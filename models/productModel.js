@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const Objectid = mongoose.Types.ObjectId
 
 const productSchema = new mongoose.Schema({
     name: {
@@ -10,8 +11,9 @@ const productSchema = new mongoose.Schema({
         required: true
     },
     category: {
-        type: String,
-        required: true
+        type: Objectid,
+        required: true,
+        ref: "Category"
     },
     price: {
         type: Number,
@@ -20,7 +22,15 @@ const productSchema = new mongoose.Schema({
     quantity: {
         type: Number,
         required: true
-    }
+    },
+    imageUrl: {
+        type: String,
+        required: true 
+    },
+    // delete: {
+    //     type: String,
+    //     default: 'listed'
+    // }
 })
 
 const Product = mongoose.model('Product', productSchema)

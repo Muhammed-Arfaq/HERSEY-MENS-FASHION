@@ -9,37 +9,53 @@ router
     .route("/login")
     .get(admincontroller.loginPage)
     .post(authcontroller.adminLogin)
-    
 
 router
     .route('/dashboard')
     .get(admincontroller.adminHome)
 
-// router
-//     .route("/allUsers")
-//     .get( admincontroller.getAllUsers)
-
+router
+    .route("/addProducts")
+    .get(admincontroller.addProduct)
+    .post(authcontroller.addProducts)
 
 router
-    .route("/products")
-    .get(authcontroller.protect, admincontroller.getAllProducts)
-    .post(authcontroller.products)
-
-
-// router
-//     .route("/products/edit")
-//     .post(admincontroller.updateProduct);
-
+    .route('/dashboard/manageProducts')
+    .get(admincontroller.getAllProducts)
 
 router
     .route("/category")
     .post(authcontroller.addCategory)
     .get(admincontroller.getCategory)
-    
 
 router
     .route('/dashboard/manageUsers')
     .get(admincontroller.getAllUsers)
+
+router
+    .route('/dashboard/blockUser/:id')
+    .post(admincontroller.blockUser)
+
+router
+    .route('/dashboard/unBlockUser/:id')
+    .post(admincontroller.unBlockUser)
+
+router
+    .route('/dashboard/editProducts/:id')
+    .get(admincontroller.editProductRender)
+    .post(admincontroller.editProduct)
+
+router
+    .route('/dashboard/deleteProducts/:id')
+    .post(admincontroller.deleteProduct)
+
+router
+    .route('/dashboard/addCategories')
+    .get(admincontroller.getCategory)
+
+router
+    .route('/dashboard/deleteCategory/:id')
+    .post(admincontroller.deleteCategory)
  
 
 module.exports = router;

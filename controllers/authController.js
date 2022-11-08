@@ -72,14 +72,6 @@ exports.signup = catchAsync(async (req, res, next) => {
     })
 
     const token = signToken(newUser._id)
-    
-    res.status(201).json({
-        status: 'success',
-        token,
-        data: {
-            user: newUser
-        }
-    })
     next()
 })
 
@@ -92,7 +84,7 @@ exports.login = catchAsync(async (req, res, next) => {
     }
 
     //to check if user exists and password is correct
-    const user = await User.findOne({ email }).select('+password')
+    const user = await User.findOne({ $and: [{ email }, { status: 'Active' }] }).select('+password')
 
     if(!user || !(await user.correctPassword(password, user.password))) {
         return next(new AppError('incorrect email or password', 401))
@@ -101,52 +93,31 @@ exports.login = catchAsync(async (req, res, next) => {
     //if everything is correct, send token to client
     const token = signToken(user._id)
 
-    res.redirect('/home')
-
-    // res.status(200).json({
-    //     status: 'success',
-    //     token
-    // })
+    res.redirect('/')
     next()
 })  
 
 exports.addCategory = catchAsync(async (req, res, next) => {
     const newCategory = await Category.create({
-
         name : req.body.name,
-
     })
-
     const token = signToken(newCategory._id)
-    
-    res.status(201).json({
-        status: 'success',
-        token,
-        data: {
-             newCategory
-        }
-    })
-    next()
+    res.redirect('/admin/category')
 })
 
-exports.products = catchAsync(async (req, res, next) => {
+exports.addProducts = catchAsync(async (req, res, next) => {
+    const image = req.file
     const newProduct = await Product.create({
         name : req.body.name,
         description : req.body.description,
         category : req.body.category,
         price : req.body.price,
-        quantity : req.body.quantity
+        quantity : req.body.quantity,
+        imageUrl : image.filename
     })
-
+    
     const token = signToken(newProduct._id)
-
-    res.status(200).json({
-        status: 'success',
-        token,
-        data: {
-            newProduct
-        }
-    })
+    res.redirect('/admin/dashboard/manageProducts')
     next()
 })
 

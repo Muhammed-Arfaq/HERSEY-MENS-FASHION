@@ -1,24 +1,32 @@
 const express = require('express')
 const authcontroller = require('../controllers/authController')
-
+const usercontroller = require('./../controllers/userController')
 
 const router = express.Router()
 
 
 
-router.post('/signup', authcontroller.signup)
-router.post('/login', authcontroller.login)
-router.get('/home', (req, res) => {
-    res.render('user/index')
-})
-router.get('/login', (req, res) => {
-    res.render('user/sign-in')
-})
+router
+    .route('/signup')
+    .post(authcontroller.signup)
+    .get(usercontroller.userRegister)
 
-router.get('/signup', (req, res) => {
-    res.render('user/sign-up')
-})
+router
+    .route('/login')
+    .post(authcontroller.login)
+    .get(usercontroller.userLogin)
 
+router
+    .route('/')
+    .get(usercontroller.userHome)
+
+router
+    .route('/shop')
+    .get(usercontroller.allProductsUser)
+
+router
+    .route('/productDetails/:id')
+    .get(usercontroller.singleProduct)
 
 
 module.exports = router
