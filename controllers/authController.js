@@ -7,11 +7,11 @@ const AppError = require('./../utils/appError')
 const Product = require('./../models/productModel')
 const Category = require('./../models/categoryModel')
 const Cart = require('./../models/cartModel')
+const Wishlist = require('./../models/wishlistModel')
 const mongoose = require('mongoose')
 
-
-
 const sendEmail = require('./../utils/email')
+
 
 const signToken = id => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -157,7 +157,21 @@ exports.addToCart = catchAsync(async(req, res, next) => {
 })
 
 exports.addToWishlist = catchAsync(async(req, res, next) => {
-    
+    let userId = req.user
+    let productId = req.params.id
+    let wishlist = await Wishlist.findOne({ userId })
+    if(wishlist) {
+        await Wishlist.findOneAndUpdate({ userId }, { $push: productId})
+    }
+    else {
+        const addWishlist = await Wishlist.create({
+            userId: mongoose.Types.ObjectId(req.user._id),
+            productId: mongoose.Types.ObjectId(productId)
+        })
+        createSendToken(addWishlist, 201, res)  
+    }
+    res.redirect('/')
+    next()
 })
 
 exports.protect = catchAsync(async (req, res, next) => {

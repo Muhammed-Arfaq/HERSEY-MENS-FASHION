@@ -36,5 +36,13 @@ router
     .route('/shoppingCart')
     .get(authcontroller.protect, usercontroller.findCart)
 
+router
+    .route('/wishlist/:id')
+    .post(authcontroller.protect, authcontroller.addToWishlist)
+
+router
+    .route('/wishlist')
+    .get(authcontroller.protect, usercontroller.productWishlist)
+
 
 module.exports = router

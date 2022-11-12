@@ -3,6 +3,7 @@ const User = require('./../models/userModel')
 const Cart = require('./../models/cartModel')
 const catchAsync = require('./../utils/catchAsync')
 const { addToCart } = require('./authController')
+const Wishlist = require('../models/wishlistModel')
 
 
 exports.userLogin = (req, res) => {
@@ -31,13 +32,14 @@ exports.singleProduct = catchAsync(async (req, res) => {
 exports.findCart = catchAsync(async(req, res, next) => {
     let userId = req.user  
     const cart = await Cart.findOne({ userId }).populate('product.productId')
-    console.log(cart.product[0])
     let carts = cart.product
     res.render('user/shoppingCart', { carts })
 })
 
-exports.wishlist = catchAsync( async(req, res, next) => {
-    
+exports.productWishlist = catchAsync( async(req, res, next) => {
+    let userId = req.user
+    const wishlist = await Wishlist.findOne({ userId }).populate('productId')
+    res.render('user/wishlist', { wishlist })
 })
 
 
