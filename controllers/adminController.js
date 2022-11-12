@@ -62,14 +62,19 @@ exports.deleteProduct = async (req, res) => {
 
 //edit page render
 exports.editProductRender = catchAsync(async (req, res) => {
-    const product = await Product.findById( req.params.id).populate('category')
+    const product = await Product.findById( req.params.id ).populate('category')
     const categories = await Category.find({ _id: { $ne: product.category}})
     res.render('admin/editProduct',{ product, categories })
 })
 
 //to edit product
 exports.editProduct = catchAsync(async(req, res, next) =>{
-    await Product.findByIdAndUpdate({ _id: req.params.id} ,{ $set: req.body })
+    if(req.file){
+        let image = req.file
+        await Product.findByIdAndUpdate({ _id:req.params.id }, { $set: { imageUrl: image.filename } })
+    }
+    console.log(req.file);
+    await Product.findByIdAndUpdate({ _id: req.params.id }, { $set: req.body })
     res.redirect('/admin/dashboard/manageProducts')
 })
 
@@ -91,19 +96,3 @@ exports.deleteCategory = async (req, res) => {
     await Category.findByIdAndDelete({ _id: req.params.id })
     res.redirect('/admin/dashboard/addCategories')
 }
-
-// exports.updateProduct = catchAsync(async (req, res, next) => {
-//     const products = await Product.findByIdAndUpdate()
-
-//     res.status(200).json({
-//         status: 'success',
-//         data: {
-//             products
-//         }
-//     })
-//     next()
-// })
-
-
-
-

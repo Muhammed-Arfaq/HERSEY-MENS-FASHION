@@ -7,7 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="/stylesheets/user/cssL/form1.css">
-    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.2/assets/css/docs.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -19,7 +24,7 @@
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                         <h3 class="register-heading">Edit Products</h3>
-                        <form action="/admin/dashboard/editProducts/<%= product._id %>" method="post">
+                        <form action="/admin/dashboard/editProducts/<%= product._id %>" method="post" enctype="multipart/form-data">
                             <div class="row register-form">
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -39,16 +44,38 @@
                                             value="<%= product.price %>" />
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6">                                   
                                     <div class="form-group">
-                                        <!-- <input type="email" class="form-control" placeholder="" value="" /> -->
+                                        <div>
+                                            <label style="color: white;">Choose size of your product</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" name="size" type="checkbox" id="inlineCheckbox1" value="XS">
+                                            <label class="form-check-label" for="inlineCheckbox1">XS</label>
+                                          </div>
+                                          <div class="form-check form-check-inline">
+                                            <input class="form-check-input" name="size" type="checkbox" id="inlineCheckbox1" value="S">
+                                            <label class="form-check-label" for="inlineCheckbox1">S</label>
+                                          </div>
+                                          <div class="form-check form-check-inline">
+                                            <input class="form-check-input" name="size" type="checkbox" id="inlineCheckbox1" value="M">
+                                            <label class="form-check-label" for="inlineCheckbox1">M</label>
+                                          </div>
+                                          <div class="form-check form-check-inline">
+                                            <input class="form-check-input" name="size" type="checkbox" id="inlineCheckbox1" value="L">
+                                            <label class="form-check-label" for="inlineCheckbox1">L</label>
+                                          </div>
+                                          <div class="form-check form-check-inline">
+                                            <input class="form-check-input" name="size" type="checkbox" id="inlineCheckbox1" value="XL">
+                                            <label class="form-check-label" for="inlineCheckbox1">XL</label>
+                                          </div>
                                     </div>
                                     <div class="form-group">
                                         <!-- <input type="text" minlength="10" maxlength="10" name="txtEmpPhone" class="form-control" placeholder="Your Phone *" value="" /> -->
                                     </div>
                                     <div class="form-group">
                                         <select class="form-control" name="category">
-                                            <option class="hidden" value="<%= product.category %>"><%= product.category.name %></option>
+                                            <option class="hidden" value="<%= product.category._id %>"><%= product.category.name %></option>
                                             <% if (categories) { %>
                                                 <% categories.forEach(function(cat){ %>
                                                 <option value="<%= cat._id %>">
@@ -59,12 +86,10 @@
                                             <% } %>
                                         </select>
                                     </div>
-                                     <!-- <div class="form-group mb-3">
-                                        <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="customFile">
-                                            <label class="custom-file-label" for="customFile">Choose Image</label>
-                                        </div>
-                                    </div>  -->
+                                    <div class="mb-3">
+                                        <label for="formFile" class="form-label"></label>
+                                        <input class="form-control" name="imageUrl" type="file" id="formFile">
+                                    </div>
                                     <input type="submit" class="btnRegister" value="Edit Product" />
                                 </div>
                             </div>

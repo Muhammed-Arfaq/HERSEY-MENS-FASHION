@@ -9,6 +9,11 @@ const adminRouter = require('./routes/adminRoutes')
 
 const app = express()
 
+app.use((req, res, next) => {
+  res.header("Cache-Control", "private,no-cache,no-store,must-revalidate");
+  next();
+});
+
 //view engine
 app.set('views',path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
@@ -42,13 +47,6 @@ const fileFilter = (req, file, cb) => {
 }
 
 app.use(multer({dest:'public/img/', storage: fileStorage, fileFilter: fileFilter}).single("imageUrl"))
-
-
-app.use("/", (req, res, next) => {
-    res.set("Cache-Control", "no-store");
-    next();
-  });
-
 
 app.use('/', userRouter)
 app.use('/admin', adminRouter)

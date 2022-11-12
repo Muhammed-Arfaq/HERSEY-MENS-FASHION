@@ -14,7 +14,7 @@ router
 router
     .route('/login')
     .post(authcontroller.login)
-    .get(usercontroller.userLogin)
+    .get( usercontroller.userLogin)
 
 router
     .route('/')
@@ -27,6 +27,14 @@ router
 router
     .route('/productDetails/:id')
     .get(usercontroller.singleProduct)
+
+router
+    .route('/cart/:id')    
+    .post(authcontroller.protect, authcontroller.addToCart)    
+
+router
+    .route('/shoppingCart')
+    .get(authcontroller.protect, usercontroller.findCart)
 
 
 module.exports = router
