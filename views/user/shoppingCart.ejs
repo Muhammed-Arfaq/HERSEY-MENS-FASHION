@@ -167,7 +167,7 @@
                                 <% carts.forEach(function(cart){ %> 
                                 <tr>
                                     <td class="product__cart__item">
-                                        <div class="product__cart__item__pic">
+                                        <div class="product__cart__item__pic" style="height: 90px; width: 90px;">
                                             <img src="/img/<%= cart.productId.imageUrl %>" alt="">
                                         </div>
                                         <div class="product__cart__item__text">
@@ -178,12 +178,14 @@
                                     <td class="quantity__item">
                                         <div class="quantity">
                                             <div class="pro-qty-2">
-                                                <input type="text" value="<%= cart.quantity %> ">
+                                                <input type="text" value="<%= cart.quantity %>">
                                             </div>
                                         </div>
                                     </td>
                                     <td class="cart__price">₹<%= cart.productId.price %></td>
-                                    <td class="cart__close"><i class="fa fa-close"></i></td>
+                                    <form action="/deleteCartProduct/<%= cart.productId._id %>" method="post">
+                                        <td class="cart__close"><button type="submit" class="fa fa-close"></button></td>
+                                    </form>
                                 </tr>
                            <% }) %> 
                             </tbody>

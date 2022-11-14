@@ -56,6 +56,15 @@ router
 router
     .route('/dashboard/deleteCategory/:id')
     .post(admincontroller.deleteCategory)
+
+router
+    .route('/addBanner')
+    .get(admincontroller.addBanner)
+    .post(authcontroller.addBanner)
+
+router
+    .route('/dashboard/manageBanner')
+    .get(admincontroller.getBanner)
  
 
 module.exports = router;

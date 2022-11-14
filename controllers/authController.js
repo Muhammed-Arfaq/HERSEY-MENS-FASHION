@@ -7,10 +7,13 @@ const AppError = require('./../utils/appError')
 const Product = require('./../models/productModel')
 const Category = require('./../models/categoryModel')
 const Cart = require('./../models/cartModel')
+const Profile = require('./../models/profileModel')
 const Wishlist = require('./../models/wishlistModel')
 const mongoose = require('mongoose')
 
+
 const sendEmail = require('./../utils/email')
+const Banner = require('../models/bannerModel')
 
 
 const signToken = id => {
@@ -87,6 +90,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     })
 
     createSendToken(newUser, 201, res)
+    res.redirect('/')
     next()
 })
 
@@ -137,6 +141,19 @@ exports.addProducts = catchAsync(async (req, res, next) => {
     next()
 })
 
+exports.addBanner = catchAsync(async(req, res, next) => {
+    const image = req.file
+    const newBanner = await Banner.create({
+        title: req.body.title,
+        description: req.body.description,
+        image: image.filename
+    })
+
+    createSendToken(newBanner, 201, res)
+    res.redirect('/admin/dashboard/bannerManagement')
+    next()
+})
+
 exports.addToCart = catchAsync(async(req, res, next) => {
     console.log(req.user);
     let userId = req.user
@@ -159,9 +176,9 @@ exports.addToCart = catchAsync(async(req, res, next) => {
 exports.addToWishlist = catchAsync(async(req, res, next) => {
     let userId = req.user
     let productId = req.params.id
-    let wishlist = await Wishlist.findOne({ userId })
-    if(wishlist) {
-        await Wishlist.findOneAndUpdate({ userId }, { $push: productId})
+    let wlist = await Wishlist.findOne({ userId })
+    if(wlist) {
+        await Wishlist.findOneAndUpdate({ userId }, { $push: { productId }})
     }
     else {
         const addWishlist = await Wishlist.create({
@@ -172,6 +189,32 @@ exports.addToWishlist = catchAsync(async(req, res, next) => {
     }
     res.redirect('/')
     next()
+})
+
+exports.addProfile = catchAsync(async(req, res, next) => {
+    let userId = req.user
+    let image = req.file.filename
+    let { firstName, lastName, pincode, currentAddress, city, state } = req.body
+    
+    let profile = await Profile.findOne({ userId })
+    if(profile) {
+        await Profile.findOneAndUpdate({ userId }, { $push: { firstName, lastName, pincode, currentAddress, city, state } })
+        
+        if(image) {
+            await Profile.findByIdAndUpdate({ userId }, { $set: { profileImage: image } })
+        }
+    }
+    else {
+    const newProfile = await Profile.create({
+        userId: mongoose.Types.ObjectId(req.user._id),
+        gender: req.body.gender,
+        address: [{ firstName, lastName, pincode, currentAddress, city, state }],
+        profileImage: image
+    })
+        createSendToken(newProfile, 201, res)
+    }
+    next()
+
 })
 
 exports.protect = catchAsync(async (req, res, next) => {

@@ -3,6 +3,7 @@ const Category = require('./../models/categoryModel')
 // const Admin = require('./../models/adminModel')
 const User = require('./../models/userModel')
 const catchAsync = require('./../utils/catchAsync')
+const Banner = require('../models/bannerModel')
 
 
 
@@ -47,6 +48,7 @@ exports.unBlockUser = async (req, res) => {
 }
 
 exports.addProduct = catchAsync(async (req, res, next) => {
+
     const categories = await Category.find()
     //to get categories in ejs files without passing them from here.
     res.locals.categories = categories || null;
@@ -54,6 +56,10 @@ exports.addProduct = catchAsync(async (req, res, next) => {
     res.render('admin/addProduct')
     next()
 })
+
+exports.addBanner = (req, res) => {
+    res.render('admin/addBanner')
+}
 
 exports.deleteProduct = async (req, res) => {
     await Product.findByIdAndDelete({ _id: req.params.id })
@@ -82,6 +88,12 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
     const products = await Product.find().populate('category')
     console.log(products);
     res.render('admin/productManagement', { products })
+    next()
+})
+
+exports.getBanner = catchAsync(async(req, res, next) => {
+    const banner = await Banner.find()
+    res.render('admin/bannerManagement', { banner })
     next()
 })
 

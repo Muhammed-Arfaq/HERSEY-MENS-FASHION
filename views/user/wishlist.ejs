@@ -11,7 +11,7 @@
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
-    rel="stylesheet">
+        rel="stylesheet">
 
     <!-- Css Styles -->
     <link rel="stylesheet" href="../stylesheets/user/cssM/bootstrap.min.css" type="text/css">
@@ -152,56 +152,67 @@
     <section class="shopping-cart spad">
         <div class="container">
             <div class="row">
-                <div class="col-lg-8">
-                    <div class="shopping__cart__table">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Product</th>
-                                    <th>Quantity</th>
-                                    <th>Total</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <% wishlist.forEach(function(wlist){ %> 
-                                <tr>
-                                    <td class="product__cart__item">
-                                        <div class="product__cart__item__pic">
-                                            <img src="/img/<%= wlist.imageUrl %>" alt="">
-                                        </div>
-                                        <div class="product__cart__item__text">
-                                            <h6><%= wlist.name %> </h6>
-                                            <h5>₹<%= wlist.price %> </h5>
-                                        </div>
-                                    </td>
-                                    <!-- <td class="quantity__item">
+                <% list.forEach(function(wlist){ %>
+                    <div class="col-lg-8">
+                        <div class="shopping__cart__table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Quantity</th>
+                                        <th>Total</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr>
+                                        <td class="product__cart__item">
+                                            <div class="product__cart__item__pic" style="height: 90px; width: 90px;">
+                                                <img src="/img/<%= wlist.imageUrl %>" alt="">
+                                            </div>
+                                            <div class="product__cart__item__text">
+                                                <h6>
+                                                    <%= wlist.name %>
+                                                </h6>
+                                                <h5>₹<%= wlist.price %>
+                                                </h5>
+                                            </div>
+                                        </td>
+                                        <!-- <td class="quantity__item">
                                         <div class="quantity">
                                             <div class="pro-qty-2">
-                                                <input type="text" value="<%= .quantity %> ">
+                                                <input type="text" value="">
                                             </div>
                                         </div>
                                     </td> -->
-                                    <td class="cart__price">₹<%= wlist.price %></td>
-                                    <td class="cart__close"><i class="fa fa-close"></i></td>
-                                </tr>
-                           <% }) %> 
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="continue__btn">
-                                <a href="#">Continue Shopping</a>
+                                        <td class="cart__price">₹<%= wlist.price %>
+                                        </td>
+                                        <form action="/deleteWishListProduct/<%= wlist._id %>" method="post">
+                                            <td class="cart__close"><button type="submit" class="fa fa-close"
+                                                    style="border: none;"></button></td>
+                                        </form>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="continue__btn">
+                                    <a href="#">Continue Shopping</a>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <form action="/cart/<%= wlist._id %>" method="post">
+                                    <div class="continue__btn update__btn">
+                                        <button><i class="fa fa-spinner"></i> Update cart</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="continue__btn update__btn">
-                                <a href="#"><i class="fa fa-spinner"></i> Update cart</a>
-                            </div>
-                        </div>
                     </div>
-                </div>
+                <% }) %>
             </div>
         </div>
     </section>
@@ -264,7 +275,7 @@
                                 document.write(new Date().getFullYear());
                             </script>2020
                             All rights reserved | This template is made with <i class="fa fa-heart-o"
-                            aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                                aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
                         </p>
                         <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                     </div>
