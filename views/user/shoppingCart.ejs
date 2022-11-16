@@ -176,15 +176,23 @@
                                         </div>
                                     </td>
                                     <td class="quantity__item">
-                                        <div class="quantity">
-                                            <div class="pro-qty-2">
-                                                <input type="text" value="<%= cart.quantity %>">
+                                        
+                                            <div class="quantity">                                                
+                                                <div class="pro-qty-2">
+                                                    <form action="/decQuantity/<%= cart._id %>" method="post">
+                                                        <button type="submit" style="border: none;  background-color: white;"><span class="fa fa-angle-left dec qtybtn"></span></button>
+                                                    </form>
+                                                    <input type="text" value="<%= cart.quantity %>">
+                                                    <form action="/incQuantity/<%= cart._id %>" method="post">
+                                                        <button type="submit" style="border: none;  background-color: white;"><span class="fa fa-angle-right inc qtybtn"></span></button>
+                                                    </form>
+                                                </div>
                                             </div>
-                                        </div>
+                                        
                                     </td>
-                                    <td class="cart__price">₹<%= cart.productId.price %></td>
+                                    <td class="cart__price">₹<%= cart.productId.price * cart.quantity %></td>
                                     <form action="/deleteCartProduct/<%= cart.productId._id %>" method="post">
-                                        <td class="cart__close"><button type="submit" class="fa fa-close"></button></td>
+                                        <td class="cart__close"><button type="submit" style="border: none; background-color: white;" class="fa fa-close"></button></td>
                                     </form>
                                 </tr>
                            <% }) %> 

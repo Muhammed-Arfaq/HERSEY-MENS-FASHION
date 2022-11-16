@@ -8,14 +8,9 @@ const profileSchema = new mongoose.Schema({
     },
     gender: {
         type: String,
-        required: true
     },
     address: [{
-        firstName: {
-            type: String,
-            required: true
-        },
-        lastName: {
+        fullName: {
             type: String,
             required: true
         },
@@ -31,15 +26,11 @@ const profileSchema = new mongoose.Schema({
             type: String,
             required: true
         },
-        State: {
+        state: {
             type: String,
             required: true
         }
     }],
-    profileImage : {
-        type: String,
-        required: true
-    }
 })
 
 const Profile = mongoose.model('Profile', profileSchema)

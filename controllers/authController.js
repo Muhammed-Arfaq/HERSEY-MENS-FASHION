@@ -193,28 +193,22 @@ exports.addToWishlist = catchAsync(async(req, res, next) => {
 
 exports.addProfile = catchAsync(async(req, res, next) => {
     let userId = req.user
-    let image = req.file.filename
-    let { firstName, lastName, pincode, currentAddress, city, state } = req.body
-    
+    let { fullName, pincode, currentAddress, city, state } = req.body
     let profile = await Profile.findOne({ userId })
+
     if(profile) {
-        await Profile.findOneAndUpdate({ userId }, { $push: { firstName, lastName, pincode, currentAddress, city, state } })
-        
-        if(image) {
-            await Profile.findByIdAndUpdate({ userId }, { $set: { profileImage: image } })
-        }
+        await Profile.findOneAndUpdate({ userId }, { $push: {address: { fullName, pincode, currentAddress, city, state }}})
     }
     else {
     const newProfile = await Profile.create({
         userId: mongoose.Types.ObjectId(req.user._id),
         gender: req.body.gender,
-        address: [{ firstName, lastName, pincode, currentAddress, city, state }],
-        profileImage: image
+        address: [{ fullName, pincode, currentAddress, city, state }],
     })
         createSendToken(newProfile, 201, res)
     }
+    res.redirect('/address')
     next()
-
 })
 
 exports.protect = catchAsync(async (req, res, next) => {

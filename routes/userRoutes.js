@@ -41,6 +41,14 @@ router
     .post(authcontroller.protect, usercontroller.deleteCartProducts)
 
 router
+    .route('/incQuantity/:id')
+    .post(authcontroller.protect, usercontroller.incQuantity)
+
+router
+    .route('/decQuantity/:id')
+    .post(authcontroller.protect, usercontroller.decQuantity)
+
+router
     .route('/wishlist/:id')
     .post(authcontroller.protect, authcontroller.addToWishlist)
 
@@ -53,8 +61,29 @@ router
     .post(authcontroller.protect, usercontroller.deleteWishListProduct)
 
 router
-    .route('/userProfile')
-    .get(usercontroller.userProfile)
+    .route('/userProfile')  
+    .get(authcontroller.protect, usercontroller.userProfile)  
+
+router
+    .route('/addProfile/:id')    
+    .post(authcontroller.protect, authcontroller.addProfile)
+
+router
+    .route('/address')
+    .get(authcontroller.protect, usercontroller.addAddress)
+
+router
+    .route('/updateAddress/:id')
+    .get(authcontroller.protect, usercontroller.updateAddress)
+    .post(authcontroller.protect, usercontroller.updateUserAddress)
+
+router
+    .route('/deleteAddress/:id')
+    .post(authcontroller.protect, usercontroller.deleteAddress)
+
+router
+    .route('/checkout')
+    .get(usercontroller.checkout)
 
 
 module.exports = router
