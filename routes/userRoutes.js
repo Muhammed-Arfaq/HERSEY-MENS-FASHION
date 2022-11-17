@@ -37,15 +37,15 @@ router
     .get(authcontroller.protect, usercontroller.findCart)
 
 router
-    .route('/deleteCartProduct/:id')
+    .route('/deleteCartProduct/:id/:price/:quantity')
     .post(authcontroller.protect, usercontroller.deleteCartProducts)
 
 router
-    .route('/incQuantity/:id')
+    .route('/incQuantity/:id/:price')
     .post(authcontroller.protect, usercontroller.incQuantity)
 
 router
-    .route('/decQuantity/:id')
+    .route('/decQuantity/:id/:price')
     .post(authcontroller.protect, usercontroller.decQuantity)
 
 router
@@ -83,7 +83,7 @@ router
 
 router
     .route('/checkout')
-    .get(usercontroller.checkout)
+    .get(authcontroller.protect, usercontroller.checkout)
 
 
 module.exports = router

@@ -40,7 +40,6 @@ exports.userProfile = catchAsync(async(req, res) => {
         let num = profile.address.length - 1
         let profiles = profile.address[num]
         res.render('user/userProfile', { user, profiles, profile })
-
     }
     else{ 
         res.render('user/userProfile', { user, profile })
@@ -61,10 +60,11 @@ exports.updateAddress = catchAsync(async (req, res, next) => {
 exports.updateUserAddress = catchAsync(async(req, res, next) => {
     let userId = req.user._id
     const addressId = req.params.id
-    let { fullName, pincode, currentAddress, city, state } = req.body
+    let { fullName, pincode, country, currentAddress, city, state } = req.body
     await Profile.updateMany({ userId, 'address._id': addressId }, { $set: { 
     'address.$.fullName': fullName, 
     'address.$.pincode': pincode,
+    'address.$.country': country,
     'address.$.currentAddress': currentAddress,
     'address.$.city': city,
     'address.$.state': state
@@ -95,27 +95,33 @@ exports.findCart = catchAsync(async(req, res, next) => {
     const userId = req.user  
     const cart = await Cart.findOne({ userId }).populate('product.productId')
     const carts = cart.product
-    res.render('user/shoppingCart', { carts })
+    const cartTotal = cart.cartTotal
+    res.render('user/shoppingCart', { carts, cart, cartTotal })
 })
 
 exports.deleteCartProducts = catchAsync(async(req, res, next) => {
     const userId = req.user
-    const productId = req.params.id
-    await Cart.findOneAndUpdate({ userId }, { $pull: { product: { productId: productId } } })     
+    const productId = req.params.id   
+    const price = req.params.price
+    const quantity = req.params.quantity
+    const amt = price * quantity
+    await Cart.findOneAndUpdate({ userId }, { $pull: { product: { productId: productId }}, $inc: { cartTotal: -amt } })     
     res.redirect('/shoppingCart')
 })
 
 exports.incQuantity = catchAsync(async(req, res, next) => {
     const userId = req.user._id
     const productId =  req.params.id
-    await Cart.findOneAndUpdate({ userId, 'product._id': productId }, { $inc: { 'product.$.quantity': 1 } })
+    const price = req.params.price
+    await Cart.findOneAndUpdate({ userId, 'product._id': productId }, { $inc: { 'product.$.quantity': 1, 'product.$.total': price, cartTotal: price } })
     res.redirect('/shoppingCart')
 })
 
 exports.decQuantity = catchAsync(async(req, res, next) => {
     const userId = req.user._id
     const productId =  req.params.id
-    await Cart.findOneAndUpdate({ userId, 'product._id': productId }, { $inc: { 'product.$.quantity': -1 } })
+    const price = req.params.price
+    await Cart.findOneAndUpdate({ userId, 'product._id': productId }, { $inc: { 'product.$.quantity': -1, 'product.$.total': -price, cartTotal: -price } })
     res.redirect('/shoppingCart')
 
 })
@@ -135,9 +141,24 @@ exports.deleteWishListProduct = catchAsync(async(req, res, next) => {
     res.redirect('/wishlist')
 })
 
-exports.checkout = (req, res) => {
-    res.render('user/checkout')
-}
+exports.checkout = catchAsync(async(req, res, next) => {
+    let userId = req.user._id
+    const profile = await Profile.findOne({ userId })
+    const user = await User.findById( userId )
+    const cart = await Cart.findOne({ userId }).populate('product.productId')
+    const carts = cart.product
+    const cartTotal = cart.cartTotal
+    if(profile != null ){
+        let num = profile.address.length - 1
+        let profiles = profile.address[num]
+        res.render('user/checkout', { user, profiles, carts, cart, cartTotal })
+
+    }
+    else{ 
+        res.render('user/checkout', { user, profile })
+    }    
+    
+})
 
 
 

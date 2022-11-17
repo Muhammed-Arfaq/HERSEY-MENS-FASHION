@@ -232,9 +232,9 @@
                                 <div class="product__details__option__size">
                                     <span>Size:</span>
                                     <% prod.size.forEach(function(size) { %>
-                                        <label for="xxl">
+                                        <label for="">
                                             <%= size %>
-                                                <input type="radio" id="xxl" />
+                                                <input type="radio" value="<%= size %>" id="">
                                         </label>
                                         <% }) %>
                                 </div>

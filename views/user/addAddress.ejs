@@ -306,11 +306,11 @@
                                             <div class="invalid-feedback"> Badd address </div>
                                         </div>
                                         <div class="form-row">
-                                            <div class="col-md-6 mb-3">
-                                                <label for="validationCustom33">City</label>
-                                                <input type="text" name="city" class="form-control"
-                                                    id="validationCustom33" required>
-                                                <div class="invalid-feedback"> Please provide a valid city. </div>
+                                            <div class="col-md-3 mb-3">
+                                                <label for="validationSelect2">Country</label>
+                                                <input class="form-control" name="country" id="custom-zip"
+                                                    autocomplete="off" maxlength="9" required>
+                                                <div class="invalid-feedback"> Please enter a valid country. </div>
                                             </div>
                                             <div class="col-md-3 mb-3">
                                                 <label for="validationSelect2">State</label>
@@ -318,6 +318,13 @@
                                                     autocomplete="off" maxlength="9" required>
                                                 <div class="invalid-feedback"> Please select a valid state. </div>
                                             </div>
+                                            <div class="col-md-3 mb-3">
+                                                <label for="validationCustom33">City</label>
+                                                <input type="text" name="city" class="form-control"
+                                                    id="validationCustom33" required>
+                                                <div class="invalid-feedback"> Please provide a valid city. </div>
+                                            </div>
+                                            
                                             <div class="col-md-3 mb-3">
                                                 <label for="custom-zip">Zip code</label>
                                                 <input class="form-control input-zip" name="pincode" id="custom-zip"
@@ -364,6 +371,9 @@
                                         </li>
                                         <li class="list-group-item border-0 ps-0 text-sm" value="<%= address.currentAddress %>"><strong
                                                 class="text-dark">Address:</strong> &nbsp; <%= address.currentAddress %>
+                                        </li>
+                                        <li class="list-group-item border-0 ps-0 text-sm" value="<%= address.country %>"><strong
+                                            class="text-dark">Country:</strong> &nbsp; <%= address.country %>
                                         </li>
                                         <li class="list-group-item border-0 ps-0 text-sm" value="<%= address.state %>"><strong
                                                 class="text-dark">State:</strong> &nbsp; <%= address.state %>

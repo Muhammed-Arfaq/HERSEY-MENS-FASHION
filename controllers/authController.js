@@ -155,17 +155,24 @@ exports.addBanner = catchAsync(async(req, res, next) => {
 })
 
 exports.addToCart = catchAsync(async(req, res, next) => {
-    console.log(req.user);
-    let userId = req.user
-    let productId = req.params.id
-    let quantity = req.body.quantity
-    let cart = await Cart.findOne({ userId })
+    const userId = req.user
+    const productId = req.params.id
+    const quantity = req.body.quantity
+    const cart = await Cart.findOne({ userId })
+    const product = await Product.findById(productId)
+    const total = product.price * quantity
     if(cart) {
-        await Cart.findOneAndUpdate({ userId }, { $push: { product: { productId, quantity } } })        
+        const exist = await Cart.findOne({ userId, 'product._id': productId })
+        if(exist != null){
+            await Cart.findOneAndUpdate({ userId, 'product._id': productId }, { $inc: { 'product.$.quantity': 1, 'product.$.total': total } })
+        } else {
+            await Cart.findOneAndUpdate({ userId }, { $push: { product: { productId, quantity, total } }, $inc: { cartTotal: total } })  
+        }              
     }else {
         const addCart = await Cart.create({
             userId: mongoose.Types.ObjectId(req.user._id),
-            product: [{ productId, quantity }]
+            product: [{ productId, quantity, total }],
+            cartTotal: total
         })
         createSendToken(addCart, 201, res)        
     }
@@ -193,17 +200,17 @@ exports.addToWishlist = catchAsync(async(req, res, next) => {
 
 exports.addProfile = catchAsync(async(req, res, next) => {
     let userId = req.user
-    let { fullName, pincode, currentAddress, city, state } = req.body
+    let { fullName, pincode, country, currentAddress, city, state } = req.body
     let profile = await Profile.findOne({ userId })
 
     if(profile) {
-        await Profile.findOneAndUpdate({ userId }, { $push: {address: { fullName, pincode, currentAddress, city, state }}})
+        await Profile.findOneAndUpdate({ userId }, { $push: {address: { fullName, pincode, country, currentAddress, city, state }}})
     }
     else {
     const newProfile = await Profile.create({
         userId: mongoose.Types.ObjectId(req.user._id),
         gender: req.body.gender,
-        address: [{ fullName, pincode, currentAddress, city, state }],
+        address: [{ fullName, pincode, country, currentAddress, city, state }],
     })
         createSendToken(newProfile, 201, res)
     }

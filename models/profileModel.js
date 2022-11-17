@@ -18,6 +18,10 @@ const profileSchema = new mongoose.Schema({
             type: Number,
             required: true
         },
+        country: {
+            type: String,
+            required: true
+        },
         currentAddress: {
             type: String,
             required: true
