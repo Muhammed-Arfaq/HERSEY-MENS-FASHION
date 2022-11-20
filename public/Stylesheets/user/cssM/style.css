@@ -2682,6 +2682,7 @@ ol {
 
 .checkout__total__products {
 	margin-bottom: 20px;
+	padding: 0px;
 }
 
 .checkout__total__products li {

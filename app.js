@@ -46,7 +46,7 @@ const fileFilter = (req, file, cb) => {
    }
 }
 
-app.use(multer({dest:'public/img/', storage: fileStorage, fileFilter: fileFilter}).single("imageUrl"))
+app.use(multer({dest:'public/img/', storage: fileStorage, fileFilter: fileFilter}).array("imageUrl", 10))
 
 app.use('/', userRouter)
 app.use('/admin', adminRouter)

@@ -158,7 +158,7 @@
     <section class="checkout spad">
         <div class="container">
             <div class="checkout__form">
-                <form action="#">
+                <form action="/order" method="post">
                     <div class="row">
                         <div class="col-lg-8 col-md-6">
                             <h6 class="coupon__code"><span class="icon_tag_alt"></span> Have a coupon? <a href="#">Click
@@ -168,43 +168,43 @@
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
                                         <p>Full Name<span>*</span></p>
-                                        <input type="text" value="<%= profiles.fullName %>">
+                                        <input type="text" name="fullName" value="<%= profiles.fullName %>">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
                                         <p>Email<span>*</span></p>
-                                        <input type="text" value="<%= user.email %>">
+                                        <input type="text" name="email" value="<%= user.email %>">
                                     </div>
                                 </div>                                
                             </div>
                             <div class="checkout__input">
                                 <p>Country<span>*</span></p>
-                                <input type="text" value="<%= profiles.country %>">
+                                <input type="text" name="country" value="<%= profiles.country %>">
                             </div>
                             <div class="checkout__input">
                                 <p>Address<span>*</span></p>
-                                <input type="text" placeholder="" class="checkout__input__add" value="<%= profiles.currentAddress %>">                                
+                                <input type="text" name="currentAddress" class="checkout__input__add" value="<%= profiles.currentAddress %>">                                
                             </div>
                             <div class="checkout__input">
                                 <p>Town/City<span>*</span></p>
-                                <input type="text" value="<%= profiles.city %>">
+                                <input type="text" name="city" value="<%= profiles.city %>">
                             </div>
                             <div class="checkout__input">
                                 <p>Country/State<span>*</span></p>
-                                <input type="text" value="<%= profiles.state %>">
+                                <input type="text" name="state" value="<%= profiles.state %>">
                             </div>                            
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
                                         <p>Phone<span>*</span></p>
-                                        <input type="text" value="<%= user.phone %>">
+                                        <input type="text" name="phone" value="<%= user.phone %>">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
                                         <p>Postcode / ZIP<span>*</span></p>
-                                        <input type="text" value="<%= profiles.pincode %>">
+                                        <input type="text" name="pincode" value="<%= profiles.pincode %>">
                                     </div>
                                 </div>
                             </div>                           
@@ -214,13 +214,13 @@
 
                             <div class="checkout__order">
                                 <h4 class="order__title">Your order</h4>
-                                <div class="checkout__order__products">Product <span>Total</span></div>
+                                <div class="checkout__order__products font-weight-bold">Product <span>Total</span></div>
                                 <ul class="checkout__total__products">
-                                    <% carts.forEach(function(cart){ %> 
-                                    <li><%= cart.productId.name %><span>₹<%= cart.productId.price %></span></li>                                    
+                                    <% carts.forEach(function(cart){ %>                                          
+                                    <li><%= index++ %>. <%= cart.productId.name %><span>₹<%= cart.total %></span></li>                                    
                                     <% }) %> 
                                 </ul>
-                                <ul class="checkout__total__all">
+                                <ul class="checkout__total__all font-weight-bold">
                                     <li>Subtotal <span>₹ <%= cartTotal %></span></li>
                                     <li>Discount <span class="text-success">₹ 500 </span></li>
                                     <hr>
@@ -229,27 +229,29 @@
                                 <p>Lorem ipsum dolor sit amet, consectetur adip elit, sed do eiusmod tempor incididunt
                                 ut labore et dolore magna aliqua.</p>
                                 <div class="checkout__input__checkbox">
-                                    <label for="payment">
+                                    <label for="Net Banking">
                                         Net Banking
-                                        <input type="checkbox" id="payment">
+                                        <input type="radio" name="netBanking" id="Net Banking">
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
                                 <div class="checkout__input__checkbox">
-                                    <label for="paypal">
+                                    <label for="Razorpay">
                                         Razorpay
-                                        <input type="checkbox" id="paypal">
+                                        <input type="radio" name="razorpay" id="Razorpay">
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
                                 <div class="checkout__input__checkbox">
-                                    <label for="paypal">
+                                    <label for="Cash on Delivery">
                                         Cash on Delivery
-                                        <input type="checkbox" id="paypal">
+                                        <input type="radio" name="cashOnDelivery" id="Cash on Delivery">
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
-                                <button type="submit" class="site-btn">PLACE ORDER</button>
+                                
+                                    <button type="submit" class="site-btn">PLACE ORDER</button>
+                               
                             </div>
                         </div>
                     </div>

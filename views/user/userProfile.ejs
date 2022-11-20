@@ -165,10 +165,10 @@
         <div class="col-auto my-auto">
           <div class="h-100">
             <h5 class="mb-1">
-              User Full Name
+              <%= profiles.fullName %> 
             </h5>
             <p class="mb-0 font-weight-bold text-sm">
-              username
+              <%= user.name %> 
             </p>
           </div>
         </div>
@@ -263,57 +263,61 @@
       <div class="col-12 col-xl-4">
         <div class="card h-100">
           <div class="card-header pb-0 p-3">
-            <h6 class="mb-0">My Orders</h6>
-          </div>
-          <div class="card-body p-3">
-            <h6 class="text-uppercase text-body text-xs font-weight-bolder">Account</h6>
-            <ul class="list-group">
-              <li class="list-group-item border-0 px-0">
-                <div class="form-check form-switch ps-0">
-                  <input class="form-check-input ms-auto" type="checkbox" id="flexSwitchCheckDefault" checked>
-                  <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0"
-                    for="flexSwitchCheckDefault">Email me when someone follows me</label>
-                </div>
-              </li>
-              <li class="list-group-item border-0 px-0">
-                <div class="form-check form-switch ps-0">
-                  <input class="form-check-input ms-auto" type="checkbox" id="flexSwitchCheckDefault1">
-                  <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0"
-                    for="flexSwitchCheckDefault1">Email me when someone answers on my post</label>
-                </div>
-              </li>
-              <li class="list-group-item border-0 px-0">
-                <div class="form-check form-switch ps-0">
-                  <input class="form-check-input ms-auto" type="checkbox" id="flexSwitchCheckDefault2" checked>
-                  <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0"
-                    for="flexSwitchCheckDefault2">Email me when someone mentions me</label>
-                </div>
-              </li>
-            </ul>
-            <h6 class="text-uppercase text-body text-xs font-weight-bolder mt-4">Application</h6>
-            <ul class="list-group">
-              <li class="list-group-item border-0 px-0">
-                <div class="form-check form-switch ps-0">
-                  <input class="form-check-input ms-auto" type="checkbox" id="flexSwitchCheckDefault3">
-                  <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0"
-                    for="flexSwitchCheckDefault3">New launches and projects</label>
-                </div>
-              </li>
-              <li class="list-group-item border-0 px-0">
-                <div class="form-check form-switch ps-0">
-                  <input class="form-check-input ms-auto" type="checkbox" id="flexSwitchCheckDefault4" checked>
-                  <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0"
-                    for="flexSwitchCheckDefault4">Monthly product updates</label>
-                </div>
-              </li>
-              <li class="list-group-item border-0 px-0 pb-0">
-                <div class="form-check form-switch ps-0">
-                  <input class="form-check-input ms-auto" type="checkbox" id="flexSwitchCheckDefault5">
-                  <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0"
-                    for="flexSwitchCheckDefault5">Subscribe to newsletter</label>
-                </div>
-              </li>
-            </ul>
+            <div class="row">
+              <div class="col-md-8 d-flex align-items-center">
+                <h6 class="mb-0">My Orders</h6>
+              </div>
+              <div class="col-md-4 text-end">
+                <a href="">
+                  <h4>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                    </svg>
+                  </h4>
+                </a>
+              </div>
+            </div>            
+          </div>          
+          <div class="row p-4">
+            <div class="col-md-1  border-0 ps-2 pt-0 text-sm text-center">
+              <strong class="text-dark">#</strong>
+            </div>
+            <div class="col-md-3  border-0 ps-0 pt-0 text-sm text-center">
+              <strong class="text-dark">Date</strong>
+            </div>
+            <div class="col-md-2  border-0 ps-0 pt-0 text-sm text-center">
+              <strong class="text-dark">Product</strong>
+            </div>
+            <div class="col-md-2  border-0 ps-0 pt-0 text-sm text-center">
+              <strong class="text-dark">Amount</strong>
+            </div>
+            <div class="col-md-2  border-0 ps-0 pt-0 text-sm text-center">
+              <strong class="text-dark">Payment</strong>
+            </div>
+            <div class="col-md-2  border-0 ps-2 pt-0 text-sm text-center">
+              <strong class="text-dark">Status</strong>
+            </div>
+          </div>  
+          <hr class="mt-0">
+          <div class="row p-4">            
+              <div class="col-md-1  border-0 ps-2 pt-0 text-sm text-center">
+                <p class="text-dark text-sm">1.</p>
+              </div>
+              <div class="col-md-3  border-0 ps-0 pt-0 text-sm text-center">
+                <p class="text-dark text-sm">12/10/2022</p>
+              </div>
+              <div class="col-md-2  border-0 ps-0 pt-0 text-sm text-center">                 
+                      <img src="/img/bruce-mars.jpg" alt="profile_image" class="w-70 border-radius-lg shadow-sm">
+              </div>
+              <div class="col-md-2  border-0 ps-0 pt-0 text-sm text-center">
+                <p class="text-dark text-sm">12000</p>
+              </div>
+              <div class="col-md-2  border-0 ps-0 pt-0 text-sm text-center">
+                <p class="text-dark text-sm">Cash On Delivery</p>
+              </div>
+              <div class="col-md-2  border-0 ps-2 pt-0 text-sm text-center">
+                <p class="text-dark text-sm">Order Placed</p>
+              </div>            
           </div>
         </div>
       </div>
@@ -354,7 +358,7 @@
               <hr class="horizontal dark my-4">
               <div class="row">
                 <div class="col-md-8 d-flex align-items-center">
-                  <h6 class="mb-0">Saved Address</h6>
+                  <h6 class="mb-0">Current Address</h6>
                 </div>
               </div>
               <div class="col-md-12 text-end">

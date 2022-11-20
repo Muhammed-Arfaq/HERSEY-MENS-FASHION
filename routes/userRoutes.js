@@ -85,5 +85,9 @@ router
     .route('/checkout')
     .get(authcontroller.protect, usercontroller.checkout)
 
+router
+    .route('/order')
+    .get(authcontroller.protect, usercontroller.orderPage)
+    .post(authcontroller.protect, authcontroller.addOrder)
 
 module.exports = router

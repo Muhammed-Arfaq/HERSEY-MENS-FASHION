@@ -14,6 +14,7 @@ const mongoose = require('mongoose')
 
 const sendEmail = require('./../utils/email')
 const Banner = require('../models/bannerModel')
+const Order = require('../models/orderModel')
 
 
 const signToken = id => {
@@ -126,6 +127,10 @@ exports.addCategory = catchAsync(async (req, res, next) => {
 
 exports.addProducts = catchAsync(async (req, res, next) => {
     const image = req.file
+    req.files.forEach(img => { });
+    console.log(req.files);
+    const productImages = req.files != null ? req.files.map((img) => img.filename) : null
+    console.log(productImages);
     const newProduct = await Product.create({
         name: req.body.name,
         description: req.body.description,
@@ -133,7 +138,7 @@ exports.addProducts = catchAsync(async (req, res, next) => {
         size: req.body.size,
         price: req.body.price,
         quantity: req.body.quantity,
-        imageUrl: image.filename
+        imageUrl: productImages
     })
 
     createSendToken(newProduct, 201, res)
@@ -162,9 +167,9 @@ exports.addToCart = catchAsync(async(req, res, next) => {
     const product = await Product.findById(productId)
     const total = product.price * quantity
     if(cart) {
-        const exist = await Cart.findOne({ userId, 'product._id': productId })
+        const exist = await Cart.findOne({ userId, 'product.productId': productId })
         if(exist != null){
-            await Cart.findOneAndUpdate({ userId, 'product._id': productId }, { $inc: { 'product.$.quantity': 1, 'product.$.total': total } })
+            await Cart.findOneAndUpdate({ userId, 'product.productId': productId }, { $inc: { 'product.$.quantity': 1, 'product.$.total': total, cartTotal: total } })
         } else {
             await Cart.findOneAndUpdate({ userId }, { $push: { product: { productId, quantity, total } }, $inc: { cartTotal: total } })  
         }              
@@ -177,6 +182,32 @@ exports.addToCart = catchAsync(async(req, res, next) => {
         createSendToken(addCart, 201, res)        
     }
     res.redirect('/shop')
+    next()
+})
+
+exports.addOrder = catchAsync(async(req, res, next) => {
+    const userId = mongoose.Types.ObjectId(req.user._id)
+    const cart = await Cart.findOne({ userId })
+    const cartTotal = cart.cartTotal
+    const products = cart.product
+    console.log(cart);
+    const newOrder = await Order.create({
+        userId: userId,
+        product: products,
+        cartTotal: cartTotal,
+        fullName: req.body.fullName,
+        pincode: req.body.pincode,
+        country: req.body.country,
+        currentAddress: req.body.currentAddress,
+        city: req.body.city,
+        state: req.body.state,
+        paymentMethod: "Cash on Delivery",
+        orderStatus: "Order Placed"
+    })
+    createSendToken(newOrder, 201, res)
+    await Cart.findByIdAndDelete({ _id: cart._id })
+ 
+    res.redirect('/order')
     next()
 })
 

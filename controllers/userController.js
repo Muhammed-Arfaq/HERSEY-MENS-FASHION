@@ -1,9 +1,10 @@
 const Product = require('./../models/productModel')
 const User = require('./../models/userModel')
 const Cart = require('./../models/cartModel')
-const catchAsync = require('./../utils/catchAsync')
 const Wishlist = require('../models/wishlistModel')
 const Profile = require('../models/profileModel')
+const Order = require('./../models/orderModel')
+const catchAsync = require('./../utils/catchAsync')
 const mongoose = require('mongoose')
 
 
@@ -151,13 +152,23 @@ exports.checkout = catchAsync(async(req, res, next) => {
     if(profile != null ){
         let num = profile.address.length - 1
         let profiles = profile.address[num]
-        res.render('user/checkout', { user, profiles, carts, cart, cartTotal })
+        res.render('user/checkout', { user, profiles, carts, cart, cartTotal, index:1 })
 
     }
     else{ 
         res.render('user/checkout', { user, profile })
     }    
     
+})
+
+exports.orderPage = catchAsync(async(req, res) => {
+
+    const userId = req.user
+    const order = await Order.find({ userId }).populate('product.productId')
+
+    const user = userId.phone  
+    
+    res.render('user/orderPage', { order, user, index: 1 })
 })
 
 
