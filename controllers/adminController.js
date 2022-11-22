@@ -97,6 +97,13 @@ exports.getBanner = catchAsync(async(req, res, next) => {
     next()
 })
 
+exports.deleteBanner = catchAsync(async (req, res, next) => {
+    const banner = await Banner.find()
+    await Banner.findByIdAndDelete({ _id: req.params.id })
+    res.render('admin/bannerManagement', { banner })
+
+})
+
 exports.getCategory = catchAsync(async (req, res, next) => {
     const categories = await Category.find()
 

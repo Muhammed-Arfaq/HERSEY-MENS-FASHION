@@ -65,6 +65,10 @@ router
 router
     .route('/dashboard/manageBanner')
     .get(admincontroller.getBanner)
+
+router
+    .route('/dashboard/manageBanner/:id')   
+    .post(admincontroller.deleteBanner)
  
 
 module.exports = router;

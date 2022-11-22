@@ -17,8 +17,12 @@ router
     .get( usercontroller.userLogin)
 
 router
+    .route('/logout')
+    .get(usercontroller.userLogout)
+
+router
     .route('/')
-    .get(usercontroller.userHome)
+    .get( usercontroller.userHome)
 
 router
     .route('/shop')
@@ -63,6 +67,10 @@ router
 router
     .route('/userProfile')  
     .get(authcontroller.protect, usercontroller.userProfile)  
+
+router
+    .route('/addAvatar')
+    .post(authcontroller.protect, authcontroller.addProfileImage)
 
 router
     .route('/addProfile/:id')    

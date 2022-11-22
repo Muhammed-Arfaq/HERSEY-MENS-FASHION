@@ -1,11 +1,15 @@
 const Product = require('./../models/productModel')
 const User = require('./../models/userModel')
 const Cart = require('./../models/cartModel')
+const Banner = require('./../models/bannerModel')
 const Wishlist = require('../models/wishlistModel')
 const Profile = require('../models/profileModel')
 const Order = require('./../models/orderModel')
+const Avatar = require('./../models/avatarModel')
 const catchAsync = require('./../utils/catchAsync')
 const mongoose = require('mongoose')
+const Category = require('../models/categoryModel')
+const jwt = require('jsonwebtoken')
 
 
 exports.userLogin = (req, res) => {
@@ -16,8 +20,26 @@ exports.userRegister = (req, res) => {
     res.render('user/sign-up')
 }
 
-exports.userHome = (req, res) => {
-    res.render('user/index')
+exports.userHome = catchAsync(async(req, res, next) => {
+    const banners = await Banner.find()
+    const products = await Product.find().limit(6)
+    const token = req.cookies.jwt
+    if(token){
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        const userId = decoded.id
+        const user = await User.findById(userId)
+        let userEmail = user.email
+
+        res.render('user/index', { token, userEmail, banners, products })
+    }
+    else {
+        res.render('user/index', { token: null, banners, products })
+    }
+})
+
+exports.userLogout = (req, res) => {
+    res.cookie('jwt', '', { maxAge: 1 })
+    res.redirect('/')
 }
 
 exports.addAddress = catchAsync(async(req, res) => {
@@ -36,14 +58,16 @@ exports.addAddress = catchAsync(async(req, res) => {
 exports.userProfile = catchAsync(async(req, res) => {
     let userId = req.user._id
     const profile = await Profile.findOne({ userId })
+    const order = await Order.find({ userId }).populate('product.productId')
     const user = await User.findById( userId )
+    const avatar = await Avatar.find()
     if(profile != null ){
         let num = profile.address.length - 1
         let profiles = profile.address[num]
-        res.render('user/userProfile', { user, profiles, profile })
+        res.render('user/userProfile', { user, profiles, profile, order, avatar, index: 1 })
     }
     else{ 
-        res.render('user/userProfile', { user, profile })
+        res.render('user/userProfile', { user, profile, order, avatar, index: 1 })
     }    
 })
 
@@ -83,7 +107,8 @@ exports.deleteAddress = catchAsync(async(req, res, next) => {
 
 exports.allProductsUser = catchAsync(async (req, res) => {
     const products = await Product.find()
-    res.render('user/shop', { products })
+    const category = await Category.find()
+    res.render('user/shop', { products, category })
 })
 
 exports.singleProduct = catchAsync(async (req, res) => {
@@ -165,9 +190,7 @@ exports.orderPage = catchAsync(async(req, res) => {
 
     const userId = req.user
     const order = await Order.find({ userId }).populate('product.productId')
-
     const user = userId.phone  
-    
     res.render('user/orderPage', { order, user, index: 1 })
 })
 

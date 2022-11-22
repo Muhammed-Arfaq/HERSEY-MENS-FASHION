@@ -9,6 +9,7 @@ const Category = require('./../models/categoryModel')
 const Cart = require('./../models/cartModel')
 const Profile = require('./../models/profileModel')
 const Wishlist = require('./../models/wishlistModel')
+const Avatar = require('./../models/avatarModel')
 const mongoose = require('mongoose')
 
 
@@ -147,15 +148,32 @@ exports.addProducts = catchAsync(async (req, res, next) => {
 })
 
 exports.addBanner = catchAsync(async(req, res, next) => {
-    const image = req.file
+   
+    req.files.forEach(img => { });
+    console.log(req.files);
+    const productImages = req.files != null ? req.files.map((img) => img.filename) : null
+    console.log(productImages);
     const newBanner = await Banner.create({
-        title: req.body.title,
-        description: req.body.description,
-        image: image.filename
+        image: productImages
     })
 
     createSendToken(newBanner, 201, res)
-    res.redirect('/admin/dashboard/bannerManagement')
+    res.redirect('/admin/dashboard/manageBanner')
+    next()
+})
+
+exports.addProfileImage = catchAsync(async(req, res, next) => {
+   
+    req.files.forEach(img => { });
+    console.log(req.files);
+    const productImages = req.files != null ? req.files.map((img) => img.filename) : null
+    console.log(productImages);
+    const newAvatar = await Avatar.create({
+        image: productImages
+    })
+
+    createSendToken(newAvatar, 201, res)
+    res.redirect('/userProfile')
     next()
 })
 

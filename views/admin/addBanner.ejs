@@ -27,18 +27,11 @@
                         <form action="/admin/addBanner" method="post" enctype="multipart/form-data">
                             <div class="row register-form">
                                 <div class="col-md-6">
-                                    <div class="form-group">
-                                        <input type="text" name="title" class="form-control" placeholder="Banner Title"
-                                            value="" >
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" name="description" class="form-control"
-                                            placeholder="Description" value="" />
-                                    </div>
+                                    
                                 </div>
                                 <div class="mb-3">
                                     <label for="formFile" class="form-label"></label>
-                                    <input class="form-control" name="imageUrl" type="file" id="formFile">
+                                    <input class="form-control" multiple name="imageUrl" type="file" id="formFile">
                                 </div>
                                 <input type="submit" class="btnRegister" value="Add Banner" />
                             </div>
