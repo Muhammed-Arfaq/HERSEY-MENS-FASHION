@@ -18,7 +18,7 @@ router
 
 router
     .route('/logout')
-    .get(usercontroller.userLogout)
+    .get(authcontroller.protect, usercontroller.userLogout)
 
 router
     .route('/')
@@ -97,5 +97,9 @@ router
     .route('/order')
     .get(authcontroller.protect, usercontroller.orderPage)
     .post(authcontroller.protect, authcontroller.addOrder)
+
+router
+    .route('/userSettings')
+    .get(usercontroller.userSettings)
 
 module.exports = router

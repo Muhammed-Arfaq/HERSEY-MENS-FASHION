@@ -84,6 +84,7 @@ exports.adminLogin = catchAsync(async (req, res, next) => {
 
 exports.signup = catchAsync(async (req, res, next) => {
     const newUser = await User.create({
+        fullName: req.body.fullName,
         name: req.body.name,
         email: req.body.email,
         phone: req.body.phone,
@@ -127,7 +128,7 @@ exports.addCategory = catchAsync(async (req, res, next) => {
 })
 
 exports.addProducts = catchAsync(async (req, res, next) => {
-    const image = req.file
+
     req.files.forEach(img => { });
     console.log(req.files);
     const productImages = req.files != null ? req.files.map((img) => img.filename) : null
@@ -135,6 +136,7 @@ exports.addProducts = catchAsync(async (req, res, next) => {
     const newProduct = await Product.create({
         name: req.body.name,
         description: req.body.description,
+        shortDescription: req.body.shortDescription,
         category: req.body.category,
         size: req.body.size,
         price: req.body.price,
@@ -163,12 +165,13 @@ exports.addBanner = catchAsync(async(req, res, next) => {
 })
 
 exports.addProfileImage = catchAsync(async(req, res, next) => {
-   
+    const userId = req.user
     req.files.forEach(img => { });
     console.log(req.files);
     const productImages = req.files != null ? req.files.map((img) => img.filename) : null
     console.log(productImages);
     const newAvatar = await Avatar.create({
+        userId: mongoose.Types.ObjectId(userId._id),
         image: productImages
     })
 
@@ -219,7 +222,7 @@ exports.addOrder = catchAsync(async(req, res, next) => {
         currentAddress: req.body.currentAddress,
         city: req.body.city,
         state: req.body.state,
-        paymentMethod: "Cash on Delivery",
+        paymentMethod: req.body.paymentMethod,
         orderStatus: "Order Placed"
     })
     createSendToken(newOrder, 201, res)

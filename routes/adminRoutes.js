@@ -59,7 +59,6 @@ router
 
 router
     .route('/addBanner')
-    .get(admincontroller.addBanner)
     .post(authcontroller.addBanner)
 
 router
@@ -69,6 +68,15 @@ router
 router
     .route('/dashboard/manageBanner/:id')   
     .post(admincontroller.deleteBanner)
+
+router
+    .route('/manageOrder')
+    .get(admincontroller.allOrders)
+
+router
+    .route('/manageOrder/:id')
+    .get(admincontroller.manageOrder)
+
  
 
 module.exports = router;

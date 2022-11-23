@@ -10,6 +10,7 @@ const catchAsync = require('./../utils/catchAsync')
 const mongoose = require('mongoose')
 const Category = require('../models/categoryModel')
 const jwt = require('jsonwebtoken')
+const moment = require('moment')
 
 
 exports.userLogin = (req, res) => {
@@ -28,9 +29,13 @@ exports.userHome = catchAsync(async(req, res, next) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
         const userId = decoded.id
         const user = await User.findById(userId)
-        let userEmail = user.email
-
-        res.render('user/index', { token, userEmail, banners, products })
+        if(user != null) {
+            let userEmail = user.email
+            res.render('user/index', { token, userEmail, banners, products })
+        } else {
+            res.render('user/index', { token: null, banners, products })
+        }
+        
     }
     else {
         res.render('user/index', { token: null, banners, products })
@@ -60,11 +65,11 @@ exports.userProfile = catchAsync(async(req, res) => {
     const profile = await Profile.findOne({ userId })
     const order = await Order.find({ userId }).populate('product.productId')
     const user = await User.findById( userId )
-    const avatar = await Avatar.find()
+    const avatar = await Avatar.findOne({ userId })
     if(profile != null ){
         let num = profile.address.length - 1
         let profiles = profile.address[num]
-        res.render('user/userProfile', { user, profiles, profile, order, avatar, index: 1 })
+        res.render('user/userProfile', { user, profiles, moment, profile, order, avatar, index: 1 })
     }
     else{ 
         res.render('user/userProfile', { user, profile, order, avatar, index: 1 })
@@ -96,6 +101,10 @@ exports.updateUserAddress = catchAsync(async(req, res, next) => {
     }})
     res.redirect('/address')
 })
+
+exports.userSettings = (req, res) => {
+    res.render('user/settings')
+}
 
 exports.deleteAddress = catchAsync(async(req, res, next) => {
     const userId = req.user._id

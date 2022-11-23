@@ -2,10 +2,12 @@ const Product = require('./../models/productModel')
 const Category = require('./../models/categoryModel')
 // const Admin = require('./../models/adminModel')
 const User = require('./../models/userModel')
+const Avatar = require('./../models/avatarModel')
+const Order = require('./../models/orderModel')
 const catchAsync = require('./../utils/catchAsync')
 const Banner = require('../models/bannerModel')
-
-
+const { populate } = require('./../models/productModel')
+const moment = require('moment')
 
 // exports.addAdmin = catchAsync(async (req, res, next) => {
 //     const admin = await Admin.find()
@@ -32,8 +34,10 @@ exports.adminHome = (req, res) => {
 
 exports.getAllUsers = catchAsync(async (req, res, next) => {
     const users = await User.find()
-    // console.log(users);
-    res.render('admin/userManagement', { users })
+    const avatar = await Avatar.find()
+    const img = avatar[0].image
+    console.log(img);
+    res.render('admin/userManagement', { users, img })
  
 })
 
@@ -56,10 +60,6 @@ exports.addProduct = catchAsync(async (req, res, next) => {
     res.render('admin/addProduct')
     next()
 })
-
-exports.addBanner = (req, res) => {
-    res.render('admin/addBanner')
-}
 
 exports.deleteProduct = async (req, res) => {
     await Product.findByIdAndDelete({ _id: req.params.id })
@@ -115,3 +115,22 @@ exports.deleteCategory = async (req, res) => {
     await Category.findByIdAndDelete({ _id: req.params.id })
     res.redirect('/admin/dashboard/addCategories')
 }
+
+exports.allOrders = catchAsync(async(req, res, next) => {
+    
+    const orders = await Order.find().populate('product.productId')
+    
+    console.log(orders.date);
+    res.render('admin/allOrders', { orders, moment })
+})
+
+exports.manageOrder = catchAsync(async(req, res, next) => {
+    const orderId = req.params.id
+    console.log(orderId);
+    
+    const orders = await Order.findOne({ _id: orderId }).populate('product.productId')
+    
+    console.log(orders);
+    res.render('admin/orderManagement', { orders, moment })
+})
+
