@@ -99,7 +99,15 @@ router
     .post(authcontroller.protect, authcontroller.addOrder)
 
 router
+    .route('/orderSuccess')
+    .get(authcontroller.protect, usercontroller.orderSuccess)
+
+router
     .route('/userSettings')
-    .get(usercontroller.userSettings)
+    .get(authcontroller.protect, usercontroller.userSettings)
+
+router  
+    .route('/verifyPayment')
+    .post(authcontroller.protect, authcontroller.verifyPayment)
 
 module.exports = router

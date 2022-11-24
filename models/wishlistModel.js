@@ -9,6 +9,10 @@ const wishlistSchema = new mongoose.Schema({
     productId: {
         type: [Objectid],
         ref: 'Product'
+    },
+    date: {
+        type: Date,
+        default: Date.now()
     }
 })
 

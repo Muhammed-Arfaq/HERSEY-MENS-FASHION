@@ -4025,7 +4025,7 @@ fieldset:disabled .btn {
 .btn-outline-secondary:active,
 .btn-outline-secondary.active,
 .btn-outline-secondary.dropdown-toggle.show {
-  color: #000;
+  color: rgb(249, 246, 246);
   background-color: #8392AB;
   border-color: #8392AB;
 }

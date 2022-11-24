@@ -11,6 +11,7 @@ const Profile = require('./../models/profileModel')
 const Wishlist = require('./../models/wishlistModel')
 const Avatar = require('./../models/avatarModel')
 const mongoose = require('mongoose')
+const Razorpay = require('razorpay')
 
 
 const sendEmail = require('./../utils/email')
@@ -207,11 +208,13 @@ exports.addToCart = catchAsync(async(req, res, next) => {
 })
 
 exports.addOrder = catchAsync(async(req, res, next) => {
+
     const userId = mongoose.Types.ObjectId(req.user._id)
     const cart = await Cart.findOne({ userId })
     const cartTotal = cart.cartTotal
     const products = cart.product
     console.log(cart);
+
     const newOrder = await Order.create({
         userId: userId,
         product: products,
@@ -223,13 +226,61 @@ exports.addOrder = catchAsync(async(req, res, next) => {
         city: req.body.city,
         state: req.body.state,
         paymentMethod: req.body.paymentMethod,
-        orderStatus: "Order Placed"
+
     })
-    createSendToken(newOrder, 201, res)
-    await Cart.findByIdAndDelete({ _id: cart._id })
+    const orderId = newOrder._id.toString()
  
-    res.redirect('/order')
-    next()
+    if(newOrder.paymentMethod == 'Cash on Delivery') {
+        await Cart.findByIdAndDelete({ _id: cart._id })
+        res.json({ status: true })
+    } else {
+        console.log('else');
+
+
+        var instance = new Razorpay({
+            key_id: process.env.RZP_KEY_ID, 
+            key_secret: process.env.RZP_KEY_SECRET 
+        })
+
+        instance.orders.create({
+        amount: cartTotal * 100,
+        currency: "INR",
+        receipt: orderId,
+        }, function(err, order){
+            if(err){
+                console.log(err);
+            } else {
+                res.json({ order })
+            }
+        })
+
+    }
+})
+
+exports.verifyPayment = catchAsync(async(req, res, next) => {
+    const userId = req.user._id
+    const details = req.body
+    console.log(details);
+    const crypto = require('crypto')
+    const cart = await Cart.findOne({ userId })
+    let hmac = crypto.createHmac('sha256', process.env.RZP_KEY_SECRET)
+    hmac.update(details['payment[razorpay_order_id]'] + '|' + details['payment[razorpay_payment_id]'])
+    hmac = hmac.digest('hex')
+
+    const orderId = details['order[order][receipt]']
+    console.log(orderId);
+    if(hmac == details['payment[razorpay_signature]']) {
+        console.log('order Successfull');
+        await Cart.findByIdAndDelete({ _id: cart._id })
+        await Order.findByIdAndUpdate(orderId, { $set: { orderStatus: 'placed' } }).then((data) => {
+        res.json({ status: true, data })
+    }).catch((err) => {
+        res.data({ status: false, err })
+    })   
+    } else {
+        res.json({ status: false })
+        console.log('payment failed');
+    }
 })
 
 exports.addToWishlist = catchAsync(async(req, res, next) => {

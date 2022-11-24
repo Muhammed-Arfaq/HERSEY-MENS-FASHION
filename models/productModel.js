@@ -35,6 +35,10 @@ const productSchema = new mongoose.Schema({
         type: [String],
         required: true 
     },
+    date: {
+        type: Date,
+        default: Date.now()
+    },
     // delete: {
     //     type: String,
     //     default: 'listed'

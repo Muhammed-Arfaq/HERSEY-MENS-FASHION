@@ -33,6 +33,10 @@ const adminSchema = new mongoose.Schema({
             },
             message: 'Password are not the same'
         }
+    },
+    date: {
+        type: Date,
+        default: Date.now()
     }
 })
 

@@ -35,6 +35,10 @@ const profileSchema = new mongoose.Schema({
             required: true
         }
     }],
+    date: {
+        type: Date,
+        default: Date.now()
+    }
 })
 
 const Profile = mongoose.model('Profile', profileSchema)
