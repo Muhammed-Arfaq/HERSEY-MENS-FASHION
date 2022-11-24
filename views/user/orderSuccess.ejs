@@ -89,24 +89,7 @@
     </header>
     <!-- Header Section End -->
 
-    <!-- Breadcrumb Section Begin -->
-    <section class="breadcrumb-option">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="breadcrumb__text">
-                        <h4>Check Out</h4>
-                        <div class="breadcrumb__links">
-                            <a href="./index.html">Home</a>
-                            <a href="./shop.html">Shop</a>
-                            <span>Check Out</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Breadcrumb Section End -->
+    
 
     <!-- Checkout Section Begin -->
     <section class="checkout spad">
@@ -124,28 +107,27 @@
                                     Product <span>Total</span>
                                 </div>
                                 <ul class="checkout__total__products">
-                                    <% cart.forEach(function(order){ %>
-                                            <% order.product.forEach(function(product){ %>
-                                        <li>
-                                            <%= index++ %>. <%= product.productId.name %><span>₹<%= product.total %></span>
-                                        </li>
-                                        <% }) %>
-                                        <% }) %> 
+                                    <% orders.forEach(function(order){ %>
+                                        <% order.product.forEach(function(product){ %>
+                                            <li>
+                                                <%= index++ %>. <%= product.productId.name %><span>₹<%= product.total %></span>
+                                            </li>
+                                        <% }) %>   
                                 </ul>
                                 <ul class="checkout__total__all font-weight-bold">
-                                    <li>Subtotal <span>₹ <%= cartTotal %></span></li>
+                                    <li>Subtotal <span>₹ <%= order.cartTotal %></span></li>
                                     <li>Discount <span class="text-success">₹ 500 </span></li>
                                     <hr />
-                                    <li>Total <span>₹ <%= cartTotal - 500 %> </span></li>
+                                    <li>Total <span>₹ <%= order.cartTotal - 500 %> </span></li>
                                 </ul>
+                                <% }) %>
                                 <p>
                                     Lorem ipsum dolor sit amet, consectetur adip elit, sed do
                                     eiusmod tempor incididunt ut labore et dolore magna aliqua.
                                 </p>
-
-                                
-
-                                <button type="submit" class="site-btn">CONTINUE SHOPPING</button>
+                                <a href="/shop">
+                                    <button type="button" class="site-btn">CONTINUE SHOPPING</button>
+                                </a>
                             </div>
                         </div>
                     </div>
