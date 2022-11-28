@@ -377,17 +377,17 @@
                   </thead>
                   <tbody>
                     <% let index = 1 %> 
-                    <% orders.forEach(function(order){ %>       
-                    <tr >
+                     <% orders.forEach(function(order){ %>  
+                      <tr >
                         <td>
-                            <p class="text-sm font-weight-bold mb-0 text-center"><%= index++ %></p>                        
-                          </td>
+                          <p class="text-sm font-weight-bold mb-0 text-center"><%= index++ %></p>                        
+                        </td>
                         <td class="align-middle text-center">
-                            <a href="/admin/manageOrder/<%= order._id %>">
-                                <span class="text-sm font-weight-bold">#<%= order._id %></span>
-                            </a>
-                         </td>
-                      <td>
+                          <a href="/admin/manageOrder/<%= order._id %>">
+                            <span class="text-sm font-weight-bold">#<%= order._id %></span>
+                          </a>
+                        </td>
+                        <td>
                         <p class="text-sm font-weight-bold mb-0 text-center"><%= moment(order.date).format('LLL') %></p>                        
                       </td>
                       <td class="align-middle text-center">
@@ -397,10 +397,10 @@
                         <span class=" text-sm font-weight-bold"><%= order.cartTotal %></span>
                       </td>
                       <td class="align-middle text-center">
-                        <span class=" text-sm font-weight-bold"><%= order.orderStatus %></span>
-                      </td>
-                    </tr>
-                    <% }) %>
+                          <span class=" text-sm font-weight-bold"><%= order.paymentStatus %></span>
+                        </td>
+                      </tr>
+                      <% }) %> 
                   </tbody>
                 </table>
               </div>

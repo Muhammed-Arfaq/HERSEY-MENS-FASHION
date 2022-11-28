@@ -4,11 +4,20 @@ const usercontroller = require('./../controllers/userController')
 
 const router = express.Router()
 
+router
+    .route('/otp')
+    .post(authcontroller.otp)
 
+router
+    .route('/resendOTP')
+    .post(authcontroller.resendOTP)
+
+router 
+    .route('/verifyOTP')
+    .post(authcontroller.verifyOTP)
 
 router
     .route('/signup')
-    .post(authcontroller.signup)
     .get(usercontroller.userRegister)
 
 router
@@ -101,6 +110,10 @@ router
 router
     .route('/orderSuccess')
     .get(authcontroller.protect, usercontroller.orderSuccess)
+
+router
+    .route('/cancelOrder/:id')
+    .post(authcontroller.protect, usercontroller.cancelOrder)
 
 router
     .route('/userSettings')

@@ -210,6 +210,14 @@ exports.orderSuccess = catchAsync(async(req, res, next) => {
     res.render('user/orderSuccess', { orders, index: 1 })
 })
 
+exports.cancelOrder = catchAsync(async(req, res, next) => {
+    const userId = req.user
+    const productId = req.params.id
+    console.log(productId);
+    await Order.findOneAndUpdate({ userId, 'product.productId': productId }, { $set: { 'product.$.orderStatus': 'Cancelled' } })
+    res.redirect('back')
+})
+
 
 
 

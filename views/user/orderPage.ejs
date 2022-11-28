@@ -245,35 +245,38 @@
                         </div>
                     </div>
                     <hr class="mt-0">                        
-                        <div class="row p-4">
-                            <% order.forEach(function(order) { %> 
+                    <div class="row p-4">
+                        <% order.forEach(function(order) { %> 
                             <% order.product.forEach(function(product){ %>
-                                <div class="col-md-1  border-0 ps-0 pt-4 text-sm text-center">                 
-                                    <img src="/img/<%= product.productId.imageUrl %>" alt="profile_image" class="w-80 border-radius-lg shadow-sm">
-                                </div>
-                                <div class="col-md-2  border-0 ps-0 pt-4 text-sm text-center">
-                                    <p class="text-dark font-weight-bold"> <%= product.productId.name %> </p>
-                                    <p class="text-dark">Quantity: <%= product.quantity %> </p>
-                                </div>
-                                <div class="col-md-2  border-0 ps-0 pt-4 text-sm text-center">
-                                    <p class="text-dark"> <%= order.fullName %> </p>
-                                    <p class="text-dark"> <%= order.currentAddress %>, <%= order.city %>, <%= order.state %>, <%= order.country %>, <%= order.pincode %> </p>
-                                </div>                        
-                                <div class="col-md-2  border-0 ps-0 pt-4 text-sm text-center">
-                                    <p class="text-dark"><%= user %> </p>
-                                </div>
-                                <div class="col-md-1  border-0 ps-0 pt-4 text-sm text-center">
-                                    <p class="text-dark"><%= product.total %> </p>
-                                </div>
-                                <div class="col-md-1  border-0 ps-0 pt-4 text-sm text-center">
-                                    <p class="text-dark"><%= order.paymentMethod %></p>
-                                </div>
-                                <div class="col-md-1  border-0 ps-0 pt-4 text-sm text-center">
-                                    <p class="text-dark"><%= order.orderStatus %></p>
-                                </div>
-                                <div class="col-md-2  border-0 ps-0 pt-4 text-sm text-center">
-                                    <p class="text-dark">Action</p>
-                                </div>
+                                
+                                    <div class="col-md-1  border-0 ps-0 pt-4 text-sm text-center">                 
+                                        <img src="/img/<%= product.productId.imageUrl %>" alt="profile_image" class="w-80 border-radius-lg shadow-sm">
+                                    </div>
+                                    <div class="col-md-2  border-0 ps-0 pt-4 text-sm text-center">
+                                        <p class="text-dark font-weight-bold"> <%= product.productId.name %> </p>
+                                        <p class="text-dark">Quantity: <%= product.quantity %> </p>
+                                    </div>
+                                    <div class="col-md-2  border-0 ps-0 pt-4 text-sm text-center">
+                                        <p class="text-dark"> <%= order.fullName %> </p>
+                                        <p class="text-dark"> <%= order.currentAddress %>, <%= order.city %>, <%= order.state %>, <%= order.country %>, <%= order.pincode %> </p>
+                                    </div>                        
+                                    <div class="col-md-2  border-0 ps-0 pt-4 text-sm text-center">
+                                        <p class="text-dark"><%= user %> </p>
+                                    </div>
+                                    <div class="col-md-1  border-0 ps-0 pt-4 text-sm text-center">
+                                        <p class="text-dark"><%= product.total %> </p>
+                                    </div>
+                                    <div class="col-md-1  border-0 ps-0 pt-4 text-sm text-center">
+                                        <p class="text-dark"><%= order.paymentMethod %></p>
+                                    </div>
+                                    <div class="col-md-1  border-0 ps-0 pt-4 text-sm text-center">
+                                        <p class="text-dark"><%= product.orderStatus %></p>
+                                    </div>
+                                    <div class="col-md-2  border-0 ps-0 pt-4 text-sm text-center">
+                                        <form action="/cancelOrder/<%= product.productId._id %>" method="post">
+                                         <button type="submit" value="Cancelled" name="orderStatus" class="btn btn-outline-secondary">Cancel</button>
+                                        </form>
+                                    </div>
                                 <% }) %>   
                          <% }) %> 
                         </div>                         

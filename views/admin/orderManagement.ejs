@@ -445,15 +445,20 @@
                               quantity</th>
                             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                               price</th>
+                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                              Order Update</th>
+                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                              Action</th>
                           </tr>
                         </thead>
                         <tbody>
-                            <% orders.product.forEach(function(product) { %>
+                          <% orders.forEach(function(order) { %>  
+                            <% order.product.forEach(function(product) { %> 
                             <tr>
                               <td>
                                 <div class="d-flex px-2 py-1">
                                   <div>
-                                    <img src="/img/<%= product.productId.imageUrl %>" class="avatar avatar-sm me-3"
+                                    <img src="/img/<%= product.productId.imageUrl %>" class="avatar avatar-lg me-3"
                                       alt="user1">
                                   </div>
                                   <div class="d-flex flex-column justify-content-center">
@@ -473,8 +478,36 @@
                                   <%= product.total %>
                                 </span>
                               </td>
+                              <td class="align-middle text-center">
+                                <% if(product.orderStatus == 'Order Placed') { %> 
+                                  <form action="/admin/changeStatus/<%= order._id %>/<%= product.productId._id %>/<%= product.orderStatus %>" method="post">
+                                    <button type="submit" class="btn btn-outline-secondary">Order Placed</button>
+                                  </form>
+                                <% } else if(product.orderStatus == 'Processed') { %>  
+                                  <form action="/admin/changeStatus/<%= order._id %>/<%= product.productId._id %>/<%= product.orderStatus %>" method="post">
+                                      <button type="submit" class="btn btn-outline-secondary">Processed</button>
+                                  </form>
+                                <% } else if(product.orderStatus == 'Shipped') { %>  
+                                  <form action="/admin/changeStatus/<%= order._id %>/<%= product.productId._id %>/<%= product.orderStatus %>" method="post">
+                                     <button type="submit" class="btn btn-outline-secondary">Shipped</button>
+                                  </form>
+                                <% } else if(product.orderStatus == 'Delivered') { %>  
+                                    <form action="/admin/changeStatus/<%= order._id %>/<%= product.productId._id %>/<%= product.orderStatus %>" method="post">
+                                      <button type="submit" class="btn btn-outline-secondary">Delivered</button>
+                                    </form>
+                                <% } else if(product.orderStatus == 'Cancelled') { %>
+                                    <button type="submit" class="btn btn-outline-secondary" disabled>Cancelled</button>
+                                <% } %> 
+                              </td>
+                              <td class="align-middle text-center">
+                                <% product.orderStatus = 'Cancelled' %>
+                                <form action="/admin/changeStatus/<%= order._id %>/<%= product.productId._id %>/<%= product.orderStatus %>" method="post">
+                                  <button type="submit" class="btn btn-outline-secondary">Cancel</button>
+                                </form>
+                              </td>
                             </tr>
-                           <% }) %>
+                          <% }) %> 
+                          <% }) %> 
                         </tbody>
                       </table>
                     </div>
@@ -535,8 +568,7 @@
                 <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
                   <div class="d-flex flex-column">
                     <h6 class="mb-3 text-sm">Purchase Date : <span class="text-dark font-weight-bold ms-sm-2"><%= moment(orders.date).format('LLL') %></span></h6>
-                    <h6 class="mb-3 text-sm">Delivery Date : <span class="text-dark font-weight-bold ms-sm-2">Viking
-                      Burrito</span></h6>
+                    <h6 class="mb-3 text-sm">Delivery Date : <span class="text-dark font-weight-bold ms-sm-2"><%= moment(orders.date).format('LLL') %></span></h6>
                     <h6 class="mb-3 text-sm">Payment Type  : <span class="text-dark font-weight-bold ms-sm-2"><%= orders.paymentMethod %> </span></h6>
                   </div>
                 </li>
@@ -583,25 +615,26 @@
                   <small>23 - 30 March 2020</small>
                 </div> -->
               </div>
-              <div class="mt-4">
-                
-                <input type="radio" class="btn-check" name="paymentMethod" id="Recieved" value="Razorpay">
-                <label class="btn btn-outline-secondary" for="Recieved">Recieved</label>
+              <!-- <div class="mt-4">
+                <form action="/admin/changeStatus/" method="post">
+                  <input type="radio" class="btn-check" name="orderStatus" id="Recieved" value="Recieved">
+                  <label class="btn btn-outline-secondary" for="Recieved">Recieved</label>
 
-                <input type="radio" class="btn-check" name="paymentMethod" id="Processed" value="Cash on Delivery">
-                <label class="btn btn-outline-secondary" for="Processed">Processed</label>
+                  <input type="radio" class="btn-check" name="orderStatus" id="Processed" value="Processed">
+                  <label class="btn btn-outline-secondary" for="Processed">Processed</label>
 
-                <input type="radio" class="btn-check" name="paymentMethod" id="Shipped" value="Razorpay">
-                <label class="btn btn-outline-secondary" for="Shipped">Shipped</label>
+                  <input type="radio" class="btn-check" name="orderStatus" id="Shipped" value="Shipped">
+                  <label class="btn btn-outline-secondary" for="Shipped">Shipped</label>
 
-                <input type="radio" class="btn-check" name="paymentMethod" id="danger-outlined" value="Cash on Delivery">
-                <label class="btn btn-outline-secondary col-11 text-center" for="danger-outlined">Delivered</label>
+                  <input type="radio" class="btn-check" name="orderStatus" id="danger-outlined" value="Delivered">
+                  <label class="btn btn-outline-secondary col-11 text-center" for="danger-outlined">Delivered</label>
 
-                <div class="col-12 text-end">
-                  <button class="btn btn-outline-primary btn-sm mb-0">Update</button>
-                  <!-- <a class="btn bg-gradient-dark mb-0" href="">&nbsp;&nbsp;Update</a> -->
-                </div>
-              </div>
+                  <div class="col-12 text-end">
+                    <button type="submit" class="btn btn-outline-primary btn-sm mb-0">Update</button>
+                    <a class="btn bg-gradient-dark mb-0" href="">&nbsp;&nbsp;Update</a>
+                  </div>
+                </form>
+              </div> -->
             </div>
           </div>
         </div>

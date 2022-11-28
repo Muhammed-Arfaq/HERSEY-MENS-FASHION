@@ -119,18 +119,16 @@ exports.deleteCategory = async (req, res) => {
 exports.allOrders = catchAsync(async(req, res, next) => {
     
     const orders = await Order.find().populate('product.productId')
-    
-    console.log(orders.date);
+    console.log(orders);
     res.render('admin/allOrders', { orders, moment })
 })
 
 exports.manageOrder = catchAsync(async(req, res, next) => {
+    
     const orderId = req.params.id
-    console.log(orderId);
-    
-    const orders = await Order.findOne({ _id: orderId }).populate('product.productId')
-    
-    console.log(orders);
+    const orders = await Order.find({ _id: orderId }).populate('product.productId')
     res.render('admin/orderManagement', { orders, moment })
 })
+
+
 

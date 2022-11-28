@@ -11,9 +11,17 @@ const orderSchema = new mongoose.Schema({
             type: Objectid,
             ref: 'Product'
         },
+        orderStatus: {
+            type: String,
+            default: 'Order Placed'
+        }, 
         quantity: Number,   
         total: Number     
     }],
+    paymentStatus: {
+        type: String,
+        default: 'Pending'
+    }, 
     cartTotal: Number,
     phone: {
         type: Number,
@@ -45,10 +53,6 @@ const orderSchema = new mongoose.Schema({
     paymentMethod: {
         type: String,
     },
-    orderStatus: {
-        type: String,
-        default: 'Pending'
-    }, 
     date: {
         type: Date,
         default: Date.now()

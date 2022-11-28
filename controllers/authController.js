@@ -1,44 +1,75 @@
-const { promisify } = require('util')
-const jwt = require('jsonwebtoken')
-const User = require('../models/userModel')
-const Admin = require('../models/adminModel')
-const catchAsync = require('../utils/catchAsync')
-const AppError = require('./../utils/appError')
-const Product = require('./../models/productModel')
-const Category = require('./../models/categoryModel')
-const Cart = require('./../models/cartModel')
-const Profile = require('./../models/profileModel')
-const Wishlist = require('./../models/wishlistModel')
-const Avatar = require('./../models/avatarModel')
-const mongoose = require('mongoose')
-const Razorpay = require('razorpay')
+const { promisify } = require("util");
+const jwt = require("jsonwebtoken");
+const User = require("../models/userModel");
+const Admin = require("../models/adminModel");
+const catchAsync = require("../utils/catchAsync");
+const AppError = require("./../utils/appError");
+const Product = require("./../models/productModel");
+const Category = require("./../models/categoryModel");
+const Cart = require("./../models/cartModel");
+const Profile = require("./../models/profileModel");
+const Wishlist = require("./../models/wishlistModel");
+const Avatar = require("./../models/avatarModel");
+const mongoose = require("mongoose");
+const Razorpay = require("razorpay");
+const nodemailer = require('nodemailer')
+const Banner = require("../models/bannerModel");
+const Order = require("../models/orderModel");
 
 
-const sendEmail = require('./../utils/email')
-const Banner = require('../models/bannerModel')
-const Order = require('../models/orderModel')
+// --------------------------------------------------------------------------------------------------------------
+// Email OTP Verify
+
+let fullName
+let email
+let name
+let phone
+let password
+let passwordConfirm
+
+let transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    service: 'Gmail',
+
+    auth: {
+        user: 'wattshand@gmail.com',
+        pass: 'fttkzontjctkofmg',
+    }
+
+});
+
+let otp = Math.random();
+otp = otp * 1000000;
+otp = parseInt(otp);
+console.log(otp);
+
+// --------------------------------------------------------------------------------------------------------------
 
 
-const signToken = id => {
+const signToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRES_IN
-    })
-}
+        expiresIn: process.env.JWT_EXPIRES_IN,
+    });
+};
 
 const createSendToken = (user, statusCode, res) => {
-    const token = signToken(user._id)
+    const token = signToken(user._id);
     const cookieOPtions = {
-        expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
-        httpOnly: true
+        expires: new Date(
+            Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+        ),
+        httpOnly: true,
+    };
+    if (process.env.NODE_ENV === "production") {
+        cookieOPtions.secure = true;
     }
-    if (process.env.NODE_ENV === 'production') {
-        cookieOPtions.secure = true
-    }
-    res.cookie('jwt', token, cookieOPtions)
+    res.cookie("jwt", token, cookieOPtions);
 
     //remove the password from the output
-    user.password = undefined
-}
+    user.password = undefined;
+};
 
 // exports.signup = catchAsync(async (req, res, next) => {
 //     const newAdmin = await Admin.create({
@@ -62,77 +93,135 @@ const createSendToken = (user, statusCode, res) => {
 // })
 
 exports.adminLogin = catchAsync(async (req, res, next) => {
-    const { email, password } = req.body
+    const { email, password } = req.body;
 
     //to check email and password exist
     if (!email || !password) {
-        return next(new AppError('please provide email and password!!!', 400))
+        return next(new AppError("please provide email and password!!!", 400));
     }
 
     //to check if admin exists and password is correct
-    const admin = await Admin.findOne({ email }).select('+password')
+    const admin = await Admin.findOne({ email }).select("+password");
 
     if (!admin || !(await admin.correctPassword(password, admin.password))) {
-        return next(new AppError('incorrect email or password', 401))
+        return next(new AppError("incorrect email or password", 401));
     }
 
     //if everything is correct, send token to client
-    createSendToken(admin, 201, res)
+    createSendToken(admin, 201, res);
 
-    res.redirect('/admin/dashboard')
-    next()
+    res.redirect("/admin/dashboard");
+    next();
+});
+
+exports.otp = catchAsync(async (req, res, next) => {
+    fullName = req.body.fullName,
+    name = req.body.name,
+    email = req.body.email,
+    phone = req.body.phone,
+    password = req.body.password,
+    passwordConfirm = req.body.passwordConfirm;
+
+    const user = await User.findOne({ email: email })
+
+    if(!user) {
+        
+        // send mail with defined transport object
+        let mailOptions = {
+            to: req.body.email,
+            subject: "Otp for registration is: ",
+            html: "<h3>OTP for account verification is </h3>" + "<h1 style='font-weight:bold;'>" + otp + "</h1>" // html body
+        };
+    
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                return console.log(error);
+            }
+            console.log('Message sent: %s', info.messageId);
+            console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+    
+            res.render('user/OTP');
+        });
+
+    } else {
+        res.redirect('/login')
+    }
 })
 
-exports.signup = catchAsync(async (req, res, next) => {
-    const newUser = await User.create({
-        fullName: req.body.fullName,
-        name: req.body.name,
-        email: req.body.email,
-        phone: req.body.phone,
-        password: req.body.password,
-        passwordConfirm: req.body.passwordConfirm
-    })
+exports.resendOTP = catchAsync(async(req, res, next) => {
+    var mailOptions={
+       to: email,
+       subject: "Otp for registration is: ",
+       html: "<h3>OTP for account verification is </h3>"  + "<h1 style='font-weight:bold;'>" + otp +"</h1>" // html body
+     };
+     
+     transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return console.log(error);
+        }
+        console.log('Message sent: %s', info.messageId);   
+        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+        res.render('otp',{msg:"otp has been sent"});
+    });
+})
 
-    createSendToken(newUser, 201, res)
-    res.redirect('/')
-    next()
+exports.verifyOTP = catchAsync(async(req, res, next) => {
+    if(req.body.otp==otp){
+        const newUser = await User.create({
+            fullName: fullName,
+            name: name,
+            email: email,
+            phone: phone,
+            password: password,
+            passwordConfirm: passwordConfirm,
+        });
+    
+        createSendToken(newUser, 201, res);
+        res.redirect("/");
+        next();
+    }
+    else{
+        res.render('user/OTP',{msg : 'otp is incorrect'});
+    }
 })
 
 exports.login = catchAsync(async (req, res, next) => {
-    const { email, password } = req.body
+    const { email, password } = req.body;
 
     //to check email and password exist
     if (!email || !password) {
-        return next(new AppError('please provide email and password!!!', 400))
+        return next(new AppError("please provide email and password!!!", 400));
     }
 
     //to check if user exists and password is correct
-    const user = await User.findOne({ $and: [{ email }, { status: 'Active' }] }).select('+password')
+    const user = await User.findOne({
+        $and: [{ email }, { status: "Active" }],
+    }).select("+password");
 
     if (!user || !(await user.correctPassword(password, user.password))) {
-        return next(new AppError('incorrect email or password', 401))
+        return next(new AppError("incorrect email or password", 401));
     }
 
     //if everything is correct, send token to client
-    createSendToken(user, 201, res)
-    res.redirect('/')
-    next()
-})
+    createSendToken(user, 201, res);
+    res.redirect("/");
+    next();
+});
 
 exports.addCategory = catchAsync(async (req, res, next) => {
     const newCategory = await Category.create({
         name: req.body.name,
-    })
+    });
 
-    createSendToken(newCategory, 201, res)
-    res.redirect('/admin/category')
-})
+    createSendToken(newCategory, 201, res);
+    res.redirect("/admin/category");
+});
 
 exports.addProducts = catchAsync(async (req, res, next) => {
-
-    req.files.forEach(img => { });
+    req.files.forEach((img) => { });
     console.log(req.files);
-    const productImages = req.files != null ? req.files.map((img) => img.filename) : null
+    const productImages =
+        req.files != null ? req.files.map((img) => img.filename) : null;
     console.log(productImages);
     const newProduct = await Product.create({
         name: req.body.name,
@@ -142,184 +231,261 @@ exports.addProducts = catchAsync(async (req, res, next) => {
         size: req.body.size,
         price: req.body.price,
         quantity: req.body.quantity,
-        imageUrl: productImages
-    })
+        imageUrl: productImages,
+    });
 
-    createSendToken(newProduct, 201, res)
-    res.redirect('/admin/dashboard/manageProducts')
-    next()
-})
+    createSendToken(newProduct, 201, res);
+    res.redirect("/admin/dashboard/manageProducts");
+    next();
+});
 
-exports.addBanner = catchAsync(async(req, res, next) => {
-   
-    req.files.forEach(img => { });
+exports.addBanner = catchAsync(async (req, res, next) => {
+    req.files.forEach((img) => { });
     console.log(req.files);
-    const productImages = req.files != null ? req.files.map((img) => img.filename) : null
+    const productImages =
+        req.files != null ? req.files.map((img) => img.filename) : null;
     console.log(productImages);
     const newBanner = await Banner.create({
-        image: productImages
-    })
+        image: productImages,
+    });
 
-    createSendToken(newBanner, 201, res)
-    res.redirect('/admin/dashboard/manageBanner')
-    next()
-})
+    createSendToken(newBanner, 201, res);
+    res.redirect("/admin/dashboard/manageBanner");
+    next();
+});
 
-exports.addProfileImage = catchAsync(async(req, res, next) => {
-    const userId = req.user
-    req.files.forEach(img => { });
+exports.addProfileImage = catchAsync(async (req, res, next) => {
+    const userId = req.user;
+    req.files.forEach((img) => { });
     console.log(req.files);
-    const productImages = req.files != null ? req.files.map((img) => img.filename) : null
+    const productImages =
+        req.files != null ? req.files.map((img) => img.filename) : null;
     console.log(productImages);
     const newAvatar = await Avatar.create({
         userId: mongoose.Types.ObjectId(userId._id),
-        image: productImages
-    })
+        image: productImages,
+    });
 
-    createSendToken(newAvatar, 201, res)
-    res.redirect('/userProfile')
-    next()
-})
+    createSendToken(newAvatar, 201, res);
+    res.redirect("/userProfile");
+    next();
+});
 
-exports.addToCart = catchAsync(async(req, res, next) => {
-    const userId = req.user
-    const productId = req.params.id
-    const quantity = req.body.quantity
-    const cart = await Cart.findOne({ userId })
-    const product = await Product.findById(productId)
-    const total = product.price * quantity
-    if(cart) {
-        const exist = await Cart.findOne({ userId, 'product.productId': productId })
-        if(exist != null){
-            await Cart.findOneAndUpdate({ userId, 'product.productId': productId }, { $inc: { 'product.$.quantity': 1, 'product.$.total': total, cartTotal: total } })
+exports.addToCart = catchAsync(async (req, res, next) => {
+    const userId = req.user;
+    const productId = req.params.id;
+    const quantity = req.body.quantity ? req.body.quantity : 1;
+    const cart = await Cart.findOne({ userId });
+    const product = await Product.findById(productId);
+    const total = product.price * quantity;
+    console.log(total);
+    if (cart) {
+        const exist = await Cart.findOne({
+            userId,
+            "product.productId": productId,
+        });
+        if (exist != null) {
+            await Cart.findOneAndUpdate(
+                { userId, "product.productId": productId },
+                {
+                    $inc: {
+                        "product.$.quantity": 1,
+                        "product.$.total": total,
+                        cartTotal: total,
+                    },
+                }
+            );
         } else {
-            await Cart.findOneAndUpdate({ userId }, { $push: { product: { productId, quantity, total } }, $inc: { cartTotal: total } })  
-        }              
-    }else {
+            await Cart.findOneAndUpdate(
+                { userId },
+                {
+                    $push: { product: { productId, quantity, total } },
+                    $inc: { cartTotal: total },
+                }
+            );
+        }
+    } else {
         const addCart = await Cart.create({
             userId: mongoose.Types.ObjectId(req.user._id),
             product: [{ productId, quantity, total }],
-            cartTotal: total
-        })
-        createSendToken(addCart, 201, res)        
+            cartTotal: total,
+        });
+        createSendToken(addCart, 201, res);
     }
-    res.redirect('/shop')
-    next()
-})
+    res.redirect("back");
+    next();
+});
 
-exports.addOrder = catchAsync(async(req, res, next) => {
-
-    const userId = mongoose.Types.ObjectId(req.user._id)
-    const cart = await Cart.findOne({ userId })
-    const cartTotal = cart.cartTotal
-    const products = cart.product
+exports.addOrder = catchAsync(async (req, res, next) => {
+    const userId = mongoose.Types.ObjectId(req.user._id);
+    const cart = await Cart.findOne({ userId });
+    const cartTotal = cart.cartTotal;
+    const products = cart.product;
     console.log(cart);
-
-    const newOrder = await Order.create({
-        userId: userId,
-        product: products,
-        cartTotal: cartTotal,
-        fullName: req.body.fullName,
-        pincode: req.body.pincode,
-        country: req.body.country,
-        currentAddress: req.body.currentAddress,
-        city: req.body.city,
-        state: req.body.state,
-        paymentMethod: req.body.paymentMethod,
-
-    })
-    const orderId = newOrder._id.toString()
- 
-    if(newOrder.paymentMethod == 'Cash on Delivery') {
-        await Cart.findByIdAndDelete({ _id: cart._id })
-        res.json({ status: true })
+    const cartId = cart._id.toString();
+    const paymentMethod = req.body.paymentMethod;
+    if (paymentMethod === "Cash on Delivery") {
+        const newOrder = await Order.create({
+            userId: userId,
+            product: products,
+            cartTotal: cartTotal,
+            fullName: req.body.fullName,
+            pincode: req.body.pincode,
+            country: req.body.country,
+            currentAddress: req.body.currentAddress,
+            city: req.body.city,
+            state: req.body.state,
+            paymentMethod: req.body.paymentMethod,
+            paymentStatus: "Pending",
+        });
+        await Cart.findByIdAndDelete({ _id: cart._id });
+        res.json({ status: true });
     } else {
-        console.log('else');
-
-
+        console.log("hiiii");
         var instance = new Razorpay({
-            key_id: process.env.RZP_KEY_ID, 
-            key_secret: process.env.RZP_KEY_SECRET 
-        })
+            key_id: process.env.RZP_KEY_ID,
+            key_secret: process.env.RZP_KEY_SECRET,
+        });
 
-        instance.orders.create({
-        amount: cartTotal * 100,
-        currency: "INR",
-        receipt: orderId,
-        }, function(err, order){
-            if(err){
-                console.log(err);
-            } else {
-                res.json({ order })
+        instance.orders.create(
+            {
+                amount: cartTotal * 100,
+                currency: "INR",
+                receipt: cartId,
+            },
+            function (err, order) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    res.json({ status: false, order });
+                }
             }
-        })
-
+        );
     }
-})
+});
 
-exports.verifyPayment = catchAsync(async(req, res, next) => {
-    const userId = req.user._id
-    const details = req.body
+exports.verifyPayment = catchAsync(async (req, res, next) => {
+    const userId = req.user._id;
+    const cart = await Cart.findOne({ userId });
+    const cartTotal = cart.cartTotal;
+    const products = cart.product;
+    const details = req.body;
     console.log(details);
-    const crypto = require('crypto')
-    const cart = await Cart.findOne({ userId })
-    let hmac = crypto.createHmac('sha256', process.env.RZP_KEY_SECRET)
-    hmac.update(details['payment[razorpay_order_id]'] + '|' + details['payment[razorpay_payment_id]'])
-    hmac = hmac.digest('hex')
+    const crypto = require("crypto");
+    let hmac = crypto.createHmac("sha256", process.env.RZP_KEY_SECRET);
+    hmac.update(
+        details["payment[razorpay_order_id]"] +
+        "|" +
+        details["payment[razorpay_payment_id]"]
+    );
+    hmac = hmac.digest("hex");
 
-    const orderId = details['order[order][receipt]']
-    console.log(orderId);
-    if(hmac == details['payment[razorpay_signature]']) {
-        console.log('order Successfull');
-        await Cart.findByIdAndDelete({ _id: cart._id })
-        await Order.findByIdAndUpdate(orderId, { $set: { orderStatus: 'placed' } }).then((data) => {
-        res.json({ status: true, data })
-    }).catch((err) => {
-        res.data({ status: false, err })
-    })   
+    if (hmac == details["payment[razorpay_signature]"]) {
+        console.log("order Successfull");
+
+        const newOrder = await Order.create({
+            userId: userId,
+            product: products,
+            cartTotal: cartTotal,
+            fullName: "fullName",
+            pincode: 1233,
+            country: "fullName",
+            currentAddress: "fullName",
+            city: "fullName",
+            state: "fullName",
+            paymentMethod: "Razorpay",
+            paymentStatus: "Paid",
+        })
+            .then(async (data) => {
+                await Cart.findByIdAndDelete({ _id: cart._id });
+                res.json({ status: true, data });
+            })
+            .catch((err) => {
+                res.json({ status: false, err });
+            });
     } else {
-        res.json({ status: false })
-        console.log('payment failed');
+        res.json({ status: false });
+        console.log("payment failed");
     }
-})
+});
 
-exports.addToWishlist = catchAsync(async(req, res, next) => {
-    let userId = req.user
-    let productId = req.params.id
-    let wlist = await Wishlist.findOne({ userId })
-    if(wlist) {
-        await Wishlist.findOneAndUpdate({ userId }, { $push: { productId }})
-    }
-    else {
+exports.addToWishlist = catchAsync(async (req, res, next) => {
+    let userId = req.user;
+    let productId = req.params.id;
+    let wlist = await Wishlist.findOne({ userId });
+    if (wlist) {
+        await Wishlist.findOneAndUpdate({ userId }, { $push: { productId } });
+    } else {
         const addWishlist = await Wishlist.create({
             userId: mongoose.Types.ObjectId(req.user._id),
-            productId: mongoose.Types.ObjectId(productId)
-        })
-        createSendToken(addWishlist, 201, res)  
+            productId: mongoose.Types.ObjectId(productId),
+        });
+        createSendToken(addWishlist, 201, res);
     }
-    res.redirect('/')
-    next()
-})
+    res.redirect("/");
+    next();
+});
 
-exports.addProfile = catchAsync(async(req, res, next) => {
-    let userId = req.user
-    let { fullName, pincode, country, currentAddress, city, state } = req.body
-    let profile = await Profile.findOne({ userId })
+exports.addProfile = catchAsync(async (req, res, next) => {
+    let userId = req.user;
+    let { fullName, pincode, country, currentAddress, city, state } = req.body;
+    let profile = await Profile.findOne({ userId });
 
-    if(profile) {
-        await Profile.findOneAndUpdate({ userId }, { $push: {address: { fullName, pincode, country, currentAddress, city, state }}})
+    if (profile) {
+        await Profile.findOneAndUpdate(
+            { userId },
+            {
+                $push: {
+                    address: { fullName, pincode, country, currentAddress, city, state },
+                },
+            }
+        );
+    } else {
+        const newProfile = await Profile.create({
+            userId: mongoose.Types.ObjectId(req.user._id),
+            gender: req.body.gender,
+            address: [{ fullName, pincode, country, currentAddress, city, state }],
+        });
+        createSendToken(newProfile, 201, res);
     }
-    else {
-    const newProfile = await Profile.create({
-        userId: mongoose.Types.ObjectId(req.user._id),
-        gender: req.body.gender,
-        address: [{ fullName, pincode, country, currentAddress, city, state }],
-    })
-        createSendToken(newProfile, 201, res)
+    res.redirect("/address");
+    next();
+});
+
+exports.changeOrderStatus = catchAsync(async (req, res, next) => {
+    const orderId = req.params.id;
+    const productId = req.params.prod
+    const orderStatus = req.params.status;
+    console.log(orderStatus);
+
+    if (orderStatus == 'Order Placed') {
+        await Order.findOneAndUpdate({_id: orderId, 'product.productId': productId },
+            {
+                $set:
+                    { 'product.$.orderStatus': "Processed" }
+            })
+    } else if (orderStatus == "Processed") {
+        await Order.findOneAndUpdate({_id: orderId, 'product.productId': productId },
+            {
+                $set:
+                    { 'product.$.orderStatus': "Shipped" }
+            })
+    } else if (orderStatus == "Shipped") {
+        await Order.findOneAndUpdate({_id: orderId, 'product.productId': productId },
+            {
+                $set:
+                    { 'product.$.orderStatus': "Delivered" }
+            })
     }
-    res.redirect('/address')
-    next()
-})
+     else if(orderStatus == "Cancelled") {
+        await Order.findOneAndUpdate({_id: orderId, 'product.productId': productId },
+            {
+                $set:
+                    { 'product.$.orderStatus': "Cancelled" }
+            })
+    }
+    res.redirect("back");
+});
 
 exports.protect = catchAsync(async (req, res, next) => {
     let token;
@@ -327,20 +493,19 @@ exports.protect = catchAsync(async (req, res, next) => {
 
     if (!token) {
         return next(
-            new AppError('You are not logged in! Please log in to get access.', 401)
+            new AppError("You are not logged in! Please log in to get access.", 401)
         );
     }
 
     // 2) Verification token
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-    
 
     // 3) Check if user still exists
     const currentUser = await User.findById(decoded.id);
     if (!currentUser) {
         return next(
             new AppError(
-                'The user belonging to this token does no longer exist.',
+                "The user belonging to this token does no longer exist.",
                 401
             )
         );
@@ -349,7 +514,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     // 4) Check if user changed password after the token was issued
     if (currentUser.changedPasswordAfter(decoded.iat)) {
         return next(
-            new AppError('User recently changed password! Please log in again.', 401)
+            new AppError("User recently changed password! Please log in again.", 401)
         );
     }
 
@@ -359,44 +524,11 @@ exports.protect = catchAsync(async (req, res, next) => {
     next();
 });
 
-exports.restrictTo = (Admin) => {
-    return (req, res, next) => {
-        if (!Admin.includes(req.user.Admin)) {
-            return next(new AppError('you do not have permission'))
-        }
-        next()
-    }
-}
-
-// exports.forgotPassword = catchAsync(async(req, res, next) => {
-//     //get user based on posted email
-//     const user = await User.findOne({ email: req.body.email })
-//     if(!user) {
-//         return next(new AppError('there is no user with this email address'))
+// exports.restrictTo = (Admin) => {
+//     return (req, res, next) => {
+//         if (!Admin.includes(req.user.Admin)) {
+//             return next(new AppError('you do not have permission'))
+//         }
+//         next()
 //     }
-
-//     //generate the random token
-//     const resetToken = user.createPasswordResetToken()
-//     await user.save({ validateBeforeSave: false })
-
-//     //send it to user's email
-//     const resetURL = '${req.protocol}://${req.get('host')}/users/resetPassword/${resetToken}'
-//     const message = 'forgot your password? Submit a new request with your new password and passwordConfirm to: $(resetURL).\n if you didnt forget your password then please ignore this email.'
-
-//     try{
-//         await sendEmail({
-//             email: user.email,
-//             subject: 'your password reset token(valid for 10 min)',
-//             message
-//         })
-//     }catch(err) {
-//         user.passwordResetToken = undefined
-//         user.passwordResetExpires = undefined
-//         await user.save({ validateBeforeSave: false })
-
-//         return next(new AppError('there was an error sending the email. Try again later'))
-//     }
-// })
-
-// exports.resetPassword = (req, res, next) => {}
-
+// }

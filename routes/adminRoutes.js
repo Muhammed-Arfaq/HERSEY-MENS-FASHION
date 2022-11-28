@@ -77,6 +77,10 @@ router
     .route('/manageOrder/:id')
     .get(admincontroller.manageOrder)
 
+router  
+    .route('/changeStatus/:id/:prod/:status')
+    .post(authcontroller.changeOrderStatus)
+
  
 
 module.exports = router;
