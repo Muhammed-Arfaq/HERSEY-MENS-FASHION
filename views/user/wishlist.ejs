@@ -22,6 +22,17 @@
     <link rel="stylesheet" href="../stylesheets/user/cssM/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="../stylesheets/user/cssM/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="../stylesheets/user/cssM/style.css" type="text/css">
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+    <!-- Nucleo Icons -->
+    <link href="../stylesheets/user/cssL/nucleo-icons.css" rel="stylesheet" />
+    <link href="../stylesheets/user/cssL/nucleo-svg.css" rel="stylesheet" />
+    <!-- Font Awesome Icons -->
+    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+    <link href="../stylesheets/user/cssL/nucleo-svg.css" rel="stylesheet" />
+    <!-- CSS Files -->
+    <link id="pagestyle" href="../stylesheets/user/cssL/soft-ui-dashboard.css?v=1.0.3" rel="stylesheet" />
+
 </head>
 
 <body>
@@ -30,129 +41,152 @@
     <div class="loader"></div>
 </div>
 
-<!-- Offcanvas Menu Begin -->
-<div class="offcanvas-menu-overlay"></div>
-<div class="offcanvas-menu-wrapper">
-    <div class="offcanvas__nav__option">
-        <a href="#" class="search-switch"><img src="img/icon/search.png" alt=""></a>
-        <a href="/wishlist"><img src="img/icon/heart.png" alt=""></a>
-        <a href="/shoppingCart"><img src="img/icon/cart.png" alt=""></a>  
-        <a href="/userProfile"><img src="img/icon/user.png" alt=""></a>          
-    </div>
-    <div id="mobile-menu-wrap"></div>
-</div>
-<!-- Offcanvas Menu End -->
-
 <!-- Header Section Begin -->
-<header class="header">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-3 col-md-3 col-9">
-                <div class="header__logo ">
-                    <a href="/"><img src="/img/logoMain.png" style="height: 32px;" alt=""></a>
+
+<div class="container position-sticky z-index-sticky top-0">
+    <div class="row">
+        <div class="col-12">
+            <!-- Navbar -->
+            <nav
+                class="navbar navbar-expand-lg blur blur-rounded top-0 z-index-3 shadow position-absolute my-3 py-2 start-0 end-0 mx-4">
+                <div class="container-fluid">
+                    <a class="navbar-brand font-weight-bolder ms-lg-0 ms-3 " href="/">
+                        <img src="/img/logoMain.png" style="height: 15px" alt="" />
+                    </a>
+                    <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon mt-2">
+                            <span class="navbar-toggler-bar bar1"></span>
+                            <span class="navbar-toggler-bar bar2"></span>
+                            <span class="navbar-toggler-bar bar3"></span>
+                        </span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navigation">
+                        <ul class="navbar-nav mx-auto">
+                            <li class="nav-item font-weight-bolder">
+                                <a class="nav-link d-flex align-items-center me-2" 
+                                    href="/">
+                                    HOME
+                                </a>
+                            </li>
+                            <li class="nav-item font-weight-bolder">
+                                <a class="nav-link me-2 " href="/shop">
+                                    SHOP
+                                </a>
+                            </li>
+                            <li class="nav-item font-weight-bolder">
+                                <a class="nav-link me-2 " href="/wishlist">
+                                    WISHLIST
+                                </a>
+                            </li>
+                            <li class="nav-item font-weight-bolder">
+                                <a class="nav-link me-2 " href="/shoppingCart">
+                                    CART
+                                </a>
+                            </li>
+                            <li class="nav-item font-weight-bolder">
+                                <a class="nav-link me-2 " href="/userProfile">
+                                    MY ACCOUNT
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="navbar-nav d-lg-block d-none">
+                            <li class="nav-item">
+                                <a href="/logout" class="btn btn-sm btn-round mb-0 me-1 bg-gradient-dark">
+                                    LOGOUT</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-            <div class="col-lg-6 col-md-6">
-                <nav class="header__menu mobile-menu">
-                    <ul>
-                        <li class="active"><a href="/" style="text-decoration: none;">Home</a></li>
-                        <li><a href="/shop" style="text-decoration: none;">Shop</a></li>
-                        <li><a href="#" style="text-decoration: none;">Pages</a></li>
-                        <li><a href="./blog.html" style="text-decoration: none;">Blog</a></li>
-                        <li><a href="./contact.html" style="text-decoration: none;">Contacts</a></li>
-                    </ul>
-                </nav>
-            </div>
-            <div class="col-lg-3 col-md-3">
-                <div class="header__nav__option">
-                    <!-- <a href="#" class="search-switch"><img src="img/icon/search.png" alt=""></a> -->
-                    <a href="/wishlist"><img src="/img/icon/heart.png" alt=""></a>
-                    <a href="/shoppingCart"><img src="/img/icon/cart.png" alt=""></a>
-                    <a href="/userProfile"><img src="/img/icon/user.png" alt=""></a>
-                </div>
-            </div>
+            </nav>
+            <!-- End Navbar -->
         </div>
-        <div class="canvas__open"><i class="fa fa-bars"></i></div>
     </div>
-</header>
+</div>
 <!-- Header Section End -->
 
-    <!-- Breadcrumb Section Begin -->
-    <section class="breadcrumb-option">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="breadcrumb__text">
-                        <h4>Wishlist</h4>
-                        <div class="breadcrumb__links">
-                            <a href="/home">Home</a>
-                            <a href="/shop">Shop</a>
-                            <span>Wishlist</span>
-                        </div>
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-option">
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+                    <h4>wishlist</h4>
+                    <div class="breadcrumb__links">
+                        <a href="/home" style="text-decoration: none;">Home</a>
+                        <span>wishlist</span>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-    <!-- Breadcrumb Section End -->
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
 
     <!-- Shopping Cart Section Begin -->
-    <section class="shopping-cart spad">
-        <div class="container">
-            <div class="row">
-                    <div class="col-lg-8">
-                        <div class="shopping__cart__table">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Product</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                <% list.forEach(function(wlist){ %>
-                                    <tr>
-                                        <td class="product__cart__item">
-                                            <div class="product__cart__item__pic" style="height: 90px; width: 90px;">
-                                                <img src="/img/<%= wlist.imageUrl %>" alt="">
-                                            </div>
-                                            <div class="product__cart__item__text mt-3">
-                                                <h6>
-                                                    <%= wlist.name %>
-                                                </h6>
-                                            </div>
-                                        </td>
-                                        <td class="cart__price">₹<%= wlist.price %>
-                                        </td>
-                                        <form action="/cart/<%= wlist._id %>" method="post">
-                                            <td class="cart__close"><button type="submit" class="btn btn-outline-secondary" data-mdb-ripple-color="dark">Add to cart</button></td>                                             
-                                        </form>
-                                        <form action="/deleteWishListProduct/<%= wlist._id %>" method="post">
-                                            <td class="cart__close"><button type="submit" class="fa fa-close"
-                                                    style="border: none; background-color: white;"></button></td>
-                                        </form>
-                                        
-                                    </tr>
-                                <% }) %>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6 col-md-6 col-sm-6">
-                                <div class="continue__btn">
+    <% if( wishlist != null && list.length != 0 ) { %> 
+        <section class="shopping-cart spad">
+            <div class="container">
+                <div class="row">
+                        <div class="col-lg-8">
+                            <div class="shopping__cart__table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <% list.forEach(function(wlist){ %>
+                                        <tr>
+                                            <td class="product__cart__item">
+                                                <div class="product__cart__item__pic" style="height: 90px; width: 90px;">
+                                                    <img src="/img/<%= wlist.imageUrl %>" alt="">
+                                                </div>
+                                                <div class="product__cart__item__text mt-3">
+                                                    <h6>
+                                                        <%= wlist.name %>
+                                                    </h6>
+                                                </div>
+                                            </td>
+                                            <td class="cart__price">₹<%= wlist.price %>
+                                            </td>
+                                            <form action="/cart/<%= wlist._id %>" method="post">
+                                                <td class="cart__close"><button type="submit" class="btn btn-outline-secondary" data-mdb-ripple-color="dark">Add to cart</button></td>                                             
+                                            </form>
+                                            <form action="/deleteWishListProduct/<%= wlist._id %>" method="post">
+                                                <td class="cart__close"><button type="submit" class="fa fa-close"
+                                                        style="border: none; background-color: white;"></button></td>
+                                            </form>
+                                            
+                                        </tr>
+                                    <% }) %>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="continue__btn">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="continue__btn update__btn">
+                                        <a href="/shop"> Continue Shopping</a>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6 col-md-6 col-sm-6">
-                                <div class="continue__btn update__btn">
-                                    <a href="/shop"> Continue Shopping</a>
-                                </div>
-                            </div>
                         </div>
-                    </div>
-                
+                    
+                </div>
             </div>
+        </section>
+    <% } else { %> 
+        <div class="text-center mt-5 mb-5">
+            <img src="https://cdni.iconscout.com/illustration/premium/thumb/confusing-woman-due-to-empty-cart-4558760-3780056.png" alt="">
         </div>
-    </section>
+    <% } %> 
     <!-- Shopping Cart Section End -->
 
     <!-- Footer Section Begin -->

@@ -81,6 +81,9 @@ router
     .route('/changeStatus/:id/:prod/:status')
     .post(authcontroller.changeOrderStatus)
 
+router
+    .route('/invoice/:id')
+    .get(admincontroller.invoice)
  
 
 module.exports = router;

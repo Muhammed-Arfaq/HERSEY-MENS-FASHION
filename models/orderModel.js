@@ -26,32 +26,37 @@ const orderSchema = new mongoose.Schema({
     phone: {
         type: Number,
     },
-    fullName: {
-        type: String,
-        required: true
-    },
-    pincode: {
-        type: Number,
-        required: true
-    },
-    country: {
-        type: String,
-        required: true
-    },
-    currentAddress: {
-        type: String,
-        required: true
-    },
-    city: {
-        type: String,
-        required: true
-    },
-    state: {
-        type: String,
-        required: true
+    address: {
+        fullName: {
+            type: String,
+            required: true
+        },
+        pincode: {
+            type: Number,
+            required: true
+        },
+        country: {
+            type: String,
+            required: true
+        },
+        currentAddress: {
+            type: String,
+            required: true
+        },
+        city: {
+            type: String,
+            required: true
+        },
+        state: {
+            type: String,
+            required: true
+        },
     },
     paymentMethod: {
         type: String,
+    },
+    deliveryDate: {
+        type: Date
     },
     date: {
         type: Date,

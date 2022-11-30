@@ -319,24 +319,24 @@ exports.addToCart = catchAsync(async (req, res, next) => {
 exports.addOrder = catchAsync(async (req, res, next) => {
     const userId = mongoose.Types.ObjectId(req.user._id);
     const cart = await Cart.findOne({ userId });
+    const addIndex = req.body.addIndex
+    let profile = await Profile.findOne({ userId })
+    profile = profile.address[addIndex]
     const cartTotal = cart.cartTotal;
     const products = cart.product;
-    console.log(cart);
     const cartId = cart._id.toString();
+    const now = new Date()
+    const deliveryDate = now.setDate(now.getDate() + 7)
     const paymentMethod = req.body.paymentMethod;
     if (paymentMethod === "Cash on Delivery") {
         const newOrder = await Order.create({
             userId: userId,
             product: products,
             cartTotal: cartTotal,
-            fullName: req.body.fullName,
-            pincode: req.body.pincode,
-            country: req.body.country,
-            currentAddress: req.body.currentAddress,
-            city: req.body.city,
-            state: req.body.state,
+            address: profile,
             paymentMethod: req.body.paymentMethod,
             paymentStatus: "Pending",
+            deliveryDate: deliveryDate,
         });
         await Cart.findByIdAndDelete({ _id: cart._id });
         res.json({ status: true });
@@ -370,7 +370,14 @@ exports.verifyPayment = catchAsync(async (req, res, next) => {
     const cartTotal = cart.cartTotal;
     const products = cart.product;
     const details = req.body;
-    console.log(details);
+    const now = new Date()
+    const deliveryDate = now.setDate(now.getDate() + 7)
+    let add = details['address'].split('&')
+    add = add[1].split('=')
+    const addIndex = parseInt(add[1])
+    let profile = await Profile.findOne({ userId })
+    profile = profile.address[addIndex]
+    console.log(addIndex);
     const crypto = require("crypto");
     let hmac = crypto.createHmac("sha256", process.env.RZP_KEY_SECRET);
     hmac.update(
@@ -387,14 +394,10 @@ exports.verifyPayment = catchAsync(async (req, res, next) => {
             userId: userId,
             product: products,
             cartTotal: cartTotal,
-            fullName: "fullName",
-            pincode: 1233,
-            country: "fullName",
-            currentAddress: "fullName",
-            city: "fullName",
-            state: "fullName",
+            address: profile,
             paymentMethod: "Razorpay",
             paymentStatus: "Paid",
+            deliveryDate: deliveryDate,
         })
             .then(async (data) => {
                 await Cart.findByIdAndDelete({ _id: cart._id });
@@ -422,7 +425,7 @@ exports.addToWishlist = catchAsync(async (req, res, next) => {
         });
         createSendToken(addWishlist, 201, res);
     }
-    res.redirect("/");
+    res.redirect("back");
     next();
 });
 

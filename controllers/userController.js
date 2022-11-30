@@ -62,8 +62,9 @@ exports.addAddress = catchAsync(async(req, res) => {
 
 exports.userProfile = catchAsync(async(req, res) => {
     let userId = req.user._id
+    let sort = { date: -1 }
     const profile = await Profile.findOne({ userId })
-    const order = await Order.find({ userId }).populate('product.productId')
+    const order = await Order.find({ userId }).populate('product.productId').sort(sort)
     const user = await User.findById( userId )
     const avatar = await Avatar.findOne({ userId })
     if(profile != null ){
@@ -102,9 +103,20 @@ exports.updateUserAddress = catchAsync(async(req, res, next) => {
     res.redirect('/address')
 })
 
-exports.userSettings = (req, res) => {
-    res.render('user/settings')
-}
+exports.changeAddress = catchAsync(async(req, res, next) => {
+    const addressId = req.params.id
+    const currentAdd = await Profile.findOne({ 'address._id': addressId })
+    console.log(currentAdd);
+    res.render('user/checkout', { currentAdd })
+})
+
+exports.userSettings = catchAsync(async(req, res, next) => {
+
+    const userId = req.user._id
+    const user = await User.findById( userId )
+
+    res.render('user/settings',{ user })
+})
 
 exports.deleteAddress = catchAsync(async(req, res, next) => {
     const userId = req.user._id
@@ -117,21 +129,53 @@ exports.deleteAddress = catchAsync(async(req, res, next) => {
 exports.allProductsUser = catchAsync(async (req, res) => {
     const products = await Product.find()
     const category = await Category.find()
-    res.render('user/shop', { products, category })
+    const token = req.cookies.jwt
+    if(token){
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        const userId = decoded.id
+        const user = await User.findById(userId)
+        if(user != null) {
+            res.render('user/shop', { token, products, category })
+        } else {
+            res.render('user/shop', { token: null, products, category })
+        }
+    }
+    else {
+        res.render('user/shop', { token: null, products, category })
+    }
+    
 })
 
 exports.singleProduct = catchAsync(async (req, res) => {
     const prod = await Product.findById({ _id: req.params.id}).populate('category')
     const relatedProduct = await Product.find({category: prod.category})
-    res.render('user/productDetails', { prod, relatedProduct })
+    const token = req.cookies.jwt
+    if(token){
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        const userId = decoded.id
+        const user = await User.findById(userId)
+        if(user != null) {
+            res.render('user/productDetails', { token, prod, relatedProduct })
+        } else {
+            res.render('user/productDetails', { token: null, prod, relatedProduct })
+        }
+    }
+    else {
+        res.render('user/productDetails', { token: null, prod, relatedProduct })
+    }
 })
 
 exports.findCart = catchAsync(async(req, res, next) => {
     const userId = req.user  
     const cart = await Cart.findOne({ userId }).populate('product.productId')
-    const carts = cart.product
-    const cartTotal = cart.cartTotal
-    res.render('user/shoppingCart', { carts, cart, cartTotal })
+    if(cart != null) {
+        const carts = cart.product
+        const cartTotal = cart.cartTotal
+        res.render('user/shoppingCart', { carts, cart, cartTotal })
+    }
+    else {
+        res.render('user/shoppingCart', { carts: [], cart: null, cartTotal: null })
+    }
 })
 
 exports.deleteCartProducts = catchAsync(async(req, res, next) => {
@@ -164,8 +208,12 @@ exports.decQuantity = catchAsync(async(req, res, next) => {
 exports.productWishlist = catchAsync( async(req, res, next) => {
     let userId = req.user
     const wishlist = await Wishlist.findOne({ userId }).populate('productId')
-    let list = wishlist.productId
-    res.render('user/wishlist', { list })
+    if(wishlist != null) {
+        let list = wishlist.productId
+        res.render('user/wishlist', { list, wishlist })
+    } else {
+        res.render('user/wishlist', { list: [], wishlist: null })
+    }
 })
 
 exports.deleteWishListProduct = catchAsync(async(req, res, next) => {
@@ -173,20 +221,22 @@ exports.deleteWishListProduct = catchAsync(async(req, res, next) => {
     let productId = req.params.id
     await Wishlist.findOneAndUpdate({ userId }, { $pull: { productId: productId }})
     
-    res.redirect('/wishlist')
+    res.redirect('back')
 })
 
 exports.checkout = catchAsync(async(req, res, next) => {
     let userId = req.user._id
-    const profile = await Profile.findOne({ userId })
+    let profile = await Profile.findOne({ userId })
     const user = await User.findById( userId )
     const cart = await Cart.findOne({ userId }).populate('product.productId')
     const carts = cart.product
     const cartTotal = cart.cartTotal
     if(profile != null ){
-        let num = profile.address.length - 1
-        let profiles = profile.address[num]
-        res.render('user/checkout', { user, profiles, carts, cart, cartTotal, index:1 })
+        profile = profile.address
+        let num = profile.length -1
+        const addIndex = req.body.indexs? req.body.indexs: num
+        console.log(req.body);
+        res.render('user/checkout', { user, addIndex, profile, carts, cart, cartTotal, index:1 })
 
     }
     else{ 
@@ -196,11 +246,11 @@ exports.checkout = catchAsync(async(req, res, next) => {
 })
 
 exports.orderPage = catchAsync(async(req, res) => {
-
+    let sort = { date: -1 }
     const userId = req.user
-    const order = await Order.find({ userId }).populate('product.productId')
+    const order = await Order.find({ userId }).populate('product.productId').sort(sort)
     const user = userId.phone  
-    res.render('user/orderPage', { order, user, index: 1 })
+    res.render('user/orderPage', { order, user, moment, index: 1 })
 })
 
 exports.orderSuccess = catchAsync(async(req, res, next) => {
@@ -214,7 +264,7 @@ exports.cancelOrder = catchAsync(async(req, res, next) => {
     const userId = req.user
     const productId = req.params.id
     console.log(productId);
-    await Order.findOneAndUpdate({ userId, 'product.productId': productId }, { $set: { 'product.$.orderStatus': 'Cancelled' } })
+    await Order.findOneAndUpdate({ userId, 'product._id': productId }, { $set: { 'product.$.orderStatus': 'Cancelled' }   })
     res.redirect('back')
 })
 

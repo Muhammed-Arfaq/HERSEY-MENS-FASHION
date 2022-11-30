@@ -19,6 +19,7 @@
   <link href="/stylesheets/user/cssL/nucleo-svg.css" rel="stylesheet" />
   <!-- CSS Files -->
   <link id="pagestyle" href="/stylesheets/user/cssL/soft-ui-dashboard.css?v=1.0.3" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 </head>
 
@@ -439,75 +440,86 @@
                       <table class="table align-items-center mb-0">
                         <thead>
                           <tr>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Products
+                            <th class="text-uppercase text-dark text-xxs font-weight-bolder opacity-7">Products
                             </th>
-                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                            <th class="text-center text-uppercase text-dark text-xxs font-weight-bolder opacity-7">
                               quantity</th>
-                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                            <th class="text-center text-uppercase text-dark text-xxs font-weight-bolder opacity-7">
                               price</th>
-                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                            <th class="text-center text-uppercase text-dark text-xxs font-weight-bolder opacity-7">
                               Order Update</th>
-                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                            <th class="text-center text-uppercase text-dark text-xxs font-weight-bolder opacity-7">
                               Action</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <% orders.forEach(function(order) { %>  
-                            <% order.product.forEach(function(product) { %> 
-                            <tr>
-                              <td>
-                                <div class="d-flex px-2 py-1">
-                                  <div>
-                                    <img src="/img/<%= product.productId.imageUrl %>" class="avatar avatar-lg me-3"
-                                      alt="user1">
+                          
+                            <% orders.product.forEach(function(product) { %>
+                              <tr>
+                                <td>
+                                  <div class="d-flex px-2 py-1">
+                                    <div>
+                                      <img src="/img/<%= product.productId.imageUrl %>" class="avatar avatar-lg me-3"
+                                        alt="user1">
+                                    </div>
+                                    <div class="d-flex flex-column justify-content-center">
+                                      <h6 class="mb-0 text-sm">
+                                        <%= product.productId.name %>
+                                      </h6>
+                                    </div>
                                   </div>
-                                  <div class="d-flex flex-column justify-content-center">
-                                    <h6 class="mb-0 text-sm">
-                                      <%= product.productId.name %>
-                                    </h6>
-                                  </div>
-                                </div>
-                              </td>
-                              <td class="align-middle text-center">
-                                <span class="text-secondary text-xs font-weight-bold">
-                                  <%= product.quantity %>
-                                </span>
-                              </td>
-                              <td class="align-middle text-center">
-                                <span class="text-secondary text-xs font-weight-bold">
-                                  <%= product.total %>
-                                </span>
-                              </td>
-                              <td class="align-middle text-center">
-                                <% if(product.orderStatus == 'Order Placed') { %> 
-                                  <form action="/admin/changeStatus/<%= order._id %>/<%= product.productId._id %>/<%= product.orderStatus %>" method="post">
-                                    <button type="submit" class="btn btn-outline-secondary">Order Placed</button>
-                                  </form>
-                                <% } else if(product.orderStatus == 'Processed') { %>  
-                                  <form action="/admin/changeStatus/<%= order._id %>/<%= product.productId._id %>/<%= product.orderStatus %>" method="post">
-                                      <button type="submit" class="btn btn-outline-secondary">Processed</button>
-                                  </form>
-                                <% } else if(product.orderStatus == 'Shipped') { %>  
-                                  <form action="/admin/changeStatus/<%= order._id %>/<%= product.productId._id %>/<%= product.orderStatus %>" method="post">
-                                     <button type="submit" class="btn btn-outline-secondary">Shipped</button>
-                                  </form>
-                                <% } else if(product.orderStatus == 'Delivered') { %>  
-                                    <form action="/admin/changeStatus/<%= order._id %>/<%= product.productId._id %>/<%= product.orderStatus %>" method="post">
-                                      <button type="submit" class="btn btn-outline-secondary">Delivered</button>
+                                </td>
+                                <td class="align-middle text-center">
+                                  <span class="text-secondary text-xs font-weight-bold">
+                                    <%= product.quantity %>
+                                  </span>
+                                </td>
+                                <td class="align-middle text-center">
+                                  <span class="text-secondary text-xs font-weight-bold">
+                                    <%= product.total %>
+                                  </span>
+                                </td>
+                                <td class="align-middle text-center">
+                                  <% if(product.orderStatus=='Order Placed' ) { %>
+                                    <form
+                                      action="/admin/changeStatus/<%= orders._id %>/<%= product.productId._id %>/<%= product.orderStatus %>"
+                                      method="post">
+                                      <button type="submit" class="btn btn-outline-secondary">Order Placed</button>
                                     </form>
-                                <% } else if(product.orderStatus == 'Cancelled') { %>
-                                    <button type="submit" class="btn btn-outline-secondary" disabled>Cancelled</button>
-                                <% } %> 
-                              </td>
-                              <td class="align-middle text-center">
-                                <% product.orderStatus = 'Cancelled' %>
-                                <form action="/admin/changeStatus/<%= order._id %>/<%= product.productId._id %>/<%= product.orderStatus %>" method="post">
-                                  <button type="submit" class="btn btn-outline-secondary">Cancel</button>
-                                </form>
-                              </td>
-                            </tr>
-                          <% }) %> 
-                          <% }) %> 
+                                    <% } else if(product.orderStatus=='Processed' ) { %>
+                                      <form
+                                        action="/admin/changeStatus/<%= orders._id %>/<%= product.productId._id %>/<%= product.orderStatus %>"
+                                        method="post">
+                                        <button type="submit" class="btn btn-outline-secondary">Processed</button>
+                                      </form>
+                                      <% } else if(product.orderStatus=='Shipped' ) { %>
+                                        <form
+                                          action="/admin/changeStatus/<%= orders._id %>/<%= product.productId._id %>/<%= product.orderStatus %>"
+                                          method="post">
+                                          <button type="submit" class="btn btn-outline-secondary">Shipped</button>
+                                        </form>
+                                        <% } else if(product.orderStatus=='Delivered' ) { %>
+                                          <form
+                                            action="/admin/changeStatus/<%= orders._id %>/<%= product.productId._id %>/<%= product.orderStatus %>"
+                                            method="post">
+                                            <button type="submit" class="btn btn-outline-secondary">Delivered</button>
+                                          </form>
+                                          <% } else if(product.orderStatus=='Cancelled' ) { %>
+                                            <button type="submit" class="btn btn-outline-secondary"
+                                              disabled>Cancelled</button>
+                                            <% } %>
+                                </td>
+                                <td class="align-middle text-center">
+                                  <% product.orderStatus='Cancelled' %>
+                                    <form
+                                      action="/admin/changeStatus/<%= orders._id %>/<%= product.productId._id %>/<%= product.orderStatus %>"
+                                      method="post">
+                                      <button type="submit" class="btn btn-outline-secondary">Cancel</button>
+                                    </form>
+                                </td>
+                              </tr>
+                              <% }) %>
+                               
                         </tbody>
                       </table>
                     </div>
@@ -518,41 +530,44 @@
           </div>
         </div>
         <div class="col-lg-4 mt-4">
-          <div class="card h-100">
-            <div class="card-header pb-0 p-3">
-              <div class="row">
-                <div class="col-6 d-flex align-items-center">
-                  <h6 class="mb-0">Order Details</h6>
+          <div class="row">
+            <div class="card h-100">
+              <div class="card-header pb-0 p-3">
+                <div class="row">
+                  <div class="col-6 d-flex align-items-center">
+                    <h6 class="mb-0">Billing Information</h6>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="card-body p-3 pb-0 mt-4">
-              <ul class="list-group">
-                <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                  <div class="d-flex flex-column">
-                    Subtotal
-                  </div>
-                  <div class="d-flex align-items-center text-sm">
-                    <%= orders.cartTotal %> 
-                  </div>
-                </li>
-                <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                  <div class="d-flex flex-column">
-                    Delivery
-                  </div>
-                  <div class="d-flex align-items-center text-sm">
-                    ₹180
-                  </div>
-                </li>
-                <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                  <div class="d-flex flex-column">
-                    Total
-                  </div>
-                  <div class="d-flex align-items-center text-sm">
-                    <%= orders.cartTotal + 180 %> 
-                  </div>
-                </li>
-              </ul>
+              <div class="card-body p-3 pb-0 mt-4">
+                <ul class="list-group">
+                  <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                    <div class="d-flex flex-column font-weight-bolder">
+                      Subtotal
+                    </div>
+                    <div class="d-flex align-items-center text-sm">
+                        <%= orders.cartTotal %>
+                    </div>
+                  </li>
+                  <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                    <div class="d-flex flex-column font-weight-bolder">
+                      Delivery
+                    </div>
+                    <div class="d-flex align-items-center text-sm">
+                      ₹180
+                    </div>
+                  </li>
+                  <hr style="height: 0.6px; color: black;">
+                  <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                    <div class="d-flex flex-column font-weight-bolder">
+                      Total
+                    </div>
+                    <div class="d-flex align-items-center text-sm">
+                        <%= orders.cartTotal + 180 %>
+                    </div>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -561,15 +576,24 @@
         <div class="col-md-5 mt-4">
           <div class="card">
             <div class="card-header pb-0 px-3">
-              <h6 class="mb-0">Billing Information</h6>
+              <h6 class="mb-0">Order Details</h6>
             </div>
             <div class="card-body pt-4 p-3">
               <ul class="list-group">
                 <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
                   <div class="d-flex flex-column">
-                    <h6 class="mb-3 text-sm">Purchase Date : <span class="text-dark font-weight-bold ms-sm-2"><%= moment(orders.date).format('LLL') %></span></h6>
-                    <h6 class="mb-3 text-sm">Delivery Date : <span class="text-dark font-weight-bold ms-sm-2"><%= moment(orders.date).format('LLL') %></span></h6>
-                    <h6 class="mb-3 text-sm">Payment Type  : <span class="text-dark font-weight-bold ms-sm-2"><%= orders.paymentMethod %> </span></h6>
+                    <h6 class="mb-3 text-sm">Purchase Date : <span class="text-secondary font-weight-bold ms-sm-2">
+                        <i class="far fa-calendar-alt me-2"></i>
+                        <%= moment(orders.date).format('LLL') %>
+                      </span></h6>
+                    <h6 class="mb-3 text-sm">Delivery Date  :  <span class="text-secondary font-weight-bold ms-sm-2">
+                        <i class="far fa-calendar-alt me-2"></i>
+                        <%= moment(orders.deliveryDate).format('LLL') %>
+                        
+                      </span></h6>
+                    <h6 class="mb-3 text-sm">Payment Type : <span class="text-secondary font-weight-bold ms-sm-2">
+                        <%= orders.paymentMethod %>
+                      </span></h6>
                   </div>
                 </li>
               </ul>
@@ -588,16 +612,16 @@
             <div class="card-body p-3 pb-0 mt-4">
               <ul class="list-group">
                 <li class="border-0 d-flex justify-content-between ps-0 mb-1 border-radius-lg">
-                    <%= orders.fullName %> 
+                  <%= orders.address.fullName %>
                 </li>
                 <li class="border-0 d-flex justify-content-between ps-0 mb-1 border-radius-lg">
-                  <%= orders.currentAddress %> 
+                  <%= orders.address.currentAddress %>
                 </li>
                 <li class="border-0 d-flex justify-content-between ps-0 mb-1 border-radius-lg">
-                  <%= orders.city %>, <%= orders.state %>   
+                  <%= orders.address.city %>, <%= orders.address.state %>
                 </li>
                 <li class="border-0 d-flex justify-content-between ps-0 mb-1 border-radius-lg">
-                  <%= orders.country %>, <%= orders.pincode %>  
+                  <%= orders.address.country %>, <%= orders.address.pincode %>
                 </li>
               </ul>
             </div>
@@ -610,31 +634,23 @@
                 <div class="col-md-6">
                   <h6 class="mb-0">Order Tracking</h6>
                 </div>
-                <!-- <div class="col-md-6 d-flex justify-content-end align-items-center">
-                  <i class="far fa-calendar-alt me-2"></i>
-                  <small>23 - 30 March 2020</small>
-                </div> -->
+                <div class="col-md-6 d-flex justify-content-end align-items-center">
+                  <a href="/admin/invoice/<%= orders._id %>">
+                    <button class="btn btn-link text-dark text-sm mb-0 px-0 ms-4"><i class="fas fa-file-pdf text-lg me-1"></i> PDF</button>
+                  </a>
+                </div>
               </div>
-              <!-- <div class="mt-4">
-                <form action="/admin/changeStatus/" method="post">
-                  <input type="radio" class="btn-check" name="orderStatus" id="Recieved" value="Recieved">
-                  <label class="btn btn-outline-secondary" for="Recieved">Recieved</label>
-
-                  <input type="radio" class="btn-check" name="orderStatus" id="Processed" value="Processed">
-                  <label class="btn btn-outline-secondary" for="Processed">Processed</label>
-
-                  <input type="radio" class="btn-check" name="orderStatus" id="Shipped" value="Shipped">
-                  <label class="btn btn-outline-secondary" for="Shipped">Shipped</label>
-
-                  <input type="radio" class="btn-check" name="orderStatus" id="danger-outlined" value="Delivered">
-                  <label class="btn btn-outline-secondary col-11 text-center" for="danger-outlined">Delivered</label>
-
-                  <div class="col-12 text-end">
-                    <button type="submit" class="btn btn-outline-primary btn-sm mb-0">Update</button>
-                    <a class="btn bg-gradient-dark mb-0" href="">&nbsp;&nbsp;Update</a>
-                  </div>
-                </form>
-              </div> -->
+              <div>
+                <h6 class="mb-3 mt-4 text-sm">Order ID : <span class="text-secondary">
+                  #<%= orders._id %>
+                </span></h6>
+                <h6 class="mb-3 mt-1 text-sm">Expected Delivery : <span class="text-secondary">
+                  <%= days %> days
+                </span></h6>
+                <h6 class="mb-3 mt-1 text-sm">Payment Status : <span class="text-secondary">
+                  <%= orders.paymentStatus %>
+                </span></h6>
+              </div>
             </div>
           </div>
         </div>
@@ -659,6 +675,7 @@
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="/javascript/user/Login/js/soft-ui-dashboard.min.js?v=1.0.3"></script>
+
 </body>
 
 </html>

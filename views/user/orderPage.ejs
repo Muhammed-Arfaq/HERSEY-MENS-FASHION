@@ -48,73 +48,94 @@
         <div class="loader"></div>
     </div>
 
-    <!-- Offcanvas Menu Begin -->
-    <div class="offcanvas-menu-overlay"></div>
-    <div class="offcanvas-menu-wrapper">
-        <div class="offcanvas__nav__option">
-            <a href="#" class="search-switch"><img src="img/icon/search.png" alt=""></a>
-            <a href="/wishlist"><img src="img/icon/heart.png" alt=""></a>
-            <a href="/shoppingCart"><img src="img/icon/cart.png" alt=""></a>  
-            <a href="/userProfile"><img src="img/icon/user.png" alt=""></a>          
-        </div>
-        <div id="mobile-menu-wrap"></div>
-    </div>
-    <!-- Offcanvas Menu End -->
-
     <!-- Header Section Begin -->
-    <header class="header">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3 col-md-3 col-9">
-                    <div class="header__logo ">
-                        <a href="/"><img src="/img/logoMain.png" style="height: 32px;" alt=""></a>
+
+    <div class="container position-sticky z-index-sticky top-0">
+        <div class="row">
+            <div class="col-12">
+                <!-- Navbar -->
+                <nav
+                    class="navbar navbar-expand-lg blur blur-rounded top-0 z-index-3 shadow position-absolute my-3 py-2 start-0 end-0 mx-4">
+                    <div class="container-fluid">
+                        <a class="navbar-brand font-weight-bolder ms-lg-0 ms-3 " href="/">
+                            <img src="/img/logoMain.png" style="height: 15px" alt="" />
+                        </a>
+                        <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false"
+                            aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon mt-2">
+                                <span class="navbar-toggler-bar bar1"></span>
+                                <span class="navbar-toggler-bar bar2"></span>
+                                <span class="navbar-toggler-bar bar3"></span>
+                            </span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navigation">
+                            <ul class="navbar-nav mx-auto">
+                                <li class="nav-item font-weight-bolder">
+                                    <a class="nav-link d-flex align-items-center me-2" href="/">
+                                        HOME
+                                    </a>
+                                </li>
+                                <li class="nav-item font-weight-bolder">
+                                    <a class="nav-link me-2 " href="/shop">
+                                        SHOP
+                                    </a>
+                                </li>
+                                <li class="nav-item font-weight-bolder">
+                                    <a class="nav-link me-2 " href="/wishlist">
+                                        WISHLIST
+                                    </a>
+                                </li>
+                                <li class="nav-item font-weight-bolder">
+                                    <a class="nav-link me-2 " href="/shoppingCart">
+                                        CART
+                                    </a>
+                                </li>
+                                <li class="nav-item font-weight-bolder">
+                                    <a class="nav-link me-2 " href="/userProfile">
+                                        MY ACCOUNT
+                                    </a>
+                                </li>
+                            </ul>
+                            <!-- <ul class="navbar-nav d-lg-block d-none">
+                                <li class="nav-item">
+                                    <a href="/logout" class="btn btn-sm btn-round mb-0 me-1 bg-gradient-dark">
+                                        LOGOUT</a>
+                                </li>
+                            </ul> -->
+                        </div>
                     </div>
-                </div>
-                <div class="col-lg-6 col-md-6">
-                    <nav class="header__menu mobile-menu">
-                        <ul>
-                            <li class="active"><a href="/" style="text-decoration: none;">Home</a></li>
-                            <li><a href="/shop" style="text-decoration: none;">Shop</a></li>
-                            <li><a href="#" style="text-decoration: none;">Pages</a></li>
-                            <li><a href="./blog.html" style="text-decoration: none;">Blog</a></li>
-                            <li><a href="./contact.html" style="text-decoration: none;">Contacts</a></li>
-                        </ul>
-                    </nav>
-                </div>
-                <div class="col-lg-3 col-md-3">
-                    <div class="header__nav__option">
-                        <!-- <a href="#" class="search-switch"><img src="img/icon/search.png" alt=""></a> -->
-                        <a href="/wishlist"><img src="/img/icon/heart.png" alt=""></a>
-                        <a href="/shoppingCart"><img src="/img/icon/cart.png" alt=""></a>
-                        <a href="/userProfile"><img src="/img/icon/user.png" alt=""></a>
-                    </div>
-                </div>
+                </nav>
+                <!-- End Navbar -->
             </div>
-            <div class="canvas__open"><i class="fa fa-bars"></i></div>
         </div>
-    </header>
+    </div>
     <!-- Header Section End -->
     <!-- End Navbar -->
     <div class="container-fluid">
-        <div class="page-header min-height-300 border-radius-xl mt-4"
-            style="background-image: url('/img/curved-images/curved0.jpg'); background-position-y: 50%;">
+        <div class="page-header min-height-300 border-radius-xl mt-4" style="
+              background-image: url('/img/curved-images/curved0.jpg');
+              background-position-y: 50%;
+            ">
             <span class="mask bg-gradient-primary opacity-6"></span>
         </div>
         <!-- <div class="page-header min-height-100 border-radius-xl mt-1"></div> -->
         <div class="card card-body blur shadow-blur mx-4 mt-n6 overflow-hidden">
             <div class="row gx-4">
                 <div class="col-auto">
+
                     <div class="avatar avatar-xl position-relative">
-                        <img src="/img/bruce-mars.jpg" alt="profile_image" class="w-100 border-radius-lg shadow-sm">
+                        <img src="/img" alt="profile_image" class="w-100 border-radius-lg shadow-sm" />
                     </div>
+
                 </div>
                 <div class="col-auto my-auto">
                     <div class="h-100">
                         <h5 class="mb-1">
-                            User Full Name
+                            <%= user.fullName %>
                         </h5>
                         <p class="mb-0 font-weight-bold text-sm">
-                            username
+                            <%= user.name %>
                         </p>
                     </div>
                 </div>
@@ -122,8 +143,7 @@
                     <div class="nav-wrapper position-relative end-0">
                         <ul class="nav nav-pills nav-fill p-1 bg-transparent" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link mb-0 px-0 py-1 " data-bs-toggle="tab" href="javascript:;" role="tab"
-                                    aria-selected="true">
+                                <a class="nav-link mb-0 px-0 py-1" href="/order" aria-selected="true">
                                     <svg class="text-dark" width="16px" height="16px" viewBox="0 0 42 42" version="1.1"
                                         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -145,15 +165,14 @@
                                             </g>
                                         </g>
                                     </svg>
-                                    <span class="ms-1">App</span>
+                                    <span class="ms-1">My Orders</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link mb-0 px-0 py-1 " data-bs-toggle="tab" href="javascript:;" role="tab"
-                                    aria-selected="false">
+                                <a class="nav-link mb-0 px-0 py-1" href="/userSettings" aria-selected="false">
                                     <svg class="text-dark" width="16px" height="16px" viewBox="0 0 40 44" version="1.1"
                                         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                        <title>document</title>
+                                        <title>Settings</title>
                                         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                             <g transform="translate(-1870.000000, -591.000000)" fill="#FFFFFF"
                                                 fill-rule="nonzero">
@@ -170,15 +189,14 @@
                                             </g>
                                         </g>
                                     </svg>
-                                    <span class="ms-1">Messages</span>
+                                    <span class="ms-1">Settings</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link mb-0 px-0 py-1 " data-bs-toggle="tab" href="javascript:;" role="tab"
-                                    aria-selected="false">
+                                <a class="nav-link mb-0 px-0 py-1" href="/logout" aria-selected="true">
                                     <svg class="text-dark" width="16px" height="16px" viewBox="0 0 40 40" version="1.1"
                                         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                        <title>settings</title>
+                                        <title>Logout</title>
                                         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                             <g transform="translate(-2020.000000, -442.000000)" fill="#FFFFFF"
                                                 fill-rule="nonzero">
@@ -198,7 +216,7 @@
                                             </g>
                                         </g>
                                     </svg>
-                                    <span class="ms-1">Settings</span>
+                                    <span class="ms-1">Logout</span>
                                 </a>
                             </li>
                         </ul>
@@ -224,10 +242,13 @@
                         </div>
                         <div class="col-md-2  border-0 ps-0 pt-0 text-sm text-center">
                             <strong class="text-dark">Details</strong>
-                        </div>                        
+                        </div>
                         <div class="col-md-2  border-0 ps-0 pt-0 text-sm text-center">
                             <strong class="text-dark">Address</strong>
-                        </div>                        
+                        </div>
+                        <div class="col-md-1  border-0 ps-0 pt-0 text-sm text-center">
+                            <strong class="text-dark">Delivery Date</strong>
+                        </div>
                         <div class="col-md-2  border-0 ps-0 pt-0 text-sm text-center">
                             <strong class="text-dark">Phone Number</strong>
                         </div>
@@ -240,48 +261,72 @@
                         <div class="col-md-1  border-0 ps-0 pt-0 text-sm text-center">
                             <strong class="text-dark">Status</strong>
                         </div>
-                        <div class="col-md-2  border-0 ps-0 pt-0 text-sm text-center">
+                        <div class="col-md-1  border-0 ps-0 pt-0 text-sm text-center">
                             <strong class="text-dark">Action</strong>
                         </div>
                     </div>
-                    <hr class="mt-0">                        
+                    <hr class="mt-0">
                     <div class="row p-4">
-                        <% order.forEach(function(order) { %> 
+                        <% order.forEach(function(order) { %>
                             <% order.product.forEach(function(product){ %>
-                                
-                                    <div class="col-md-1  border-0 ps-0 pt-4 text-sm text-center">                 
-                                        <img src="/img/<%= product.productId.imageUrl %>" alt="profile_image" class="w-80 border-radius-lg shadow-sm">
-                                    </div>
-                                    <div class="col-md-2  border-0 ps-0 pt-4 text-sm text-center">
-                                        <p class="text-dark font-weight-bold"> <%= product.productId.name %> </p>
-                                        <p class="text-dark">Quantity: <%= product.quantity %> </p>
-                                    </div>
-                                    <div class="col-md-2  border-0 ps-0 pt-4 text-sm text-center">
-                                        <p class="text-dark"> <%= order.fullName %> </p>
-                                        <p class="text-dark"> <%= order.currentAddress %>, <%= order.city %>, <%= order.state %>, <%= order.country %>, <%= order.pincode %> </p>
-                                    </div>                        
-                                    <div class="col-md-2  border-0 ps-0 pt-4 text-sm text-center">
-                                        <p class="text-dark"><%= user %> </p>
-                                    </div>
-                                    <div class="col-md-1  border-0 ps-0 pt-4 text-sm text-center">
-                                        <p class="text-dark"><%= product.total %> </p>
-                                    </div>
-                                    <div class="col-md-1  border-0 ps-0 pt-4 text-sm text-center">
-                                        <p class="text-dark"><%= order.paymentMethod %></p>
-                                    </div>
-                                    <div class="col-md-1  border-0 ps-0 pt-4 text-sm text-center">
-                                        <p class="text-dark"><%= product.orderStatus %></p>
-                                    </div>
-                                    <div class="col-md-2  border-0 ps-0 pt-4 text-sm text-center">
-                                        <form action="/cancelOrder/<%= product.productId._id %>" method="post">
-                                         <button type="submit" value="Cancelled" name="orderStatus" class="btn btn-outline-secondary">Cancel</button>
-                                        </form>
-                                    </div>
-                                <% }) %>   
-                         <% }) %> 
-                        </div>                         
+
+                                <div class="col-md-1  border-0 ps-0 pt-4 text-sm text-center">
+                                    <img src="/img/<%= product.productId.imageUrl %>" alt="profile_image"
+                                        class="w-80 border-radius-lg shadow-sm">
+                                </div>
+                                <div class="col-md-2  border-0 ps-0 pt-4 text-sm text-center">
+                                    <p class="text-dark font-weight-bold">
+                                        <%= product.productId.name %>
+                                    </p>
+                                    <p class="text-dark">Quantity: <%= product.quantity %>
+                                    </p>
+                                </div>
+                                <div class="col-md-2  border-0 ps-0 pt-4 text-sm text-center">
+                                    <p class="text-dark">
+                                        <%= order.address.fullName %>
+                                    </p>
+                                    <p class="text-dark">
+                                        <%= order.address.currentAddress %>, <%= order.address.city %>, <%=
+                                                    order.address.state %>, <%= order.address.country %>, <%=
+                                                            order.address.pincode %>
+                                    </p>
+                                </div>
+                                <div class="col-md-1  border-0 ps-0 pt-4 text-sm text-center">
+                                    <p class="text-dark">
+                                        <%= moment(order.deliveryDate).format('MMMM D') %>
+                                    </p>
+                                </div>
+                                <div class="col-md-2  border-0 ps-0 pt-4 text-sm text-center">
+                                    <p class="text-dark">
+                                        <%= user %>
+                                    </p>
+                                </div>
+                                <div class="col-md-1  border-0 ps-0 pt-4 text-sm text-center">
+                                    <p class="text-dark">
+                                        <%= product.total %>
+                                    </p>
+                                </div>
+                                <div class="col-md-1  border-0 ps-0 pt-4 text-sm text-center">
+                                    <p class="text-dark">
+                                        <%= order.paymentMethod %>
+                                    </p>
+                                </div>
+                                <div class="col-md-1  border-0 ps-0 pt-4 text-sm text-center">
+                                    <p class="text-dark">
+                                        <%= product.orderStatus %>
+                                    </p>
+                                </div>
+                                <div class="col-md-1  border-0 ps-0 pt-4 text-sm text-center">
+                                    <form action="/cancelOrder/<%= product._id %>" method="post">
+                                        <button type="submit" value="Cancelled" name="orderStatus"
+                                            class="btn btn-outline-dark">Cancel</button>
+                                    </form>
+                                </div>
+                                <% }) %>
+                                    <% }) %>
+                    </div>
                 </div>
-            </div>           
+            </div>
         </div>
     </div>
     <!--   Core JS Files   -->

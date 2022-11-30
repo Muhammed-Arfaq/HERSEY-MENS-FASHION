@@ -126,8 +126,19 @@ exports.allOrders = catchAsync(async(req, res, next) => {
 exports.manageOrder = catchAsync(async(req, res, next) => {
     
     const orderId = req.params.id
-    const orders = await Order.find({ _id: orderId }).populate('product.productId')
-    res.render('admin/orderManagement', { orders, moment })
+    const orders = await Order.findOne({ _id: orderId }).populate('product.productId')
+    const days = parseInt((orders.deliveryDate.getTime() - orders.date.getTime()) / (1000 * 60 * 60 * 24))
+    res.render('admin/orderManagement', { orders, days, moment })
+})
+
+exports.invoice = catchAsync(async(req, res, next) => {
+    
+    const orderId = req.params.id
+    const orders = await Order.findOne({ _id: orderId }).populate('product.productId')
+    const userId = orders.userId
+    const user = await User.findOne({ _id: userId })
+    console.log(user);
+    res.render('admin/invoice', { orders, user, orderId, index:1, moment })
 })
 
 

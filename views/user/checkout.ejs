@@ -30,6 +30,17 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+    <!-- Nucleo Icons -->
+    <link href="../stylesheets/user/cssL/nucleo-icons.css" rel="stylesheet" />
+    <link href="../stylesheets/user/cssL/nucleo-svg.css" rel="stylesheet" />
+    <!-- Font Awesome Icons -->
+    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+    <link href="../stylesheets/user/cssL/nucleo-svg.css" rel="stylesheet" />
+    <!-- CSS Files -->
+    <link id="pagestyle" href="../stylesheets/user/cssL/soft-ui-dashboard.css?v=1.0.3" rel="stylesheet" />
+
 </head>
 
 <body>
@@ -38,62 +49,73 @@
         <div class="loader"></div>
     </div>
 
-    <!-- Offcanvas Menu Begin -->
-    <div class="offcanvas-menu-overlay"></div>
-    <div class="offcanvas-menu-wrapper">
-        <div class="offcanvas__nav__option">
-            <a href="#" class="search-switch"><img src="img/icon/search.png" alt="" /></a>
-            <a href="/wishlist"><img src="img/icon/heart.png" alt="" /></a>
-            <a href="/shoppingCart"><img src="img/icon/cart.png" alt="" /></a>
-            <a href="/userProfile"><img src="img/icon/user.png" alt="" /></a>
-        </div>
-        <div id="mobile-menu-wrap"></div>
-    </div>
-    <!-- Offcanvas Menu End -->
-
     <!-- Header Section Begin -->
-    <header class="header">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3 col-md-3 col-9">
-                    <div class="header__logo">
-                        <a href="/"><img src="/img/logoMain.png" style="height: 32px" alt="" /></a>
+
+    <div class="container position-sticky z-index-sticky top-0">
+        <div class="row">
+            <div class="col-12">
+                <!-- Navbar -->
+                <nav
+                    class="navbar navbar-expand-lg blur blur-rounded top-0 z-index-3 shadow position-absolute my-3 py-2 start-0 end-0 mx-4">
+                    <div class="container-fluid">
+                        <a class="navbar-brand font-weight-bolder ms-lg-0 ms-3 " href="/">
+                            <img src="/img/logoMain.png" style="height: 15px" alt="" />
+                        </a>
+                        <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false"
+                            aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon mt-2">
+                                <span class="navbar-toggler-bar bar1"></span>
+                                <span class="navbar-toggler-bar bar2"></span>
+                                <span class="navbar-toggler-bar bar3"></span>
+                            </span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navigation">
+                            <ul class="navbar-nav mx-auto">
+                                <li class="nav-item font-weight-bolder">
+                                    <a class="nav-link d-flex align-items-center me-2" href="/">
+                                        HOME
+                                    </a>
+                                </li>
+                                <li class="nav-item font-weight-bolder">
+                                    <a class="nav-link me-2 " href="/shop">
+                                        SHOP
+                                    </a>
+                                </li>
+                                <li class="nav-item font-weight-bolder">
+                                    <a class="nav-link me-2 " href="/wishlist">
+                                        WISHLIST
+                                    </a>
+                                </li>
+                                <li class="nav-item font-weight-bolder">
+                                    <a class="nav-link me-2 " href="/shoppingCart">
+                                        CART
+                                    </a>
+                                </li>
+                                <li class="nav-item font-weight-bolder">
+                                    <a class="nav-link me-2 " href="/userProfile">
+                                        MY ACCOUNT
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="navbar-nav d-lg-block d-none">
+                                <li class="nav-item">
+                                    <a href="/logout" class="btn btn-sm btn-round mb-0 me-1 bg-gradient-dark">
+                                        LOGOUT</a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                </div>
-                <div class="col-lg-6 col-md-6">
-                    <nav class="header__menu mobile-menu">
-                        <ul>
-                            <li class="active">
-                                <a href="/" style="text-decoration: none">Home</a>
-                            </li>
-                            <li><a href="/shop" style="text-decoration: none">Shop</a></li>
-                            <li><a href="#" style="text-decoration: none">Pages</a></li>
-                            <li>
-                                <a href="./blog.html" style="text-decoration: none">Blog</a>
-                            </li>
-                            <li>
-                                <a href="./contact.html" style="text-decoration: none">Contacts</a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-                <div class="col-lg-3 col-md-3">
-                    <div class="header__nav__option">
-                        <!-- <a href="#" class="search-switch"><img src="img/icon/search.png" alt=""></a> -->
-                        <a href="/wishlist"><img src="/img/icon/heart.png" alt="" /></a>
-                        <a href="/shoppingCart"><img src="/img/icon/cart.png" alt="" /></a>
-                        <a href="/userProfile"><img src="/img/icon/user.png" alt="" /></a>
-                    </div>
-                </div>
+                </nav>
+                <!-- End Navbar -->
             </div>
-            <div class="canvas__open"><i class="fa fa-bars"></i></div>
         </div>
-    </header>
+    </div>
     <!-- Header Section End -->
 
     <!-- Breadcrumb Section Begin -->
     <section class="breadcrumb-option">
-        <div class="container">
+        <div class="container mt-5">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb__text">
@@ -114,19 +136,66 @@
     <section class="checkout spad">
         <div class="container">
             <div class="checkout__form">
-                <form id="checkout-form" action="">
-                    <div class="row">
-                        <div class="col-lg-8 col-md-6">
-                            <h6 class="coupon__code">
-                                <span class="icon_tag_alt"></span> Have a coupon?
-                                <a href="#">Click here</a> to enter your code
-                            </h6>
+                <div class="row">
+                    <div class="col-lg-8 col-md-6">
+                        <h6 class="coupon__code">
+                            <span class="icon_tag_alt"></span> Want to change Address?
+
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-dark mt-3 ms-2" data-bs-toggle="modal"
+                                data-bs-target="#exampleModal">
+                                CLICK HERE
+                            </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Change Address
+                                            </h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <form action="/changeAddress" method="post">
+                                            <div class="modal-body">
+                                                <% profile.forEach(function(add, indexs){ %>
+                                                    <div class="frb-group">
+                                                        <div class="frb frb-default">
+                                                            <input type="radio" id="<%= indexs %>" class="radio-button"
+                                                                name="indexs" value="<%= indexs %>">
+                                                            <label for="<%= indexs %>">
+                                                                <span class="ms-5 mb-1 mt-3">
+                                                                    <%= add.fullName %>, <%= add.currentAddress %>
+                                                                </span>
+                                                                <span class="ms-5 mb-3">
+                                                                    <%= add.city %>, <%= add.state %>, <%= add.country
+                                                                                %>, <%= add.pincode %>
+                                                                </span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <% }) %>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-dark">Update Address</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </h6>
                             <h6 class="checkout__title">Billing Details</h6>
+
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
                                         <p>Full Name<span>*</span></p>
-                                        <input type="text" name="fullName" value="<%= profiles.fullName %>" />
+                                        <input type="text" name="fullName" value="<%= profile[addIndex].fullName %>" />
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -138,20 +207,20 @@
                             </div>
                             <div class="checkout__input">
                                 <p>Country<span>*</span></p>
-                                <input type="text" name="country" value="<%= profiles.country %>" />
+                                <input type="text" name="country" value="<%= profile[addIndex].country %>" />
                             </div>
                             <div class="checkout__input">
                                 <p>Address<span>*</span></p>
                                 <input type="text" name="currentAddress" class="checkout__input__add"
-                                    value="<%= profiles.currentAddress %>" />
+                                    value="<%= profile[addIndex].currentAddress %>" />
                             </div>
                             <div class="checkout__input">
                                 <p>Town/City<span>*</span></p>
-                                <input type="text" name="city" value="<%= profiles.city %>" />
+                                <input type="text" name="city" value="<%= profile[addIndex].city %>" />
                             </div>
                             <div class="checkout__input">
                                 <p>Country/State<span>*</span></p>
-                                <input type="text" name="state" value="<%= profiles.state %>" />
+                                <input type="text" name="state" value="<%= profile[addIndex].state %>" />
                             </div>
                             <div class="row">
                                 <div class="col-lg-6">
@@ -163,48 +232,68 @@
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
                                         <p>Postcode / ZIP<span>*</span></p>
-                                        <input type="text" name="pincode" value="<%= profiles.pincode %>" />
+                                        <input type="text" name="pincode" value="<%= profile[addIndex].pincode %>" />
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6">
-                            <div class="checkout__order">
-                                <h4 class="order__title">Your order</h4>
-                                <div class="checkout__order__products font-weight-bold">
-                                    Product <span>Total</span>
-                                </div>
-                                <ul class="checkout__total__products">
-                                    <% carts.forEach(function(cart){ %>
-                                        <li>
-                                            <%= index++ %>. <%= cart.productId.name %><span>₹<%= cart.total %></span>
-                                        </li>
-                                        <% }) %>
-                                </ul>
-                                <ul class="checkout__total__all font-weight-bold">
-                                    <li>Subtotal <span>₹ <%= cartTotal %></span></li>
-                                    <li>Discount <span class="text-success">₹ 500 </span></li>
-                                    <hr />
-                                    <li>Total <span>₹ <%= cartTotal - 500 %> </span></li>
-                                </ul>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adip elit, sed do
-                                    eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                </p>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="cart__discount">
+                            <h6 class="">Discount codes</h6>
 
+                            <form class="row g-3">
+                                <div class="col-auto">
+                                </div>
+                                <div class="col-auto">
+                                </div>
+                            </form>
+
+                            <form action="#">
+                                <div class="col-12 mb-3 text-end">
+                                    <input type="email" class="form-control outline-dark"
+                                        placeholder="Enter Coupon Code">
+                                    <button type="submit" class="btn btn-dark btn-sm mt-0">Apply</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="checkout__order">
+                            <h4 class="order__title">Your order</h4>
+                            <div class="checkout__order__products font-weight-bold">
+                                Product <span>Total</span>
+                            </div>
+                            <ul class="checkout__total__products">
+                                <% carts.forEach(function(cart){ %>
+                                    <li>
+                                        <%= index++ %>. <%= cart.productId.name %><span>₹<%= cart.total %></span>
+                                    </li>
+                                    <% }) %>
+                            </ul>
+                            <ul class="checkout__total__all font-weight-bold">
+                                <li>Subtotal <span>₹ <%= cartTotal %></span></li>
+                                <li>Discount <span class="text-success">₹ 500 </span></li>
+                                <hr />
+                                <li>Total <span>₹ <%= cartTotal - 500 %> </span></li>
+                            </ul>
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adip elit, sed do
+                                eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                            </p>
+                            <form id="checkout-form" action="">
                                 <input type="radio" class="btn-check" name="paymentMethod" id="success-outlined"
-                                    value="Razorpay" checked />
-                                <label class="btn btn-outline-secondary" for="success-outlined">Razorpay</label>
+                                    value="Razorpay" />
+                                <label class="btn btn-outline-dark" for="success-outlined">Razorpay</label>
 
                                 <input type="radio" class="btn-check" name="paymentMethod" id="danger-outlined"
                                     value="Cash on Delivery" />
-                                <label class="btn btn-outline-secondary" for="danger-outlined">Cash on Delivery</label>
+                                <label class="btn btn-outline-dark" for="danger-outlined">Cash on Delivery</label>
+
+                                <input name="addIndex" id="danger-outlined" value="<%= addIndex %>" hidden />
 
                                 <button type="submit" class="site-btn">PLACE ORDER</button>
-                            </div>
+                            </form>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </section>
@@ -330,60 +419,176 @@
                 }
             },
         });
-    
 
-    function razorpayPayment(order) {
-        console.log(order.order.id);
-        var options = {
-            "key": 'rzp_test_VQSkwOUrerK4eq',
-            "amount": order.order.amount,
-            "currency": "INR",
-            "name": "Hersey Mens Formals",
-            "description": "Order Transaction",
-            "image": "img/logoMain.png",
-            "order_id": order.order.id,
-            "handler": function (response) {
-                verifyPayment(response, order);
-            },
-            "prefill": {
+
+        function razorpayPayment(order) {
+            console.log(order.order.id);
+            var options = {
+                "key": 'rzp_test_VQSkwOUrerK4eq',
+                "amount": order.order.amount,
+                "currency": "INR",
                 "name": "Hersey Mens Formals",
-                "email": "herseyMensFormals@gmail.com",
-                "contact": "9999999999",
-            },
-            "notes": {
-                "address": "Razorpay Corporate Office",
-            },
-            "theme": {
-                "color": "#3399cc",
-            },
-        };
+                "description": "Order Transaction",
+                "image": "img/logoMain.png",
+                "order_id": order.order.id,
+                "handler": function (response) {
+                    verifyPayment(response, order);
+                },
+                "prefill": {
+                    "name": "Hersey Mens Formals",
+                    "email": "herseyMensFormals@gmail.com",
+                    "contact": "9999999999",
+                },
+                "notes": {
+                    "address": "Razorpay Corporate Office",
+                },
+                "theme": {
+                    "color": "#3399cc",
+                },
+            };
 
-        function verifyPayment(payment, order) {
-        $.ajax({
-            url: "/verifyPayment",
-            data: {
-                payment,
-                order,
-                address: $("#checkout-form").serialize()
-            },
-            method: "post",
-            success: (response) => {
-                if (response.status) {
-                    location.href = "/orderSuccess";
-                } else {
-                    alert("payment failed");
-                }
-            },
-        });
+            function verifyPayment(payment, order) {
+                $.ajax({
+                    url: "/verifyPayment",
+                    data: {
+                        payment,
+                        order,
+                        address: $("#checkout-form").serialize()
+                    },
+                    method: "post",
+                    success: (response) => {
+                        if (response.status) {
+                            location.href = "/orderSuccess";
+                        } else {
+                            alert("payment failed");
+                        }
+                    },
+                });
+            }
+
+            var rzp1 = new Razorpay(options);
+            rzp1.open();
+        }
+
+    });
+</script>
+
+<style>
+    .frb-group {
+        margin: 15px 0;
     }
 
-        var rzp1 = new Razorpay(options);
-        rzp1.open();
-}
+    .frb~.frb {
+        margin-top: 15px;
+    }
 
-});
+    .frb input[type="radio"]:empty,
+    .frb input[type="checkbox"]:empty {
+        display: none;
+    }
 
-    
-</script>
+    .frb input[type="radio"]~label:before,
+    .frb input[type="checkbox"]~label:before {
+        font-family: FontAwesome;
+        content: '\f096';
+        position: absolute;
+        top: 50%;
+        margin-top: -11px;
+        left: 15px;
+        font-size: 22px;
+    }
+
+    .frb input[type="radio"]:checked~label:before,
+    .frb input[type="checkbox"]:checked~label:before {
+        content: '\f046';
+    }
+
+    .frb input[type="radio"]~label,
+    .frb input[type="checkbox"]~label {
+        position: relative;
+        cursor: pointer;
+        width: 100%;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f2f2f2;
+    }
+
+    .frb input[type="radio"]~label:focus,
+    .frb input[type="radio"]~label:hover,
+    .frb input[type="checkbox"]~label:focus,
+    .frb input[type="checkbox"]~label:hover {
+        box-shadow: 0px 0px 3px #333;
+    }
+
+    .frb input[type="radio"]:checked~label,
+    .frb input[type="checkbox"]:checked~label {
+        color: #fafafa;
+    }
+
+    .frb input[type="radio"]:checked~label,
+    .frb input[type="checkbox"]:checked~label {
+        background-color: #f2f2f2;
+    }
+
+    .frb.frb-default input[type="radio"]:checked~label,
+    .frb.frb-default input[type="checkbox"]:checked~label {
+        color: #333;
+    }
+
+    .frb.frb-primary input[type="radio"]:checked~label,
+    .frb.frb-primary input[type="checkbox"]:checked~label {
+        background-color: #337ab7;
+    }
+
+    .frb.frb-success input[type="radio"]:checked~label,
+    .frb.frb-success input[type="checkbox"]:checked~label {
+        background-color: #5cb85c;
+    }
+
+    .frb.frb-info input[type="radio"]:checked~label,
+    .frb.frb-info input[type="checkbox"]:checked~label {
+        background-color: #5bc0de;
+    }
+
+    .frb.frb-warning input[type="radio"]:checked~label,
+    .frb.frb-warning input[type="checkbox"]:checked~label {
+        background-color: #f0ad4e;
+    }
+
+    .frb.frb-danger input[type="radio"]:checked~label,
+    .frb.frb-danger input[type="checkbox"]:checked~label {
+        background-color: #d9534f;
+    }
+
+    .frb input[type="radio"]:empty~label span,
+    .frb input[type="checkbox"]:empty~label span {
+        display: inline-block;
+    }
+
+    .frb input[type="radio"]:empty~label span.frb-title,
+    .frb input[type="checkbox"]:empty~label span.frb-title {
+        font-size: 16px;
+        font-weight: 700;
+        margin: 5px 5px 5px 50px;
+    }
+
+    .frb input[type="radio"]:empty~label span.frb-description,
+    .frb input[type="checkbox"]:empty~label span.frb-description {
+        font-weight: normal;
+        font-style: italic;
+        color: #999;
+        margin: 5px 5px 5px 50px;
+    }
+
+    .frb input[type="radio"]:empty:checked~label span.frb-description,
+    .frb input[type="checkbox"]:empty:checked~label span.frb-description {
+        color: #fafafa;
+    }
+
+    .frb.frb-default input[type="radio"]:empty:checked~label span.frb-description,
+    .frb.frb-default input[type="checkbox"]:empty:checked~label span.frb-description {
+        color: #999;
+    }
+</style>
 
 </html>

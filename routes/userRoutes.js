@@ -95,6 +95,10 @@ router
     .post(authcontroller.protect, usercontroller.updateUserAddress)
 
 router
+    .route('/changeAddress')
+    .post(authcontroller.protect, usercontroller.checkout)
+
+router
     .route('/deleteAddress/:id')
     .post(authcontroller.protect, usercontroller.deleteAddress)
 
