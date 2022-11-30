@@ -5,81 +5,90 @@ const admincontroller = require("./../controllers/adminController");
 const router = express.Router();
 
 
+// router  
+//     .route("/signup")
+//     .get(admincontroller.addAdmin)
+//     .post(authcontroller.signup)
+
 router  
     .route("/login")
     .get(admincontroller.loginPage)
     .post(authcontroller.adminLogin)
 
 router
+    .route('/logout')
+    .get(authcontroller.adminProtect, admincontroller.adminLogout)
+
+router
     .route('/dashboard')
-    .get(admincontroller.adminHome)
+    .get(authcontroller.adminProtect, admincontroller.adminHome)
 
 router
     .route("/addProducts")
-    .get(admincontroller.addProduct)
-    .post(authcontroller.addProducts)
+    .get(authcontroller.adminProtect, admincontroller.addProduct)
+    .post(authcontroller.adminProtect, authcontroller.addProducts)
 
 router
     .route('/dashboard/manageProducts')
-    .get(admincontroller.getAllProducts)
+    .get(authcontroller.adminProtect, admincontroller.getAllProducts)
 
 router
     .route("/category")
-    .post(authcontroller.addCategory)
-    .get(admincontroller.getCategory)
+    .post(authcontroller.adminProtect, authcontroller.addCategory)
+    .get(authcontroller.adminProtect, admincontroller.getCategory)
 
 router
     .route('/dashboard/manageUsers')
-    .get(admincontroller.getAllUsers)
+    .get(authcontroller.adminProtect, admincontroller.getAllUsers)
 
 router
     .route('/dashboard/blockUser/:id')
-    .post(admincontroller.blockUser)
+    .post(authcontroller.adminProtect, admincontroller.blockUser)
 
 router
     .route('/dashboard/unBlockUser/:id')
-    .post(admincontroller.unBlockUser)
+    .post(authcontroller.adminProtect, admincontroller.unBlockUser)
 
 router
     .route('/dashboard/editProducts/:id')
-    .get(admincontroller.editProductRender)
-    .post(admincontroller.editProduct)
+    .get(authcontroller.adminProtect, admincontroller.editProductRender)
+    .post(authcontroller.adminProtect, admincontroller.editProduct)
 
 router
     .route('/dashboard/deleteProducts/:id')
-    .post(admincontroller.deleteProduct)
+    .post(authcontroller.adminProtect, admincontroller.deleteProduct)
 
 router
     .route('/dashboard/addCategories')
-    .get(admincontroller.getCategory)
+    .get(authcontroller.adminProtect, admincontroller.getCategory)
 
 router
     .route('/dashboard/deleteCategory/:id')
-    .post(admincontroller.deleteCategory)
+    .post(authcontroller.adminProtect, admincontroller.deleteCategory)
 
 router
     .route('/addBanner')
-    .post(authcontroller.addBanner)
+    .post(authcontroller.adminProtect, authcontroller.addBanner)
 
 router
     .route('/dashboard/manageBanner')
-    .get(admincontroller.getBanner)
+    .get(authcontroller.adminProtect, admincontroller.getBanner)
 
 router
     .route('/dashboard/manageBanner/:id')   
-    .post(admincontroller.deleteBanner)
+    .post(authcontroller.adminProtect, admincontroller.deleteBanner)
 
 router
     .route('/manageOrder')
-    .get(admincontroller.allOrders)
+    .get(authcontroller.adminProtect, admincontroller.allOrders)
 
 router
     .route('/manageOrder/:id')
-    .get(admincontroller.manageOrder)
+    .get(authcontroller.adminProtect, admincontroller.manageOrder)
 
 router  
     .route('/changeStatus/:id/:prod/:status')
-    .post(authcontroller.changeOrderStatus)
+    .post(authcontroller.adminProtect, authcontroller.changeOrderStatus)
 
 router
     .route('/invoice/:id')

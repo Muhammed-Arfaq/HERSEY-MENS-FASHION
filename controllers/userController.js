@@ -12,6 +12,9 @@ const Category = require('../models/categoryModel')
 const jwt = require('jsonwebtoken')
 const moment = require('moment')
 
+exports.pageNotFound = (req, res) => {
+    res.render('pageNotFound')
+}
 
 exports.userLogin = (req, res) => {
     res.render('user/sign-in')

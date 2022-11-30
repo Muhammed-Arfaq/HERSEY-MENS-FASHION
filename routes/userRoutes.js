@@ -127,4 +127,8 @@ router
     .route('/verifyPayment')
     .post(authcontroller.protect, authcontroller.verifyPayment)
 
+router
+    .route('/404')
+    .get(usercontroller.pageNotFound)
+
 module.exports = router

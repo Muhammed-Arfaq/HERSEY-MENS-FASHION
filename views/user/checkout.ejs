@@ -410,11 +410,9 @@
             data: $("#checkout-form").serialize(),
             success: (response) => {
                 if (response.status) {
-                    alert('errorrrrr')
                     window.location.href = "/orderSuccess";
                     console.log(response);
                 } else {
-                    alert('hiiii')
                     razorpayPayment(response);
                 }
             },

@@ -80,15 +80,7 @@ const createSendToken = (user, statusCode, res) => {
 //         passwordConfirm: req.body.passwordConfirm
 //     })
 
-//     const token = signToken(newAdmin._id)
-
-//     res.status(201).json({
-//         status: 'success',
-//         token,
-//         data: {
-//             user: newAdmin
-//         }
-//     })
+//     createSendToken(newAdmin, 201, res);
 //     next()
 // })
 
@@ -212,8 +204,6 @@ exports.addCategory = catchAsync(async (req, res, next) => {
     const newCategory = await Category.create({
         name: req.body.name,
     });
-
-    createSendToken(newCategory, 201, res);
     res.redirect("/admin/category");
 });
 
@@ -233,8 +223,6 @@ exports.addProducts = catchAsync(async (req, res, next) => {
         quantity: req.body.quantity,
         imageUrl: productImages,
     });
-
-    createSendToken(newProduct, 201, res);
     res.redirect("/admin/dashboard/manageProducts");
     next();
 });
@@ -248,8 +236,6 @@ exports.addBanner = catchAsync(async (req, res, next) => {
     const newBanner = await Banner.create({
         image: productImages,
     });
-
-    createSendToken(newBanner, 201, res);
     res.redirect("/admin/dashboard/manageBanner");
     next();
 });
@@ -265,8 +251,6 @@ exports.addProfileImage = catchAsync(async (req, res, next) => {
         userId: mongoose.Types.ObjectId(userId._id),
         image: productImages,
     });
-
-    createSendToken(newAvatar, 201, res);
     res.redirect("/userProfile");
     next();
 });
@@ -306,11 +290,10 @@ exports.addToCart = catchAsync(async (req, res, next) => {
         }
     } else {
         const addCart = await Cart.create({
-            userId: mongoose.Types.ObjectId(req.user._id),
+            userId:req.user._id,
             product: [{ productId, quantity, total }],
             cartTotal: total,
         });
-        createSendToken(addCart, 201, res);
     }
     res.redirect("back");
     next();
@@ -423,7 +406,6 @@ exports.addToWishlist = catchAsync(async (req, res, next) => {
             userId: mongoose.Types.ObjectId(req.user._id),
             productId: mongoose.Types.ObjectId(productId),
         });
-        createSendToken(addWishlist, 201, res);
     }
     res.redirect("back");
     next();
@@ -493,10 +475,10 @@ exports.changeOrderStatus = catchAsync(async (req, res, next) => {
 exports.protect = catchAsync(async (req, res, next) => {
     let token;
     token = req.cookies.jwt;
-
+    console.log(token);
     if (!token) {
         return next(
-            new AppError("You are not logged in! Please log in to get access.", 401)
+            res.redirect('/404')
         );
     }
 
@@ -504,7 +486,9 @@ exports.protect = catchAsync(async (req, res, next) => {
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
     // 3) Check if user still exists
-    const currentUser = await User.findById(decoded.id);
+    console.log(decoded)
+    const currentUser = await User.findOne({_id:decoded.id});
+    console.log(currentUser)
     if (!currentUser) {
         return next(
             new AppError(
@@ -523,6 +507,38 @@ exports.protect = catchAsync(async (req, res, next) => {
 
     // GRANT ACCESS TO PROTECTED ROUTE
     req.user = currentUser;
+    // res.locals.user = currentUser;
+    next();
+});
+
+exports.adminProtect = catchAsync(async (req, res, next) => {
+    let token;
+    token = req.cookies.jwt;
+    console.log(token);
+    if (!token) {
+        return next(
+            res.redirect('/404')
+        );
+    }
+
+    // 2) Verification token
+    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+
+    // 3) Check if user still exists
+    console.log(decoded)
+    const currentAdmin = await Admin.findOne({_id:decoded.id});
+    console.log(currentAdmin)
+    if (!currentAdmin) {
+        return next(
+            new AppError(
+                "The user belonging to this token does no longer exist.",
+                401
+            )
+        );
+    }
+
+    // GRANT ACCESS TO PROTECTED ROUTE
+    req.admin = currentAdmin;
     // res.locals.user = currentUser;
     next();
 });

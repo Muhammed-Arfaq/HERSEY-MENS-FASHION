@@ -14,6 +14,8 @@ app.use((req, res, next) => {
   next();
 });
 
+
+
 //view engine
 app.set('views',path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
@@ -51,6 +53,9 @@ app.use(multer({dest:'public/img/', storage: fileStorage, fileFilter: fileFilter
 
 app.use('/', userRouter)
 app.use('/admin', adminRouter)
+app.use('*',(req, res) =>{
+  res.render('pageNotFound')
+})
 
  
 
