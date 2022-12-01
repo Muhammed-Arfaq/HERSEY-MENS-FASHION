@@ -38,6 +38,10 @@ router
     .get(usercontroller.allProductsUser)
 
 router
+    .route('/shop/:id')
+    .get(usercontroller.filterProducts)
+
+router
     .route('/productDetails/:id')
     .get(usercontroller.singleProduct)
 

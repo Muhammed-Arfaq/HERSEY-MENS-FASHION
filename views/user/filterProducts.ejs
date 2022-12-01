@@ -364,7 +364,7 @@
                     </div>
                     <% if(option == 'Low To High') { %> 
                         <div class="row">
-                            <% sortLow.forEach(function(product){ %>
+                            <% productCat.forEach(function(product){ %>
                                 <div class="col-lg-4 col-md-6 col-sm-6">
                                     <form action="/wishlist/<%= product._id %>" method="post">
                                         <div class="product__item">
@@ -396,7 +396,7 @@
                         </div>
                     <% } else { %>
                         <div class="row">
-                            <% sortHigh.forEach(function(product){ %>
+                            <% productCat.forEach(function(product){ %>
                                 <div class="col-lg-4 col-md-6 col-sm-6">
                                     <form action="/wishlist/<%= product._id %>" method="post">
                                         <div class="product__item">

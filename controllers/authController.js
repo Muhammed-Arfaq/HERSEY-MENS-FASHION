@@ -381,17 +381,18 @@ exports.verifyPayment = catchAsync(async (req, res, next) => {
 
 exports.addToWishlist = catchAsync(async (req, res, next) => {
     let userId = req.user;
-    let productId = req.params.id;
-    let wlist = await Wishlist.findOne({ userId });
-    if (wlist) {
-        await Wishlist.findOneAndUpdate({ userId }, { $addToSet: { productId } });
-    } else {
-        const addWishlist = await Wishlist.create({
-            userId: req.user._id,
-            productId: productId,
-        });
-    }
-    res.redirect("back");
+        let productId = req.params.id;
+        let wlist = await Wishlist.findOne({ userId });
+        if (wlist) {
+            await Wishlist.findOneAndUpdate({ userId }, { $addToSet: { productId } });
+        } else {
+            const addWishlist = await Wishlist.create({
+                userId: req.user._id,
+                productId: productId,
+            });
+        }
+        res.redirect("back");
+   
     next();
 });
 

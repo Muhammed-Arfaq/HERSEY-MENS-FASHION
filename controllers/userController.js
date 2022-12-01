@@ -25,12 +25,8 @@ exports.userRegister = (req, res) => {
 
 exports.userHome = catchAsync(async(req, res, next) => {
     const banners = await Banner.find()
-    const blazer = await Product.find({ 'product.category': '636b46530f7f26a6b0e7809a' }).sort({ date: -1 }).limit(1)
-    const loafer = await Product.find({ 'product.category': '636b465e0f7f26a6b0e780a0' }).sort({ date: -1 }).limit(1)
-    const necktie = await Product.find({ 'product.category': '636b46680f7f26a6b0e780a3' }).sort({ date: -1 }).limit(1)
     const products = await Product.find().sort({ date: -1 }).limit(6)
     const hotProducts = await Product.find().sort({'product.category': 1}).limit(4)
-    console.log(blazer);
     const token = req.cookies.jwt
     if(token){
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
@@ -38,14 +34,14 @@ exports.userHome = catchAsync(async(req, res, next) => {
         const user = await User.findById(userId)
         if(user != null) {
             let userEmail = user.email
-            res.render('user/index', { token, userEmail, banners, products, hotProducts, blazer, loafer, necktie })
+            res.render('user/index', { token, userEmail, banners, products, hotProducts })
         } else {
-            res.render('user/index', { token: null, banners, products, hotProducts, blazer, loafer, necktie })
+            res.render('user/index', { token: null, banners, products, hotProducts })
         }
         
     }
     else {
-        res.render('user/index', { token: null, banners, products, hotProducts, blazer, loafer, necktie })
+        res.render('user/index', { token: null, banners, products, hotProducts })
     }
 })
 
@@ -128,7 +124,7 @@ exports.allProductsUser = catchAsync(async (req, res) => {
     const option = req.body.option
     const page = parseInt(req.query.page) || 1;
     const items_per_page = 15;
-    const totalProducts = await User.find().countDocuments()
+    const totalProducts = await Product.find().countDocuments()
     const products = await Product.find().skip((page - 1) * items_per_page).limit(items_per_page)
     const sortHigh = await Product.find().sort({ price: -1 }).skip((page - 1) * items_per_page).limit(items_per_page)
     const sortLow = await Product.find().sort({ price: 1 }).skip((page - 1) * items_per_page).limit(items_per_page)
@@ -157,6 +153,44 @@ exports.allProductsUser = catchAsync(async (req, res) => {
             PreviousPage: page - 1, })
     }
     
+})
+
+exports.filterProducts = catchAsync(async(req, res, next) => {
+    const cat = req.params.id
+    console.log(cat);
+    const productCat = await Product.find({category:cat})
+    const option = req.body.option
+    const page = parseInt(req.query.page) || 1;
+    const items_per_page = 15;
+    const totalProducts = await Product.find({category:cat}).countDocuments()
+    const products = await Product.find({category:cat}).skip((page - 1) * items_per_page).limit(items_per_page)
+    const sortHigh = await Product.find({category:cat}).sort({ price: -1 }).skip((page - 1) * items_per_page).limit(items_per_page)
+    const sortLow = await Product.find({category:cat}).sort({ price: 1 }).skip((page - 1) * items_per_page).limit(items_per_page)
+    const category = await Category.find()
+    console.log(productCat);
+    const token = req.cookies.jwt
+    if(token){
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        const userId = decoded.id
+        const user = await User.findById(userId)
+        if(user != null) {
+            res.render('user/filterProducts', { token, products, productCat, items_per_page, totalProducts, category,page, sortHigh, sortLow, option,
+                hasNextPage: items_per_page * page < totalProducts,
+                hasPreviousPage: page > 1,
+                PreviousPage: page - 1, })
+        } else {
+            res.render('user/filterProducts', { token: null, products, productCat, category, items_per_page, totalProducts, page, sortHigh, sortLow, option,
+                hasNextPage: items_per_page * page < totalProducts,
+                hasPreviousPage: page > 1,
+                PreviousPage: page - 1, })
+        }
+    }
+    else {
+        res.render('user/filterProducts', { token: null, products, productCat, items_per_page, totalProducts, category, page, sortHigh, sortLow, option,
+            hasNextPage: items_per_page * page < totalProducts,
+            hasPreviousPage: page > 1,
+            PreviousPage: page - 1, })
+    }
 })
 
 exports.singleProduct = catchAsync(async (req, res) => {
