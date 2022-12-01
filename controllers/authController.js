@@ -9,7 +9,6 @@ const Category = require("./../models/categoryModel");
 const Cart = require("./../models/cartModel");
 const Profile = require("./../models/profileModel");
 const Wishlist = require("./../models/wishlistModel");
-const Avatar = require("./../models/avatarModel");
 const mongoose = require("mongoose");
 const Razorpay = require("razorpay");
 const nodemailer = require('nodemailer')
@@ -240,21 +239,6 @@ exports.addBanner = catchAsync(async (req, res, next) => {
     next();
 });
 
-exports.addProfileImage = catchAsync(async (req, res, next) => {
-    const userId = req.user;
-    req.files.forEach((img) => { });
-    console.log(req.files);
-    const productImages =
-        req.files != null ? req.files.map((img) => img.filename) : null;
-    console.log(productImages);
-    const newAvatar = await Avatar.create({
-        userId: mongoose.Types.ObjectId(userId._id),
-        image: productImages,
-    });
-    res.redirect("/userProfile");
-    next();
-});
-
 exports.addToCart = catchAsync(async (req, res, next) => {
     const userId = req.user;
     const productId = req.params.id;
@@ -400,11 +384,11 @@ exports.addToWishlist = catchAsync(async (req, res, next) => {
     let productId = req.params.id;
     let wlist = await Wishlist.findOne({ userId });
     if (wlist) {
-        await Wishlist.findOneAndUpdate({ userId }, { $push: { productId } });
+        await Wishlist.findOneAndUpdate({ userId }, { $addToSet: { productId } });
     } else {
         const addWishlist = await Wishlist.create({
-            userId: mongoose.Types.ObjectId(req.user._id),
-            productId: mongoose.Types.ObjectId(productId),
+            userId: req.user._id,
+            productId: productId,
         });
     }
     res.redirect("back");

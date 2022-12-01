@@ -78,10 +78,6 @@ router
     .get(authcontroller.protect, usercontroller.userProfile)  
 
 router
-    .route('/addAvatar')
-    .post(authcontroller.protect, authcontroller.addProfileImage)
-
-router
     .route('/addProfile/:id')    
     .post(authcontroller.protect, authcontroller.addProfile)
 
@@ -118,10 +114,6 @@ router
 router
     .route('/cancelOrder/:id')
     .post(authcontroller.protect, usercontroller.cancelOrder)
-
-router
-    .route('/userSettings')
-    .get(authcontroller.protect, usercontroller.userSettings)
 
 router  
     .route('/verifyPayment')

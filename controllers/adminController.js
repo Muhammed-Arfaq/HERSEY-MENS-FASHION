@@ -2,7 +2,6 @@ const Product = require('./../models/productModel')
 const Category = require('./../models/categoryModel')
 const Admin = require('./../models/adminModel')
 const User = require('./../models/userModel')
-const Avatar = require('./../models/avatarModel')
 const Order = require('./../models/orderModel')
 const catchAsync = require('./../utils/catchAsync')
 const Banner = require('../models/bannerModel')
@@ -26,20 +25,39 @@ exports.adminLogout = (req, res) => {
 exports.adminHome = async(req, res) => {
     const adminId = req.admin._id
     const admin = await Admin.findOne(adminId)
-    console.log(admin);
-    res.render('admin/dashboard', { admin })
+    const newOrders = await Order.find().sort({ date: -1 }).limit(10)
+    const newUsers = await User.find().sort({ date: -1 }).limit(10)
+    const totalActiveUsers = await User.find({ status: 'Active' }).countDocuments()
+    const totalUsers = await User.find().countDocuments()
+    const sales = await Order.aggregate([
+        {
+          '$group': {
+            '_id': null, 
+            'totalCount': {
+              '$sum': '$cartTotal'
+            }
+          }
+        }
+      ])
+    const totalSales = sales.map(a => a.totalCount);
+    const totalProducts = await Product.find().countDocuments()
+    const outOfStock = await Product.find({ quantity: 0 }).countDocuments()
+    const totalCategories = await Category.find().countDocuments()
+    const totalOrder = await Order.find().countDocuments()
+    const pendingOrder = await Order.find({ 'product.orderStatus': 'Order Placed' }).countDocuments()
+    const purchasedOrder = await Order.find({ paymentStatus: 'Paid' }).countDocuments()
+    
+    console.log(totalSales[0]);
+    res.render('admin/dashboard', { moment, admin, totalActiveUsers, totalUsers, totalProducts, totalOrder, totalSales, purchasedOrder, newOrders, newUsers, totalCategories, outOfStock, pendingOrder })
 }
 
 exports.getAllUsers = catchAsync(async (req, res, next) => {
     const page = parseInt(req.query.page) || 1;
-    const items_per_page = 10;
+    const items_per_page = 1;
     const totalUser = await User.find().countDocuments()
     console.log(totalUser);
     const users = await User.find().sort({ date: -1 }).skip((page - 1) * items_per_page).limit(items_per_page)
-    const avatar = await Avatar.find()
-    const img = avatar[0].image
-    console.log(img);
-    res.render('admin/userManagement', { users, img, page,
+    res.render('admin/userManagement', { users, page,
         hasNextPage: items_per_page * page < totalUser,
         hasPreviousPage: page > 1,
         PreviousPage: page - 1, })

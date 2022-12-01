@@ -3,11 +3,11 @@ const Objectid = mongoose.Types.ObjectId
 
 const wishlistSchema = new mongoose.Schema({
     userId: {
-        type: Objectid,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
     productId: {
-        type: [Objectid],
+        type: [mongoose.Schema.Types.ObjectId],
         ref: 'Product'
     },
     date: {

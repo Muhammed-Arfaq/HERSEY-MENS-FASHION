@@ -12,7 +12,7 @@
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
         rel="stylesheet" />
-      
+
 
     <!-- Css Styles -->
     <link rel="stylesheet" href="/Stylesheets/user/cssM/bootstrap.min.css" type="text/css" />
@@ -76,8 +76,7 @@
                             <div class="collapse navbar-collapse" id="navigation">
                                 <ul class="navbar-nav mx-auto">
                                     <li class="nav-item font-weight-bolder">
-                                        <a class="nav-link d-flex align-items-center me-2" 
-                                            href="/">
+                                        <a class="nav-link d-flex align-items-center me-2" href="/">
                                             HOME
                                         </a>
                                     </li>
@@ -152,7 +151,7 @@
                                                 SHOP
                                             </a>
                                         </li>
-                                        <li class="nav-item font-weight-bolder">
+                                        <!-- <li class="nav-item font-weight-bolder">
                                             <a class="nav-link me-2 " href="/shop">
                                                 NEW ARRIVALS
                                             </a>
@@ -161,12 +160,11 @@
                                             <a class="nav-link me-2 " href="/shop">
                                                 NEW OFFERS
                                             </a>
-                                        </li>
+                                        </li> -->
                                     </ul>
                                     <ul class="navbar-nav d-lg-block d-none">
                                         <li class="nav-item">
-                                            <a href="/login"
-                                                class="btn btn-sm btn-round mb-0 me-1 bg-gradient-dark">
+                                            <a href="/login" class="btn btn-sm btn-round mb-0 me-1 bg-gradient-dark">
                                                 SIGN IN</a>
                                         </li>
                                     </ul>
@@ -179,7 +177,7 @@
             </div>
             <!-- Header Section End -->
 
-        <% } %>
+            <% } %>
 
                 <!-- Hero Section Begin -->
                 <section class="hero">
@@ -191,6 +189,7 @@
                     </div>
                 </section>
                 <!-- Hero Section End -->
+                <!-- <span class="label">New</span>------------- -->
 
                 <!-- Banner Section Begin -->
                 <section class="banner spad">
@@ -200,33 +199,33 @@
                             <div class="col-lg-7 offset-lg-4">
                                 <div class="banner__item">
                                     <div class="banner__item__pic">
-                                        <img src="img/banner/banner-1.jpg" alt="">
+                                        <img src="/img/imageUrl_1669886040062.jpg" style="height: 480px; width: 440px;" alt="">
                                     </div>
                                     <div class="banner__item__text">
-                                        <h2>Clothing Collections 2030</h2>
-                                        <a href="#">Shop now</a>
+                                        <h2>Blazer Collections</h2>
+                                        <a href="/shop">Shop now</a>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-5">
                                 <div class="banner__item banner__item--middle">
                                     <div class="banner__item__pic">
-                                        <img src="img/banner/banner-2.jpg" alt="">
+                                        <img src="/img/imageUrl_1669887279222.jpg" style="height: 440px; width: 440px;" alt="">
                                     </div>
                                     <div class="banner__item__text">
                                         <h2>Accessories</h2>
-                                        <a href="#">Shop now</a>
+                                        <a href="/shop">Shop now</a>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-7">
                                 <div class="banner__item banner__item--last">
                                     <div class="banner__item__pic">
-                                        <img src="img/banner/banner-3.jpg" alt="">
+                                        <img src="/img/imageUrl_1669886751541.jpg" style="height: 440px; width: 440px;" alt="">
                                     </div>
                                     <div class="banner__item__text">
-                                        <h2>Shoes Spring 2030</h2>
-                                        <a href="#">Shop now</a>
+                                        <h2>Shoes Collections</h2>
+                                        <a href="/shop">Shop now</a>
                                     </div>
                                 </div>
                             </div>
@@ -285,58 +284,65 @@
                             </div>
                         </div>
                         <div class="row product__filter">
-                            <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
-                                <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="img/product/product-1.jpg">
-                                        <span class="label">New</span>
-                                        <ul class="product__hover">
-                                            <li>
-                                                <a href="#" style="text-decoration: none"><img src="img/icon/heart.png"
-                                                        alt="" /></a>
-                                            </li>
-                                            <li>
-                                                <a href="#" style="text-decoration: none"><img
-                                                        src="img/icon/compare.png" alt="" />
-                                                    <span>Compare</span></a>
-                                            </li>
-                                            <li>
-                                                <a href="#" style="text-decoration: none"><img src="img/icon/search.png"
-                                                        alt="" /></a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="product__item__text">
-                                        <h6>Piqué Biker Jacket</h6>
-                                        <a href="#" class="add-cart">+ Add To Cart</a>
-                                        <div class="rating">
-                                            <i class="fa fa-star-o"></i>
-                                            <i class="fa fa-star-o"></i>
-                                            <i class="fa fa-star-o"></i>
-                                            <i class="fa fa-star-o"></i>
-                                            <i class="fa fa-star-o"></i>
+                            <% products.forEach(function(product){ %>
+                                <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
+                                    <form action="/wishlist/<%= product._id %>" method="post">
+                                        <div class="product__item">
+                                            <div class="product__item__pic set-bg"
+                                                data-setbg="/img/<%= product.imageUrl %>">
+                                                <span class="label">New</span>
+                                                <ul class="product__hover">
+                                                    <li>
+                                                        <li><button style="border: none;background-color: white;"><img src="img/icon/heart.png" alt=""></button></li>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="product__item__text">
+                                                <h6>
+                                                    <%= product.name %>
+                                                </h6>
+                                                <a href="/productDetails/<%= product._id %>" class="">
+                                                    <%= product.name %>
+                                                </a>
+                                                <h5>₹<%= product.price %> </h5>
+                                            </div>
                                         </div>
-                                        <h5>₹ 699</h5>
-                                        <div class="product__color__select">
-                                            <label for="pc-1">
-                                                <input type="radio" id="pc-1" />
-                                            </label>
-                                            <label class="active black" for="pc-2">
-                                                <input type="radio" id="pc-2" />
-                                            </label>
-                                            <label class="grey" for="pc-3">
-                                                <input type="radio" id="pc-3" />
-                                            </label>
-                                        </div>
-                                    </div>
+                                    </form>
                                 </div>
-                            </div>
+                            <% }) %>
+                            <% hotProducts.forEach(function(product){ %>
+                            <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix hot-sales">
+                                    <form action="/wishlist/<%= product._id %>" method="post">
+                                        <div class="product__item">
+                                            <div class="product__item__pic set-bg"
+                                                data-setbg="/img/<%= product.imageUrl %>">
+                                                <span class="label">New</span>
+                                                <ul class="product__hover">
+                                                    <li>
+                                                        <li><button style="border: none;background-color: white;"><img src="img/icon/heart.png" alt=""></button></li>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="product__item__text">
+                                                <h6>
+                                                    <%= product.name %>
+                                                </h6>
+                                                <a href="/productDetails/<%= product._id %>" class="">
+                                                    <%= product.name %>
+                                                </a>
+                                                <h5>₹<%= product.price %> </h5>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <% }) %>
                         </div>
                     </div>
                 </section>
                 <!-- Product Section End -->
 
                 <!-- Categories Section Begin -->
-                <section class="categories spad">
+                <!-- <section class="categories spad">
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-3">
@@ -350,17 +356,17 @@
                             </div>
                             <div class="col-lg-4">
                                 <div class="categories__hot__deal">
-                                    <img src="img/product-sale.png" alt="" />
+                                    <img src="/img/tanner boot black.png" alt="" />
                                     <div class="hot__deal__sticker">
                                         <span>Sale Of</span>
-                                        <h5>$29.99</h5>
+                                        <h5>₹2499</h5>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-4 offset-lg-1">
                                 <div class="categories__deal__countdown">
                                     <span>Deal Of The Week</span>
-                                    <h2>Multi-pocket Chest Bag Black</h2>
+                                    <h2>Tanner Boot Black</h2>
                                     <div class="categories__deal__countdown__timer" id="countdown">
                                         <div class="cd-item">
                                             <span>3</span>
@@ -384,7 +390,7 @@
                             </div>
                         </div>
                     </div>
-                </section>
+                </section> -->
                 <!-- Categories Section End -->
 
                 <!-- Instagram Section Begin -->
@@ -393,18 +399,11 @@
                         <div class="row">
                             <div class="col-lg-8">
                                 <div class="instagram__pic">
-                                    <div class="instagram__pic__item set-bg" data-setbg="img/instagram/instagram-1.jpg">
+                            <% products.forEach(function(product){ %>
+
+                                    <div class="instagram__pic__item set-bg" data-setbg="/img/<%= product.imageUrl %>">
                                     </div>
-                                    <div class="instagram__pic__item set-bg" data-setbg="img/instagram/instagram-2.jpg">
-                                    </div>
-                                    <div class="instagram__pic__item set-bg" data-setbg="img/instagram/instagram-3.jpg">
-                                    </div>
-                                    <div class="instagram__pic__item set-bg" data-setbg="img/instagram/instagram-4.jpg">
-                                    </div>
-                                    <div class="instagram__pic__item set-bg" data-setbg="img/instagram/instagram-5.jpg">
-                                    </div>
-                                    <div class="instagram__pic__item set-bg" data-setbg="img/instagram/instagram-6.jpg">
-                                    </div>
+                                <% }) %> 
                                 </div>
                             </div>
                             <div class="col-lg-4">
