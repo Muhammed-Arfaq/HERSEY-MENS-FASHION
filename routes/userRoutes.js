@@ -42,6 +42,11 @@ router
     .get(usercontroller.filterProducts)
 
 router
+    .route('/sort/:index')
+    .post(usercontroller.allProductsUser)
+    
+
+router
     .route('/productDetails/:id')
     .get(usercontroller.singleProduct)
 

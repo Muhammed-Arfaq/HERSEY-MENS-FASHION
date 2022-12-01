@@ -303,7 +303,6 @@ exports.orderPage = catchAsync(async(req, res) => {
 exports.orderSuccess = catchAsync(async(req, res, next) => {
     const userId = req.user
     const orders = await Order.find({ userId }).populate('product.productId').sort({ _id: -1 }).limit(1)
-    
     res.render('user/orderSuccess', { orders, index: 1 })
 })
 

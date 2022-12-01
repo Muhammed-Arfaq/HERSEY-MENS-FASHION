@@ -308,12 +308,10 @@ exports.addOrder = catchAsync(async (req, res, next) => {
         await Cart.findByIdAndDelete({ _id: cart._id });
         res.json({ status: true });
     } else {
-        console.log("hiiii");
         var instance = new Razorpay({
             key_id: process.env.RZP_KEY_ID,
             key_secret: process.env.RZP_KEY_SECRET,
         });
-
         instance.orders.create(
             {
                 amount: cartTotal * 100,
@@ -332,6 +330,7 @@ exports.addOrder = catchAsync(async (req, res, next) => {
 });
 
 exports.verifyPayment = catchAsync(async (req, res, next) => {
+    
     const userId = req.user._id;
     const cart = await Cart.findOne({ userId });
     const cartTotal = cart.cartTotal;
@@ -463,7 +462,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     console.log(token);
     if (!token) {
         return next(
-            res.redirect('/404')
+            res.redirect('/login')
         );
     }
 
@@ -477,8 +476,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     if (!currentUser) {
         return next(
             new AppError(
-                "The user belonging to this token does no longer exist.",
-                401
+                res.redirect('/login')
             )
         );
     }
