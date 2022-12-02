@@ -302,7 +302,7 @@ exports.addOrder = catchAsync(async (req, res, next) => {
     const addIndex = req.body.addIndex
     let profile = await Profile.findOne({ userId })
     profile = profile.address[addIndex]
-    const cartTotal = cart.cartTotal;
+    const grandTotal = cart.grandTotal
     const products = cart.product;
     const cartId = cart._id.toString();
     const now = new Date()
@@ -312,7 +312,7 @@ exports.addOrder = catchAsync(async (req, res, next) => {
         const newOrder = await Order.create({
             userId: userId,
             product: products,
-            cartTotal: cartTotal,
+            cartTotal: grandTotal,
             address: profile,
             paymentMethod: req.body.paymentMethod,
             paymentStatus: "Pending",
@@ -346,8 +346,9 @@ exports.verifyPayment = catchAsync(async (req, res, next) => {
     
     const userId = req.user._id;
     const cart = await Cart.findOne({ userId });
-    const cartTotal = cart.cartTotal;
+    const grandTotal = cart.grandTotal;
     const products = cart.product;
+    const couponId = cart.discount.couponId
     const details = req.body;
     const now = new Date()
     const deliveryDate = now.setDate(now.getDate() + 7)
@@ -372,7 +373,7 @@ exports.verifyPayment = catchAsync(async (req, res, next) => {
         const newOrder = await Order.create({
             userId: userId,
             product: products,
-            cartTotal: cartTotal,
+            cartTotal: grandTotal,
             address: profile,
             paymentMethod: "Razorpay",
             paymentStatus: "Paid",
@@ -380,6 +381,7 @@ exports.verifyPayment = catchAsync(async (req, res, next) => {
         })
             .then(async (data) => {
                 await Cart.findByIdAndDelete({ _id: cart._id });
+                await Coupon.findByIdAndUpdate({ _id: couponId }, { $push: { users: userId } })
                 res.json({ status: true, data });
             })
             .catch((err) => {

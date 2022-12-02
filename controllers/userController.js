@@ -10,6 +10,7 @@ const mongoose = require('mongoose')
 const Category = require('../models/categoryModel')
 const jwt = require('jsonwebtoken')
 const moment = require('moment')
+const Coupon = require('../models/couponModel')
 
 exports.pageNotFound = (req, res) => {
     res.render('pageNotFound')
@@ -273,22 +274,53 @@ exports.deleteWishListProduct = catchAsync(async(req, res, next) => {
 
 exports.checkout = catchAsync(async(req, res, next) => {
     let userId = req.user._id
-    let profile = await Profile.findOne({ userId })
-    const user = await User.findById( userId )
-    const cart = await Cart.findOne({ userId }).populate('product.productId')
-    const carts = cart.product
-    const cartTotal = cart.cartTotal
-    if(profile != null ){
-        profile = profile.address
-        let num = profile.length -1
-        const addIndex = req.body.indexs? req.body.indexs: num
-        console.log(req.body);
-        res.render('user/checkout', { user, addIndex, profile, carts, cart, cartTotal, index:1 })
+    const couponCode = req.body.couponCode
+    console.log(couponCode);
+    const couponAvail = await Coupon.findOne({ couponCode: couponCode })
+    if(couponAvail != null) {
+        const coupon = couponAvail.discount
+        console.log(coupon);
+        let profile = await Profile.findOne({ userId })
+        const user = await User.findById( userId )
+        const cart = await Cart.findOne({ userId }).populate('product.productId')
+        const carts = cart.product
+        const cartTotal = cart.cartTotal
+        const discount = (cartTotal / 100) * coupon
+        const grandTotal = cartTotal - discount
+        await Cart.findOne({ userId }, { $set: { grandTotal: grandTotal, 'discount.couponId': couponCode, 'discount.amount': discount } })
+        if(profile != null ){
+            profile = profile.address
+            let num = profile.length -1
+            const addIndex = req.body.indexs? req.body.indexs: num
+            console.log(req.body);
+            res.render('user/checkout', { user, addIndex, discount, grandTotal, profile, carts, cart, cartTotal, index:1 })
 
+        }
+        else{ 
+            res.render('user/checkout', { user, profile })
+        }    
+
+    } else {
+
+        let profile = await Profile.findOne({ userId })
+        const user = await User.findById( userId )
+        const cart = await Cart.findOne({ userId }).populate('product.productId')
+        const carts = cart.product
+        const cartTotal = cart.cartTotal
+        const discount = 0
+        const grandTotal = cartTotal - discount
+        if(profile != null ){
+            profile = profile.address
+            let num = profile.length -1
+            const addIndex = req.body.indexs? req.body.indexs: num
+            console.log(req.body);
+            res.render('user/checkout', { user, addIndex, grandTotal, discount, profile, carts, cart, cartTotal, index:1 })
+    
+        }
+        else{ 
+            res.render('user/checkout', { user, profile })
+        }    
     }
-    else{ 
-        res.render('user/checkout', { user, profile })
-    }    
     
 })
 

@@ -20,6 +20,15 @@ const cartSchema = new mongoose.Schema({
     grandTotal: {
         type: Number
     },
+    discount: {
+        couponId: {
+            type: mongoose.Schema.Types.ObjectId,
+        },
+        amount: {
+            type: Number,
+            default: 0
+        }
+    },
     date: {
         type: Date,
         default: Date.now()

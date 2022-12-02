@@ -248,9 +248,9 @@
                                 </div>
                             </form>
 
-                            <form action="#">
+                            <form action="/coupon" method="post">
                                 <div class="col-12 mb-3 text-end">
-                                    <input type="text" class="form-control outline-dark"
+                                    <input type="text" name="couponCode" class="form-control outline-dark"
                                         placeholder="Enter Coupon Code">
                                     <button type="submit" class="btn btn-dark btn-sm mt-0">Apply</button>
                                 </div>
@@ -271,8 +271,9 @@
                             <ul class="checkout__total__all font-weight-bold">
                                 <li>Subtotal <span>₹ <%= cartTotal %></span></li>
                                 <li>Delivery <span class="text-success">Free </span></li>
+                                <li>Discount <span class="text-success"><%= discount %> </span></li>
                                 <hr />
-                                <li>Total <span>₹ <%= cartTotal %> </span></li>
+                                <li>Total <span>₹ <%= grandTotal  %> </span></li>
                             </ul>
                             <p>
                                 Lorem ipsum dolor sit amet, consectetur adip elit, sed do

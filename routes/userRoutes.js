@@ -112,6 +112,10 @@ router
     .get(authcontroller.protect, usercontroller.checkout)
 
 router
+    .route('/coupon')
+    .post(authcontroller.protect, usercontroller.checkout)
+
+router
     .route('/order')
     .get(authcontroller.protect, usercontroller.orderPage)
     .post(authcontroller.protect, authcontroller.addOrder)
