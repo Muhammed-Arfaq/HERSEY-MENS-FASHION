@@ -225,6 +225,15 @@
               </a>
             </li>
           </ul>
+          <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+            <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
+              <div class="sidenav-toggler-inner">
+                <i class="sidenav-toggler-line"></i>
+                <i class="sidenav-toggler-line"></i>
+                <i class="sidenav-toggler-line"></i>
+              </div>
+            </a>
+          </li>
         </div>
       </div>
     </nav>
@@ -250,7 +259,6 @@
                   </thead>
                   <tbody>
                     <% users.forEach(function(user){ %>
-                      <% img.forEach(function(avatar){ %> 
                     <tr>
                       <td>
                         <div class="d-flex px-2 py-1">
@@ -282,7 +290,6 @@
                       </td>
                     </tr>
                     <% }) %>
-                    <% }) %> 
                   </tbody>
                 </table>
               </div>

@@ -17,6 +17,9 @@ const cartSchema = new mongoose.Schema({
     cartTotal: {
         type: Number,
     },
+    grandTotal: {
+        type: Number
+    },
     date: {
         type: Date,
         default: Date.now()
