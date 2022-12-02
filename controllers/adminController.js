@@ -7,6 +7,7 @@ const catchAsync = require('./../utils/catchAsync')
 const Banner = require('../models/bannerModel')
 const { populate } = require('./../models/productModel')
 const moment = require('moment')
+const Coupon = require('../models/couponModel')
 
 // exports.addAdmin = catchAsync(async (req, res, next) => {
 //     const admin = await Admin.find()
@@ -162,6 +163,17 @@ exports.invoice = catchAsync(async (req, res, next) => {
     const user = await User.findOne({ _id: userId })
     console.log(user);
     res.render('admin/invoice', { orders, user, orderId, index: 1, moment })
+})
+
+exports.newCoupon = catchAsync(async(req, res, next) => {
+    const coupon = await Coupon.find().sort({ date: -1 })
+    res.render('admin/couponManagement', { coupon, index:1, moment })
+})
+
+exports.deleteCoupon = catchAsync(async(req, res, next) => {
+    const couponId = req.params.id
+    await Coupon.findOneAndDelete({ _id: couponId })
+    res.redirect('/admin/manageCoupon')
 })
 
 

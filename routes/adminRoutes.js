@@ -93,6 +93,14 @@ router
 router
     .route('/invoice/:id')
     .get(admincontroller.invoice)
- 
+
+router
+    .route('/manageCoupon')
+    .get(authcontroller.adminProtect, admincontroller.newCoupon)
+    .post(authcontroller.adminProtect, authcontroller.addCoupon)
+
+router
+    .route('/deleteCoupon/:id')
+    .post(authcontroller.adminProtect, admincontroller.deleteCoupon)
 
 module.exports = router;

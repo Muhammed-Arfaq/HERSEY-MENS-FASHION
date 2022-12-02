@@ -14,6 +14,7 @@ const Razorpay = require("razorpay");
 const nodemailer = require('nodemailer')
 const Banner = require("../models/bannerModel");
 const Order = require("../models/orderModel");
+const Coupon = require('../models/couponModel')
 
 
 // --------------------------------------------------------------------------------------------------------------
@@ -88,14 +89,14 @@ exports.adminLogin = catchAsync(async (req, res, next) => {
 
     //to check email and password exist
     if (!email || !password) {
-        return next(new AppError("please provide email and password!!!", 400));
+        return next(new AppError('/admin/login'));
     }
 
     //to check if admin exists and password is correct
     const admin = await Admin.findOne({ email }).select("+password");
 
     if (!admin || !(await admin.correctPassword(password, admin.password))) {
-        return next(new AppError("incorrect email or password", 401));
+        return next(new AppError('/admin/login'));
     }
 
     //if everything is correct, send token to client
@@ -181,7 +182,7 @@ exports.login = catchAsync(async (req, res, next) => {
 
     //to check email and password exist
     if (!email || !password) {
-        return next(new AppError("please provide email and password!!!", 400));
+        return next(new AppError('/login'));
     }
 
     //to check if user exists and password is correct
@@ -190,7 +191,7 @@ exports.login = catchAsync(async (req, res, next) => {
     }).select("+password");
 
     if (!user || !(await user.correctPassword(password, user.password))) {
-        return next(new AppError("incorrect email or password", 401));
+        return next(new AppError('/login'));
     }
 
     //if everything is correct, send token to client
@@ -238,6 +239,18 @@ exports.addBanner = catchAsync(async (req, res, next) => {
     res.redirect("/admin/dashboard/manageBanner");
     next();
 });
+
+exports.addCoupon = catchAsync(async(req, res, next) => {
+    console.log(req.body);
+    const newCoupon = await Coupon.create({
+        couponCode: req.body.couponCode,
+        discount: req.body.discount,
+        startDate: req.body.startDate,
+        expiryDate: req.body.expiryDate,
+        limit: req.body.limit,
+    });
+    res.redirect("/admin/manageCoupon");
+})
 
 exports.addToCart = catchAsync(async (req, res, next) => {
     const userId = req.user;
@@ -500,7 +513,7 @@ exports.adminProtect = catchAsync(async (req, res, next) => {
     console.log(token);
     if (!token) {
         return next(
-            res.redirect('/404')
+            res.redirect('/admin/login')
         );
     }
 
@@ -514,8 +527,7 @@ exports.adminProtect = catchAsync(async (req, res, next) => {
     if (!currentAdmin) {
         return next(
             new AppError(
-                "The user belonging to this token does no longer exist.",
-                401
+                res.redirect('/admin/login')
             )
         );
     }
