@@ -443,7 +443,6 @@ exports.addProfile = catchAsync(async (req, res, next) => {
             gender: req.body.gender,
             address: [{ fullName, pincode, country, currentAddress, city, state }],
         });
-        createSendToken(newProfile, 201, res);
     }
     res.redirect("/address");
     next();

@@ -310,7 +310,7 @@ exports.checkout = catchAsync(async(req, res, next) => {
     const cartTotal = cart.cartTotal
     const discount = cart.discount.amount
     const grandTotal = cartTotal - discount
-    if(profile != null ){
+    if(profile != null && profile.length != 0){
         profile = profile.address
         let num = profile.length -1
         const addIndex = req.body.indexs? req.body.indexs: num
@@ -319,7 +319,7 @@ exports.checkout = catchAsync(async(req, res, next) => {
 
     }
     else{ 
-        res.render('user/checkout', { user, profile })
+        res.redirect('/userProfile')
     }    
     
 })
