@@ -299,6 +299,7 @@ exports.addToCart = catchAsync(async (req, res, next) => {
 exports.addOrder = catchAsync(async (req, res, next) => {
     const userId = mongoose.Types.ObjectId(req.user._id);
     const cart = await Cart.findOne({ userId });
+    const couponId = cart.discount.couponId
     const addIndex = req.body.addIndex
     let profile = await Profile.findOne({ userId })
     profile = profile.address[addIndex]
@@ -318,8 +319,14 @@ exports.addOrder = catchAsync(async (req, res, next) => {
             paymentStatus: "Pending",
             deliveryDate: deliveryDate,
         });
+        for(let product of products) {
+            let id = product.productId
+            let quantity = product.quantity * -1
+            await Product.updateOne({ _id: id }, { $inc: { quantity } })
+        }
+        await Coupon.findByIdAndUpdate({ _id: couponId }, { $push: { users: userId }, $inc: { limit: -1 } })
         await Cart.findByIdAndDelete({ _id: cart._id });
-        await Coupon.findByIdAndUpdate({  })
+        
         res.json({ status: true });
     } else {
         var instance = new Razorpay({
@@ -381,8 +388,13 @@ exports.verifyPayment = catchAsync(async (req, res, next) => {
             deliveryDate: deliveryDate,
         })
             .then(async (data) => {
+                for(let product of products) {
+                    let id = product.productId
+                    let quantity = product.quantity * -1
+                    await Product.updateOne({ _id: id }, { $inc: { quantity } })
+                }
                 await Cart.findByIdAndDelete({ _id: cart._id });
-                await Coupon.findByIdAndUpdate({ _id: couponId }, { $push: { users: userId } })
+                await Coupon.findByIdAndUpdate({ _id: couponId }, { $push: { users: userId }, $inc: { limit: -1 } })
                 res.json({ status: true, data });
             })
             .catch((err) => {

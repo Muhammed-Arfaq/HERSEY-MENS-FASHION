@@ -290,7 +290,8 @@ exports.checkCoupon = catchAsync(async(req, res, next) => {
             const cartTotal = cart.cartTotal
             const discount = parseInt((cartTotal / 100) * coupon)
             const grandTotal = cartTotal - discount
-            await Cart.findOneAndUpdate({ userId }, { $set: { grandTotal: grandTotal, 'discount.couponId': couponCode, 'discount.amount': discount } })
+            console.log(grandTotal+' '+couponAvail._id+' '+discount);
+            await Cart.findOneAndUpdate({ userId }, { $set: { grandTotal: grandTotal, 'discount.couponId': couponAvail._id, 'discount.amount': discount } })
             res.json({ used: false })
         }
     }

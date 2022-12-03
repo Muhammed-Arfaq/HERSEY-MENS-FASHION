@@ -283,6 +283,7 @@
                                                     title: "Success",
                                                     text: "Coupon applied Successfully"
                                                 })
+                                                $('#couponReload').load(' #couponReload > *')
                                             }
                                         })
                                 }
@@ -300,7 +301,7 @@
                                     </li>
                                     <% }) %>
                             </ul>
-                            <ul class="checkout__total__all font-weight-bold">
+                            <ul class="checkout__total__all font-weight-bold" id="couponReload">
                                 <li>Subtotal <span>₹ <%= cartTotal %></span></li>
                                 <li>Delivery <span class="text-success">Free </span></li>
                                 <li>Discount <span class="text-success"><%= discount %> </span></li>
