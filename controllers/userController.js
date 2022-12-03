@@ -277,30 +277,53 @@ exports.checkout = catchAsync(async(req, res, next) => {
     const couponCode = req.body.couponCode
     console.log(couponCode);
     const couponAvail = await Coupon.findOne({ couponCode: couponCode })
+    const exist = await Coupon.findOne({ couponCode: couponCode, users: { $in: userId } })
     if(couponAvail != null) {
         const coupon = couponAvail.discount
-        console.log(coupon);
-        let profile = await Profile.findOne({ userId })
-        const user = await User.findById( userId )
-        const cart = await Cart.findOne({ userId }).populate('product.productId')
-        const carts = cart.product
-        const cartTotal = cart.cartTotal
-        const discount = (cartTotal / 100) * coupon
-        const grandTotal = cartTotal - discount
-        await Cart.findOne({ userId }, { $set: { grandTotal: grandTotal, 'discount.couponId': couponCode, 'discount.amount': discount } })
-        if(profile != null ){
-            profile = profile.address
-            let num = profile.length -1
-            const addIndex = req.body.indexs? req.body.indexs: num
-            console.log(req.body);
-            res.render('user/checkout', { user, addIndex, discount, grandTotal, profile, carts, cart, cartTotal, index:1 })
-
-        }
-        else{ 
-            res.render('user/checkout', { user, profile })
-        }    
-
-    } else {
+        console.log(exist);
+        if(exist != null) {
+            let profile = await Profile.findOne({ userId })
+            const user = await User.findById( userId )
+            const cart = await Cart.findOne({ userId }).populate('product.productId')
+            const carts = cart.product
+            const cartTotal = cart.cartTotal
+            const discount = 0
+            const grandTotal = cartTotal - discount
+            if(profile != null ){
+                profile = profile.address
+                let num = profile.length -1
+                const addIndex = req.body.indexs? req.body.indexs: num
+                console.log(req.body);
+                res.render('user/checkout', { user, addIndex, discount, exist, grandTotal, profile, carts, cart, cartTotal, index:1 })
+    
+            }
+            else{ 
+                res.render('user/checkout', { user, exist: null, profile })
+            } 
+        }else {
+            
+            let profile = await Profile.findOne({ userId })
+            const user = await User.findById( userId )
+            const cart = await Cart.findOne({ userId }).populate('product.productId')
+            const carts = cart.product
+            const cartTotal = cart.cartTotal
+            const discount = parseInt((cartTotal / 100) * coupon)
+            const grandTotal = cartTotal - discount
+            await Cart.findOneAndUpdate({ userId }, { $set: { grandTotal: grandTotal, 'discount.couponId': couponAvail._id, 'discount.amount': discount } })
+            if(profile != null ){
+                profile = profile.address
+                let num = profile.length -1
+                const addIndex = req.body.indexs? req.body.indexs: num
+                console.log(req.body);
+                res.render('user/checkout', { user, addIndex, exist: null, discount, grandTotal, profile, carts, cart, cartTotal, index:1 })
+    
+            }
+            else{ 
+                res.render('user/checkout', { user, exist: null, profile })
+            }    
+    
+        } 
+        } else {
 
         let profile = await Profile.findOne({ userId })
         const user = await User.findById( userId )
@@ -314,11 +337,11 @@ exports.checkout = catchAsync(async(req, res, next) => {
             let num = profile.length -1
             const addIndex = req.body.indexs? req.body.indexs: num
             console.log(req.body);
-            res.render('user/checkout', { user, addIndex, grandTotal, discount, profile, carts, cart, cartTotal, index:1 })
+            res.render('user/checkout', { user, addIndex, exist: null, grandTotal, discount, profile, carts, cart, cartTotal, index:1 })
     
         }
         else{ 
-            res.render('user/checkout', { user, profile })
+            res.render('user/checkout', { user, exist: null, profile })
         }    
     }
     

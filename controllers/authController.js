@@ -327,7 +327,7 @@ exports.addOrder = catchAsync(async (req, res, next) => {
         });
         instance.orders.create(
             {
-                amount: cartTotal * 100,
+                amount: grandTotal * 100,
                 currency: "INR",
                 receipt: cartId,
             },
