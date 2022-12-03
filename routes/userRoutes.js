@@ -113,7 +113,7 @@ router
 
 router
     .route('/coupon')
-    .post(authcontroller.protect, usercontroller.checkout)
+    .post(authcontroller.protect, usercontroller.checkCoupon)
 
 router
     .route('/order')

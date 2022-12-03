@@ -319,6 +319,7 @@ exports.addOrder = catchAsync(async (req, res, next) => {
             deliveryDate: deliveryDate,
         });
         await Cart.findByIdAndDelete({ _id: cart._id });
+        await Coupon.findByIdAndUpdate({  })
         res.json({ status: true });
     } else {
         var instance = new Razorpay({
