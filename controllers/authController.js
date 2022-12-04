@@ -89,14 +89,14 @@ exports.adminLogin = catchAsync(async (req, res, next) => {
 
     //to check email and password exist
     if (!email || !password) {
-        return next(new AppError('/admin/login'));
+        return next(new AppError(res.redirect('/admin/login')));
     }
 
     //to check if admin exists and password is correct
     const admin = await Admin.findOne({ email }).select("+password");
 
     if (!admin || !(await admin.correctPassword(password, admin.password))) {
-        return next(new AppError('/admin/login'));
+        return next(new AppError(res.redirect('/admin/login')));
     }
 
     //if everything is correct, send token to client
@@ -182,7 +182,7 @@ exports.login = catchAsync(async (req, res, next) => {
 
     //to check email and password exist
     if (!email || !password) {
-        return next(new AppError('/login'));
+        return next(new AppError(res.redirect('/login')));
     }
 
     //to check if user exists and password is correct
@@ -191,7 +191,7 @@ exports.login = catchAsync(async (req, res, next) => {
     }).select("+password");
 
     if (!user || !(await user.correctPassword(password, user.password))) {
-        return next(new AppError('/login'));
+        return next(new AppError(res.redirect('/login')));
     }
 
     //if everything is correct, send token to client
