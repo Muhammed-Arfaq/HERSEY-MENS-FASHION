@@ -315,6 +315,7 @@ exports.checkout = catchAsync(async(req, res, next) => {
         let num = profile.length -1
         const addIndex = req.body.indexs? req.body.indexs: num
         console.log(req.body);
+        await Cart.findOneAndUpdate({ userId }, { $set: { grandTotal: grandTotal } })
         res.render('user/checkout', { user, addIndex, discount, grandTotal, profile, carts, cart, cartTotal, index:1 })
 
     }

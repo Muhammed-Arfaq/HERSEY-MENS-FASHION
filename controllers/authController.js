@@ -324,7 +324,9 @@ exports.addOrder = catchAsync(async (req, res, next) => {
             let quantity = product.quantity * -1
             await Product.updateOne({ _id: id }, { $inc: { quantity } })
         }
-        await Coupon.findByIdAndUpdate({ _id: couponId }, { $push: { users: userId }, $inc: { limit: -1 } })
+        if(couponId != null){
+            await Coupon.findByIdAndUpdate({ _id: couponId }, { $push: { users: userId }, $inc: { limit: -1 } })
+        }
         await Cart.findByIdAndDelete({ _id: cart._id });
         
         res.json({ status: true });
@@ -394,7 +396,9 @@ exports.verifyPayment = catchAsync(async (req, res, next) => {
                     await Product.updateOne({ _id: id }, { $inc: { quantity } })
                 }
                 await Cart.findByIdAndDelete({ _id: cart._id });
-                await Coupon.findByIdAndUpdate({ _id: couponId }, { $push: { users: userId }, $inc: { limit: -1 } })
+                if(couponId != null){
+                    await Coupon.findByIdAndUpdate({ _id: couponId }, { $push: { users: userId }, $inc: { limit: -1 } })
+                }
                 res.json({ status: true, data });
             })
             .catch((err) => {
