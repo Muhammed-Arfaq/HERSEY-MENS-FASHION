@@ -47,7 +47,6 @@ exports.adminHome = async(req, res) => {
     const totalOrder = await Order.find().countDocuments()
     const pendingOrder = await Order.find({ 'product.orderStatus': 'Order Placed' }).countDocuments()
     const purchasedOrder = await Order.find({ paymentStatus: 'Paid' }).countDocuments()
-    
     console.log(totalSales[0]);
     res.render('admin/dashboard', { moment, admin, totalActiveUsers, totalUsers, totalProducts, totalOrder, totalSales, purchasedOrder, newOrders, newUsers, totalCategories, outOfStock, pendingOrder })
 }
