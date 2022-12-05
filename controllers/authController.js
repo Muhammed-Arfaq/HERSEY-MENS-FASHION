@@ -321,8 +321,8 @@ exports.addOrder = catchAsync(async (req, res, next) => {
         });
         for(let product of products) {
             let id = product.productId
-            let quantity = product.quantity * -1
-            await Product.updateOne({ _id: id }, { $inc: { quantity } })
+            let quantity = product.quantity
+            await Product.updateOne({ _id: id }, { $inc: { quantity: -quantity } })
         }
         if(couponId != null){
             await Coupon.findByIdAndUpdate({ _id: couponId }, { $push: { users: userId }, $inc: { limit: -1 } })
@@ -392,8 +392,8 @@ exports.verifyPayment = catchAsync(async (req, res, next) => {
             .then(async (data) => {
                 for(let product of products) {
                     let id = product.productId
-                    let quantity = product.quantity * -1
-                    await Product.updateOne({ _id: id }, { $inc: { quantity } })
+                    let quantity = product.quantity
+                    await Product.updateOne({ _id: id }, { $inc: { quantity: -quantity } })
                 }
                 await Cart.findByIdAndDelete({ _id: cart._id });
                 if(couponId != null){
