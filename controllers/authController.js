@@ -34,7 +34,7 @@ let transporter = nodemailer.createTransport({
     service: 'Gmail',
 
     auth: {
-        user: 'wattshand@gmail.com',
+        user: 'hersey@gmail.com',
         pass: 'fttkzontjctkofmg',
     }
 

@@ -53,7 +53,7 @@ exports.adminHome = async(req, res) => {
 
 exports.getAllUsers = catchAsync(async (req, res, next) => {
     const page = parseInt(req.query.page) || 1;
-    const items_per_page = 1;
+    const items_per_page = 10;
     const totalUser = await User.find().countDocuments()
     console.log(totalUser);
     const users = await User.find().sort({ date: -1 }).skip((page - 1) * items_per_page).limit(items_per_page)
